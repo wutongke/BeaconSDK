@@ -2,16 +2,19 @@ package com.lef.beaconconnection;
 
 import java.util.UUID;
 
-import com.radiusnetworks.ibeacon.IBeacon;
+import com.lef.ibeacon.IBeacon;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.ParcelUuid;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -29,6 +32,7 @@ public class BeaconConnection {
 
 	/**
 	 * 构造函数，需要实现监听程序BeaconConnectionCallback
+	 * 
 	 * @param context
 	 * @param beacon
 	 * @param callback
@@ -39,7 +43,17 @@ public class BeaconConnection {
 		this.mContext = context;
 		this.mcurrentBeacon = beacon;
 		this.mConnectionCallback = callback;
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(UpdateService.ACTION_STATE_CHANGED);
+		filter.addAction(UpdateService.ACTION_DONE);
+		filter.addAction(UpdateService.ACTION_UUID_READY);
+		filter.addAction(UpdateService.ACTION_MAJOR_MINOR_READY);
+		filter.addAction(UpdateService.ACTION_RSSI_READY);
+		filter.addAction(UpdateService.ACTION_GATT_ERROR);
+		LocalBroadcastManager.getInstance(mContext).registerReceiver(
+				mServiceBroadcastReceiver, filter);
 	}
+
 	private ServiceConnection mServiceConnection = new ServiceConnection() {
 		@Override
 		public void onServiceConnected(final ComponentName name,
@@ -49,7 +63,7 @@ public class BeaconConnection {
 			switch (state) {
 			case UpdateService.STATE_DISCONNECTED:
 				mConnectionCallback.onConnectedState(mcurrentBeacon, FAILURE);
-//				binder.connect();
+				binder.connect();
 				break;
 			case UpdateService.STATE_CONNECTED:
 				isConnection = true;
@@ -57,58 +71,69 @@ public class BeaconConnection {
 				break;
 			}
 		}
+
 		@Override
 		public void onServiceDisconnected(final ComponentName name) {
 			mBinder = null;
 		}
 	};
-	
+
 	/**
-	 * 设置beacon的Major和Minor 
-	 * @param major  (范围:0~65535)
-	 * @param minor  (范围:0~65535)
+	 * 设置beacon的Major和Minor
+	 * 
+	 * @param major
+	 *            (范围:0~65535)
+	 * @param minor
+	 *            (范围:0~65535)
 	 */
-	public  void setMajorMinor(int major,int minor) {
-		if (major<0||major>0xFFF||minor<0||minor>0xFFFF) {
+	public void setMajorMinor(int major, int minor) {
+		if (major < 0 || major > 0xFFF || minor < 0 || minor > 0xFFFF) {
 			// TODO Auto-generated method stub
 			if (mBinder.setMajorAndMinor(major, minor)) {
 				mConnectionCallback.onSetMajoMinor(mcurrentBeacon, SUCCESS);
 			} else {
 				mConnectionCallback.onSetMajoMinor(mcurrentBeacon, FAILURE);
 			}
-		}else{
+		} else {
 			mConnectionCallback.onSetMajoMinor(mcurrentBeacon, INVALIDVALUE);
 		}
 	}
+
 	/**
 	 * 设置beacon的UUID
-	 * @param UUID (格式:"00000000-0000-0000-0000-000000000000")
+	 * 
+	 * @param UUID
+	 *            (格式:"00000000-0000-0000-0000-000000000000")
 	 */
-	public void setUUID(String proximityUuid){
-		if (TextUtils.isEmpty(proximityUuid) || proximityUuid.length() != 36){
-			mConnectionCallback.onSetProximityUUID(mcurrentBeacon, INVALIDVALUE);
-		}else{
+	public void setUUID(String proximityUuid) {
+		if (TextUtils.isEmpty(proximityUuid) || proximityUuid.length() != 36) {
+			mConnectionCallback
+					.onSetProximityUUID(mcurrentBeacon, INVALIDVALUE);
+		} else {
 			UUID uuid = UUID.fromString(proximityUuid);
-			if(mBinder.setBeaconUuid(uuid))
+			if (mBinder.setBeaconUuid(uuid))
 				mConnectionCallback.onSetProximityUUID(mcurrentBeacon, SUCCESS);
-			else{
+			else {
 				mConnectionCallback.onSetProximityUUID(mcurrentBeacon, FAILURE);
 			}
 		}
 	}
-	public void setCalRssi(int rssi){
-		if (rssi>0||rssi<-150){
+
+	public void setCalRssi(int rssi) {
+		if (rssi > 0 || rssi < -150) {
 			mConnectionCallback.onSetCalRssi(mcurrentBeacon, INVALIDVALUE);
-		}else{
-			if(mBinder.setCalibratedRssi(rssi))
+		} else {
+			if (mBinder.setCalibratedRssi(rssi))
 				mConnectionCallback.onSetCalRssi(mcurrentBeacon, SUCCESS);
-			else{
+			else {
 				mConnectionCallback.onSetCalRssi(mcurrentBeacon, FAILURE);
 			}
 		}
 	}
+
 	/**
 	 * 连接蓝牙设备Beacon
+	 * 
 	 * @param device
 	 */
 	public void connect(final BluetoothDevice device) {
@@ -132,21 +157,24 @@ public class BeaconConnection {
 
 	/**
 	 * 判断是否连接beacon成功
-	 * @return isConnection 
+	 * 
+	 * @return isConnection
 	 */
 	public boolean isConnection() {
 		return isConnection;
 	}
+
 	private BroadcastReceiver mServiceBroadcastReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
-			if (mContext == null )
-				return;
+			// if (mContext == null )
+			// return;
 
 			final String action = intent.getAction();
 
 			if (UpdateService.ACTION_STATE_CHANGED.equals(action)) {
-				final int state = intent.getIntExtra(UpdateService.EXTRA_DATA, UpdateService.STATE_DISCONNECTED);
+				final int state = intent.getIntExtra(UpdateService.EXTRA_DATA,
+						UpdateService.STATE_DISCONNECTED);
 
 				switch (state) {
 				case UpdateService.STATE_DISCONNECTED:
@@ -163,7 +191,9 @@ public class BeaconConnection {
 					break;
 				}
 			} else if (UpdateService.ACTION_UUID_READY.equals(action)) {
-				UUID uuid = ((ParcelUuid) intent.getParcelableExtra(UpdateService.EXTRA_DATA)).getUuid();
+				UUID uuid = ((ParcelUuid) intent
+						.getParcelableExtra(UpdateService.EXTRA_DATA))
+						.getUuid();
 				mConnectionCallback.onGetUUID(uuid.toString());
 			} else if (UpdateService.ACTION_MAJOR_MINOR_READY.equals(action)) {
 				int major = intent.getIntExtra(UpdateService.EXTRA_MAJOR, 0);
@@ -176,14 +206,17 @@ public class BeaconConnection {
 			} else if (UpdateService.ACTION_DONE.equals(action)) {
 				mBinder.read();
 			} else if (UpdateService.ACTION_GATT_ERROR.equals(action)) {
-				final int error = intent.getIntExtra(UpdateService.EXTRA_DATA, 0);
+				final int error = intent.getIntExtra(UpdateService.EXTRA_DATA,
+						0);
 
 				switch (error) {
 				case UpdateService.ERROR_UNSUPPORTED_DEVICE:
-					Toast.makeText(mContext,"设备不支持BLE", Toast.LENGTH_SHORT).show();
+					Toast.makeText(mContext, "设备不支持BLE", Toast.LENGTH_SHORT)
+							.show();
 					break;
 				default:
-					Toast.makeText(mContext, "服务出现错误", Toast.LENGTH_SHORT).show();
+					Toast.makeText(mContext, "服务出现错误", Toast.LENGTH_SHORT)
+							.show();
 					break;
 				}
 				mBinder.disconnectAndClose();

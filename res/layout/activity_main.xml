@@ -9,8 +9,43 @@
     tools:context=".MainActivity" >
 
     <TextView
+        android:id="@+id/uuid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="10dp"
+        
+        />
+
+    <TextView
+        android:id="@+id/major"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/uuid"
+        android:layout_marginBottom="10dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/minor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/major"
+        android:layout_marginBottom="10dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/rssi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/minor"
+        android:layout_marginBottom="10dp"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Button" />
 
 </RelativeLayout>

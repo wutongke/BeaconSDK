@@ -34,34 +34,38 @@ import android.util.Pair;
 public class UpdateService extends Service {
 	private static final String TAG = "UpdateService";
 
-	public final static String ACTION_STATE_CHANGED = "no.nordicsemi.android.nrfbeacon.ACTION_STATE_CHANGED";
-	public final static String ACTION_GATT_ERROR = "no.nordicsemi.android.nrfbeacon.ACTION_GATT_ERROR";
-	public final static String ACTION_DONE = "no.nordicsemi.android.nrfbeacon.ACTION_DONE";
-	public final static String ACTION_UUID_READY = "no.nordicsemi.android.nrfbeacon.ACTION_UUID_READY";
-	public final static String ACTION_MAJOR_MINOR_READY = "no.nordicsemi.android.nrfbeacon.ACTION_MAJOR_MINOR_READY";
-	public final static String ACTION_RSSI_READY = "no.nordicsemi.android.nrfbeacon.ACTION_RSSI_READY";
+	protected final static String ACTION_STATE_CHANGED = "no.nordicsemi.android.nrfbeacon.ACTION_STATE_CHANGED";
+	protected final static String ACTION_GATT_ERROR = "no.nordicsemi.android.nrfbeacon.ACTION_GATT_ERROR";
+	protected final static String ACTION_DONE = "no.nordicsemi.android.nrfbeacon.ACTION_DONE";
+	protected final static String ACTION_UUID_READY = "no.nordicsemi.android.nrfbeacon.ACTION_UUID_READY";
+	protected final static String ACTION_MAJOR_MINOR_READY = "no.nordicsemi.android.nrfbeacon.ACTION_MAJOR_MINOR_READY";
+	protected final static String ACTION_RSSI_READY = "no.nordicsemi.android.nrfbeacon.ACTION_RSSI_READY";
 
-	public final static String EXTRA_DATA = "no.nordicsemi.android.nrfbeacon.EXTRA_DATA";
-	public final static String EXTRA_MAJOR = "no.nordicsemi.android.nrfbeacon.EXTRA_MAJOR";
-	public final static String EXTRA_MINOR = "no.nordicsemi.android.nrfbeacon.EXTRA_MINOR";
+	protected final static String EXTRA_DATA = "no.nordicsemi.android.nrfbeacon.EXTRA_DATA";
+	protected final static String EXTRA_MAJOR = "no.nordicsemi.android.nrfbeacon.EXTRA_MAJOR";
+	protected final static String EXTRA_MINOR = "no.nordicsemi.android.nrfbeacon.EXTRA_MINOR";
 
-	public final static int ERROR_UNSUPPORTED_DEVICE = -1;
+	protected final static int ERROR_UNSUPPORTED_DEVICE = -1;
 
 	private int mConnectionState;
-	public final static int STATE_DISCONNECTED = 0;
-	public final static int STATE_CONNECTING = 1;
-	public final static int STATE_DISCOVERING_SERVICES = 2;
-	public final static int STATE_CONNECTED = 3;
-	public final static int STATE_DISCONNECTING = 4;
+	protected final static int STATE_DISCONNECTED = 0;
+	protected final static int STATE_CONNECTING = 1;
+	protected final static int STATE_DISCOVERING_SERVICES = 2;
+	protected final static int STATE_CONNECTED = 3;
+	protected final static int STATE_DISCONNECTING = 4;
 
-	public final static int SERVICE_UUID = 1;
-	public final static int SERVICE_MAJOR_MINOR = 2;
-	public final static int SERVICE_CALIBRATION = 3;
+	protected final static int SERVICE_UUID = 1;
+	protected final static int SERVICE_MAJOR_MINOR = 2;
+	protected final static int SERVICE_CALIBRATION = 3;
 
-	private static final UUID CONFIG_SERVICE_UUID = new UUID(0x955A15230FE2F5AAl, 0x0A09484B8D4F3E8ADl);
-	private static final UUID CONFIG_UUID_CHARACTERISTIC_UUID = new UUID(0x955A15240FE2F5AAl, 0x0A09484B8D4F3E8ADl);
-	private static final UUID CONFIG_RSSI_CHARACTERISTIC_UUID = new UUID(0x955A15250FE2F5AAl, 0x0A09484B8D4F3E8ADl);
-	private static final UUID CONFIG_MAJOR_MINOR_CHARACTERISTIC_UUID = new UUID(0x955A15260FE2F5AAl, 0x0A09484B8D4F3E8ADl);
+	private static final UUID CONFIG_SERVICE_UUID = new UUID(
+			0x955A15230FE2F5AAl, 0x0A09484B8D4F3E8ADl);
+	private static final UUID CONFIG_UUID_CHARACTERISTIC_UUID = new UUID(
+			0x955A15240FE2F5AAl, 0x0A09484B8D4F3E8ADl);
+	private static final UUID CONFIG_RSSI_CHARACTERISTIC_UUID = new UUID(
+			0x955A15250FE2F5AAl, 0x0A09484B8D4F3E8ADl);
+	private static final UUID CONFIG_MAJOR_MINOR_CHARACTERISTIC_UUID = new UUID(
+			0x955A15260FE2F5AAl, 0x0A09484B8D4F3E8ADl);
 
 	private BluetoothAdapter mAdapter;
 	private BluetoothDevice mBluetoothDevice;
@@ -74,7 +78,8 @@ public class UpdateService extends Service {
 
 	private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
 		@Override
-		public void onConnectionStateChange(final BluetoothGatt gatt, final int status, final int newState) {
+		public void onConnectionStateChange(final BluetoothGatt gatt,
+				final int status, final int newState) {
 			if (status != BluetoothGatt.GATT_SUCCESS) {
 				logw("Connection state change error: " + status);
 				broadcastError(status);
@@ -95,7 +100,8 @@ public class UpdateService extends Service {
 		}
 
 		@Override
-		public void onServicesDiscovered(final BluetoothGatt gatt, final int status) {
+		public void onServicesDiscovered(final BluetoothGatt gatt,
+				final int status) {
 			if (status != BluetoothGatt.GATT_SUCCESS) {
 				logw("Service discovery error: " + status);
 				broadcastError(status);
@@ -106,7 +112,8 @@ public class UpdateService extends Service {
 			setState(STATE_CONNECTED);
 
 			// Search for config service
-			final BluetoothGattService configService = gatt.getService(CONFIG_SERVICE_UUID);
+			final BluetoothGattService configService = gatt
+					.getService(CONFIG_SERVICE_UUID);
 			if (configService == null) {
 				// Config service is not present
 				broadcastError(ERROR_UNSUPPORTED_DEVICE);
@@ -115,14 +122,21 @@ public class UpdateService extends Service {
 				return;
 			}
 
-			mUuidCharacteristic = configService.getCharacteristic(CONFIG_UUID_CHARACTERISTIC_UUID);
-			mMajorMinorCharacteristic = configService.getCharacteristic(CONFIG_MAJOR_MINOR_CHARACTERISTIC_UUID);
-			mRssiCharacteristic = configService.getCharacteristic(CONFIG_RSSI_CHARACTERISTIC_UUID);
+			mUuidCharacteristic = configService
+					.getCharacteristic(CONFIG_UUID_CHARACTERISTIC_UUID);
+			mMajorMinorCharacteristic = configService
+					.getCharacteristic(CONFIG_MAJOR_MINOR_CHARACTERISTIC_UUID);
+			mRssiCharacteristic = configService
+					.getCharacteristic(CONFIG_RSSI_CHARACTERISTIC_UUID);
 
-			if (mUuidCharacteristic != null || mMajorMinorCharacteristic != null || mRssiCharacteristic != null)
+			if (mUuidCharacteristic != null
+					|| mMajorMinorCharacteristic != null
+					|| mRssiCharacteristic != null)
 				broadcastOperationCompleted();
 
-			if (mUuidCharacteristic == null && mMajorMinorCharacteristic == null && mRssiCharacteristic == null) {
+			if (mUuidCharacteristic == null
+					&& mMajorMinorCharacteristic == null
+					&& mRssiCharacteristic == null) {
 				// Config characteristics is not present
 				broadcastError(ERROR_UNSUPPORTED_DEVICE);
 				setState(STATE_DISCONNECTING);
@@ -132,47 +146,59 @@ public class UpdateService extends Service {
 		}
 
 		@Override
-		public void onCharacteristicWrite(final BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic, final int status) {
+		public void onCharacteristicWrite(final BluetoothGatt gatt,
+				final BluetoothGattCharacteristic characteristic,
+				final int status) {
 			if (status != BluetoothGatt.GATT_SUCCESS) {
 				logw("Characteristic write error: " + status);
 				broadcastError(status);
 				return;
 			}
 
-			if (CONFIG_UUID_CHARACTERISTIC_UUID.equals(characteristic.getUuid())) {
+			if (CONFIG_UUID_CHARACTERISTIC_UUID
+					.equals(characteristic.getUuid())) {
 				final UUID uuid = decodeBeaconUUID(characteristic);
 				broadcastUuid(uuid);
-			} else if (CONFIG_MAJOR_MINOR_CHARACTERISTIC_UUID.equals(characteristic.getUuid())) {
+			} else if (CONFIG_MAJOR_MINOR_CHARACTERISTIC_UUID
+					.equals(characteristic.getUuid())) {
 				final int major = decodeUInt16(characteristic, 0);
 				final int minor = decodeUInt16(characteristic, 2);
 				broadcastMajorAndMinor(major, minor);
-			} else if (CONFIG_RSSI_CHARACTERISTIC_UUID.equals(characteristic.getUuid())) {
-				final int rssi = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT8, 0);
+			} else if (CONFIG_RSSI_CHARACTERISTIC_UUID.equals(characteristic
+					.getUuid())) {
+				final int rssi = characteristic.getIntValue(
+						BluetoothGattCharacteristic.FORMAT_SINT8, 0);
 				broadcastRssi(rssi);
 			}
 		}
 
 		@Override
-		public void onCharacteristicRead(final BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic, final int status) {
+		public void onCharacteristicRead(final BluetoothGatt gatt,
+				final BluetoothGattCharacteristic characteristic,
+				final int status) {
 			if (status != BluetoothGatt.GATT_SUCCESS) {
 				logw("Characteristic read error: " + status);
 				broadcastError(status);
 				return;
 			}
 
-			if (CONFIG_UUID_CHARACTERISTIC_UUID.equals(characteristic.getUuid())) {
+			if (CONFIG_UUID_CHARACTERISTIC_UUID
+					.equals(characteristic.getUuid())) {
 				final UUID uuid = decodeBeaconUUID(characteristic);
 				broadcastUuid(uuid);
 				if (mMajorMinorCharacteristic.getValue() == null)
 					gatt.readCharacteristic(mMajorMinorCharacteristic);
-			} else if (CONFIG_MAJOR_MINOR_CHARACTERISTIC_UUID.equals(characteristic.getUuid())) {
+			} else if (CONFIG_MAJOR_MINOR_CHARACTERISTIC_UUID
+					.equals(characteristic.getUuid())) {
 				final int major = decodeUInt16(characteristic, 0);
 				final int minor = decodeUInt16(characteristic, 2);
 				broadcastMajorAndMinor(major, minor);
 				if (mRssiCharacteristic.getValue() == null)
 					gatt.readCharacteristic(mRssiCharacteristic);
-			} else if (CONFIG_RSSI_CHARACTERISTIC_UUID.equals(characteristic.getUuid())) {
-				final int rssi = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT8, 0);
+			} else if (CONFIG_RSSI_CHARACTERISTIC_UUID.equals(characteristic
+					.getUuid())) {
+				final int rssi = characteristic.getIntValue(
+						BluetoothGattCharacteristic.FORMAT_SINT8, 0);
 				broadcastRssi(rssi);
 			}
 		}
@@ -180,7 +206,9 @@ public class UpdateService extends Service {
 
 	public class ServiceBinder extends Binder {
 		/**
-		 * Connects to the service. The bluetooth device must have been passed during binding to the service in {@link UpdateService#EXTRA_DATA} field.
+		 * Connects to the service. The bluetooth device must have been passed
+		 * during binding to the service in {@link UpdateService#EXTRA_DATA}
+		 * field.
 		 * 
 		 * @return <code>true</code> if connection process has been initiated
 		 */
@@ -195,34 +223,43 @@ public class UpdateService extends Service {
 				return false;
 			}
 
-			// the device may be already connected 
+			// the device may be already connected
 			if (mConnectionState == STATE_CONNECTED) {
 				return true;
 			}
 
 			setState(STATE_CONNECTING);
-			mBluetoothGatt = mBluetoothDevice.connectGatt(UpdateService.this, false, mGattCallback);
+			mBluetoothGatt = mBluetoothDevice.connectGatt(UpdateService.this,
+					false, mGattCallback);
 			return true;
 		}
 
 		/**
-		 * Disconnects from the device and closes the Bluetooth GATT object afterwards.
+		 * Disconnects from the device and closes the Bluetooth GATT object
+		 * afterwards.
 		 */
 		public void disconnectAndClose() {
-			// This sometimes happen when called from UpdateService.ACTION_GATT_ERROR event receiver in UpdateFragment.
+			// This sometimes happen when called from
+			// UpdateService.ACTION_GATT_ERROR event receiver in UpdateFragment.
 			if (mBluetoothGatt == null)
 				return;
 
 			setState(STATE_DISCONNECTING);
 			mBluetoothGatt.disconnect();
 
-			// Sometimes the connection gets error 129 or 133. Calling disconnect() method does not really disconnect... sometimes the connection is already broken.
-			// Here we have a security check that notifies UI about disconnection even if onConnectionStateChange(...) has not been called. 
+			// Sometimes the connection gets error 129 or 133. Calling
+			// disconnect() method does not really disconnect... sometimes the
+			// connection is already broken.
+			// Here we have a security check that notifies UI about
+			// disconnection even if onConnectionStateChange(...) has not been
+			// called.
 			mHandler.postDelayed(new Runnable() {
 				@Override
 				public void run() {
 					if (mConnectionState == STATE_DISCONNECTING)
-						mGattCallback.onConnectionStateChange(mBluetoothGatt, BluetoothGatt.GATT_SUCCESS, BluetoothProfile.STATE_DISCONNECTED);
+						mGattCallback.onConnectionStateChange(mBluetoothGatt,
+								BluetoothGatt.GATT_SUCCESS,
+								BluetoothProfile.STATE_DISCONNECTED);
 				}
 			}, 1500);
 		}
@@ -230,7 +267,8 @@ public class UpdateService extends Service {
 		/**
 		 * Reads all the values from the device, one by one.
 		 * 
-		 * @return <code>true</code> if at least one required characteristic has been found on the beacon.
+		 * @return <code>true</code> if at least one required characteristic has
+		 *         been found on the beacon.
 		 */
 		public boolean read() {
 			if (mBluetoothGatt == null)
@@ -254,7 +292,8 @@ public class UpdateService extends Service {
 		 * 
 		 * @param uuid
 		 *            the new UUID
-		 * @return <code>true</code> if altering UUID is supported (required characteristic exists)
+		 * @return <code>true</code> if altering UUID is supported (required
+		 *         characteristic exists)
 		 */
 		public boolean setBeaconUuid(final UUID uuid) {
 			if (mUuidCharacteristic == null || uuid == null)
@@ -271,7 +310,9 @@ public class UpdateService extends Service {
 		}
 
 		/**
-		 * Returns the current UUID value. This reads the value from the local cache. The {@link #read()} method must be invoked before to read the current value from the device.
+		 * Returns the current UUID value. This reads the value from the local
+		 * cache. The {@link #read()} method must be invoked before to read the
+		 * current value from the device.
 		 * 
 		 * @return the beacon service UUID
 		 */
@@ -293,7 +334,8 @@ public class UpdateService extends Service {
 		 *            the major number (0-65535)
 		 * @param minor
 		 *            the minor number (0-65535)
-		 * @return <code>true</code> if altering major and minor is supported (required characteristic exists)
+		 * @return <code>true</code> if altering major and minor is supported
+		 *         (required characteristic exists)
 		 */
 		public boolean setMajorAndMinor(final int major, final int minor) {
 			if (mMajorMinorCharacteristic == null)
@@ -305,18 +347,25 @@ public class UpdateService extends Service {
 			if (minor < 0 || minor > 0xFFFF)
 				return false;
 
-			final int majorInverted = (major & 0xFF) << 8 | ((major >> 8) & 0xFF);
-			final int minorInverted = (minor & 0xFF) << 8 | ((minor >> 8) & 0xFF);
-			mMajorMinorCharacteristic.setValue(majorInverted, BluetoothGattCharacteristic.FORMAT_UINT16, 0);
-			mMajorMinorCharacteristic.setValue(minorInverted, BluetoothGattCharacteristic.FORMAT_UINT16, 2);
+			final int majorInverted = (major & 0xFF) << 8
+					| ((major >> 8) & 0xFF);
+			final int minorInverted = (minor & 0xFF) << 8
+					| ((minor >> 8) & 0xFF);
+			mMajorMinorCharacteristic.setValue(majorInverted,
+					BluetoothGattCharacteristic.FORMAT_UINT16, 0);
+			mMajorMinorCharacteristic.setValue(minorInverted,
+					BluetoothGattCharacteristic.FORMAT_UINT16, 2);
 			mBluetoothGatt.writeCharacteristic(mMajorMinorCharacteristic);
 			return true;
 		}
 
 		/**
-		 * Returns the pair of current Major and Minor values. This reads the value from the local cache. The {@link #read()} method must be invoked before to read the current value from the device.
+		 * Returns the pair of current Major and Minor values. This reads the
+		 * value from the local cache. The {@link #read()} method must be
+		 * invoked before to read the current value from the device.
 		 * 
-		 * @return the pair where the first value is the major number and the second is the minor value
+		 * @return the pair where the first value is the major number and the
+		 *         second is the minor value
 		 */
 		public Pair<Integer, Integer> getMajorAndMinor() {
 			final BluetoothGattCharacteristic characteristic = mMajorMinorCharacteristic;
@@ -335,21 +384,25 @@ public class UpdateService extends Service {
 		 * Overwrites the beacon calibration RSSI value.
 		 * 
 		 * @param rssi
-		 *            the RSSI value calculated at 1m distance from the beacon using iPhone 5S.
-		 * @return <code>true</code> if altering major and minor is supported (required characteristic exists)
+		 *            the RSSI value calculated at 1m distance from the beacon
+		 *            using iPhone 5S.
+		 * @return <code>true</code> if altering major and minor is supported
+		 *         (required characteristic exists)
 		 */
 		public boolean setCalibratedRssi(final int rssi) {
 			if (mRssiCharacteristic == null)
 				return false;
 
-			mRssiCharacteristic.setValue(rssi, BluetoothGattCharacteristic.FORMAT_SINT8, 0);
+			mRssiCharacteristic.setValue(rssi,
+					BluetoothGattCharacteristic.FORMAT_SINT8, 0);
 			mBluetoothGatt.writeCharacteristic(mRssiCharacteristic);
 			return true;
 		}
 
 		/**
-		 * Obtains the cached value of the RSSI characteristic. If the value has not been obtained yet using {@link #read()}, or the characteristic has not been found on the beacon, <code>null</code>
-		 * is returned.
+		 * Obtains the cached value of the RSSI characteristic. If the value has
+		 * not been obtained yet using {@link #read()}, or the characteristic
+		 * has not been found on the beacon, <code>null</code> is returned.
 		 * 
 		 * @return the RSSI value or <code>null</code>
 		 */
@@ -359,7 +412,8 @@ public class UpdateService extends Service {
 				final byte[] data = characteristic.getValue();
 				if (data == null || data.length < 1)
 					return null;
-				return characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT8, 0);
+				return characteristic.getIntValue(
+						BluetoothGattCharacteristic.FORMAT_SINT8, 0);
 			}
 			return null;
 		}
@@ -400,7 +454,8 @@ public class UpdateService extends Service {
 	}
 
 	@Override
-	public int onStartCommand(final Intent intent, final int flags, final int startId) {
+	public int onStartCommand(final Intent intent, final int flags,
+			final int startId) {
 		mBluetoothDevice = intent.getParcelableExtra(EXTRA_DATA);
 		return START_NOT_STICKY;
 	}
@@ -454,19 +509,28 @@ public class UpdateService extends Service {
 	 * Clears the device cache.
 	 * <p>
 	 * CAUTION:<br />
-	 * It is very unsafe to call the refresh() method. First of all it's hidden so it may be removed in the future release of Android. We do it because Nordic Beacon may advertise as a beacon, as
-	 * Beacon Config or DFU. Android does not clear cache then device is disconnected unless manually restarted Bluetooth Adapter. To do this in the code we need to call
-	 * {@link BluetoothGatt#refresh()} method. However is may cause a lot of troubles. Ideally it should be called before connection attempt but we get 'gatt' object by calling connectGatt method so
-	 * when the connection already has been started. Calling refresh() afterwards causes errors 129 and 133 to pop up from time to time when refresh takes place actually during service discovery. It
-	 * seems to be asynchronous method. Therefore we are refreshing the device after disconnecting from it, before closing gatt. Sometimes you may obtain services from cache, not the actual values so
-	 * reconnection is required.
+	 * It is very unsafe to call the refresh() method. First of all it's hidden
+	 * so it may be removed in the future release of Android. We do it because
+	 * Nordic Beacon may advertise as a beacon, as Beacon Config or DFU. Android
+	 * does not clear cache then device is disconnected unless manually
+	 * restarted Bluetooth Adapter. To do this in the code we need to call
+	 * {@link BluetoothGatt#refresh()} method. However is may cause a lot of
+	 * troubles. Ideally it should be called before connection attempt but we
+	 * get 'gatt' object by calling connectGatt method so when the connection
+	 * already has been started. Calling refresh() afterwards causes errors 129
+	 * and 133 to pop up from time to time when refresh takes place actually
+	 * during service discovery. It seems to be asynchronous method. Therefore
+	 * we are refreshing the device after disconnecting from it, before closing
+	 * gatt. Sometimes you may obtain services from cache, not the actual values
+	 * so reconnection is required.
 	 * 
 	 * @param gatt
 	 *            the Bluetooth GATT object to refresh.
 	 */
 	private boolean refreshDeviceCache(final BluetoothGatt gatt) {
 		/*
-		 * There is a refresh() method in BluetoothGatt class but for now it's hidden. We will call it using reflections.
+		 * There is a refresh() method in BluetoothGatt class but for now it's
+		 * hidden. We will call it using reflections.
 		 */
 		try {
 			final Method refresh = gatt.getClass().getMethod("refresh");
@@ -489,17 +553,32 @@ public class UpdateService extends Service {
 			Log.w(TAG, message);
 	}
 
-	public static int decodeUInt16(final BluetoothGattCharacteristic characteristic, final int offset) {
+	public static int decodeUInt16(
+			final BluetoothGattCharacteristic characteristic, final int offset) {
 		final byte[] data = characteristic.getValue();
-		return (unsignedByteToInt(data[offset]) << 8) | unsignedByteToInt(data[offset + 1]);
+		return (unsignedByteToInt(data[offset]) << 8)
+				| unsignedByteToInt(data[offset + 1]);
 	}
 
-	public static UUID decodeBeaconUUID(final BluetoothGattCharacteristic characteristic) {
+	public static UUID decodeBeaconUUID(
+			final BluetoothGattCharacteristic characteristic) {
 		final byte[] data = characteristic.getValue();
-		final long mostSigBits = (unsignedByteToLong(data[0]) << 56) + (unsignedByteToLong(data[1]) << 48) + (unsignedByteToLong(data[2]) << 40) + (unsignedByteToLong(data[3]) << 32)
-				+ (unsignedByteToLong(data[4]) << 24) + (unsignedByteToLong(data[5]) << 16) + (unsignedByteToLong(data[6]) << 8) + unsignedByteToLong(data[7]);
-		final long leastSigBits = (unsignedByteToLong(data[8]) << 56) + (unsignedByteToLong(data[9]) << 48) + (unsignedByteToLong(data[10]) << 40) + (unsignedByteToLong(data[11]) << 32)
-				+ (unsignedByteToLong(data[12]) << 24) + (unsignedByteToLong(data[13]) << 16) + (unsignedByteToLong(data[14]) << 8) + unsignedByteToLong(data[15]);
+		final long mostSigBits = (unsignedByteToLong(data[0]) << 56)
+				+ (unsignedByteToLong(data[1]) << 48)
+				+ (unsignedByteToLong(data[2]) << 40)
+				+ (unsignedByteToLong(data[3]) << 32)
+				+ (unsignedByteToLong(data[4]) << 24)
+				+ (unsignedByteToLong(data[5]) << 16)
+				+ (unsignedByteToLong(data[6]) << 8)
+				+ unsignedByteToLong(data[7]);
+		final long leastSigBits = (unsignedByteToLong(data[8]) << 56)
+				+ (unsignedByteToLong(data[9]) << 48)
+				+ (unsignedByteToLong(data[10]) << 40)
+				+ (unsignedByteToLong(data[11]) << 32)
+				+ (unsignedByteToLong(data[12]) << 24)
+				+ (unsignedByteToLong(data[13]) << 16)
+				+ (unsignedByteToLong(data[14]) << 8)
+				+ unsignedByteToLong(data[15]);
 		return new UUID(mostSigBits, leastSigBits);
 	}
 
