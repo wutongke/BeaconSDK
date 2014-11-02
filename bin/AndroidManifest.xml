@@ -7,8 +7,13 @@
     <uses-sdk
         android:minSdkVersion="18"
         android:targetSdkVersion="18" />
+
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -24,7 +29,32 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-       	<service android:name = "com.lef.beaconconnection.UpdateService"/>"
+
+        <service android:name="com.lef.beaconconnection.UpdateService" />
+        <service
+            android:name="com.radiusnetworks.ibeacon.service.IBeaconService"
+            android:enabled="true"
+            android:exported="true"
+            android:isolatedProcess="false"
+            android:label="iBeacon" >
+        </service>
+        <service
+            android:name="com.radiusnetworks.ibeacon.IBeaconIntentProcessor"
+            android:enabled="true" >
+            <meta-data
+                android:name="background"
+                android:value="true" />
+
+            <intent-filter android:priority="1" >
+                <action android:name="com.radiusnetworks.ibeacon.DID_RANGING" />
+                <action android:name="com.radiusnetworks.ibeacon.DID_MONITORING" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="com.lef.beaconsdk.BeaconModify"
+            android:label="@string/title_activity_beacon_modify" >
+        </activity>
     </application>
 
 </manifest>

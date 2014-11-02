@@ -2,7 +2,7 @@ package com.lef.beaconconnection;
 
 import java.util.UUID;
 
-import com.lef.ibeacon.IBeacon;
+import com.radiusnetworks.ibeacon.IBeacon;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
@@ -18,7 +18,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-public class BeaconConnection {
+public class BeaconConnection implements ScannerListener {
 
 	public static final int SUCCESS = 1;
 	public static final int FAILURE = 2;
@@ -29,6 +29,7 @@ public class BeaconConnection {
 	private IBeacon mcurrentBeacon;
 	private BeaconConnectionCallback mConnectionCallback;
 	private boolean isConnection;
+	private BeaconScanner bs;
 
 	/**
 	 * 构造函数，需要实现监听程序BeaconConnectionCallback
@@ -136,14 +137,9 @@ public class BeaconConnection {
 	 * 
 	 * @param device
 	 */
-	public void connect(final BluetoothDevice device) {
-		// This will connect to the service only if it's already running
-		final Activity activity = mContext;
-		final Intent service = new Intent(activity, UpdateService.class);
-		service.putExtra(UpdateService.EXTRA_DATA, device);
-		activity.startService(service);
-		mBinded = true;
-		activity.bindService(service, mServiceConnection, 0);
+	public void connect() {
+		bs = new BeaconScanner(mContext, this, mcurrentBeacon.getBluetoothAddress());
+		bs.startScan();
 	}
 
 	/**
@@ -223,4 +219,17 @@ public class BeaconConnection {
 			}
 		};
 	};
+
+	@Override
+	public void onDeviceSelected(BluetoothDevice device, String name) {
+		// TODO Auto-generated method stub
+		// This will connect to the service only if it's already running
+		bs.stopScan();
+		final Activity activity = mContext;
+		final Intent service = new Intent(activity, UpdateService.class);
+		service.putExtra(UpdateService.EXTRA_DATA, device);
+		activity.startService(service);
+		mBinded = true;
+		activity.bindService(service, mServiceConnection, 0);
+	}
 }

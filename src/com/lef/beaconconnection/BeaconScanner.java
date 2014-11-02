@@ -3,15 +3,14 @@ package com.lef.beaconconnection;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import com.lef.ibeacon.service.ScannerServiceParser;
+import com.radiusnetworks.ibeacon.service.ScannerServiceParser;
+
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
-import android.widget.Button;
 
 public class BeaconScanner {
 
@@ -25,11 +24,13 @@ public class BeaconScanner {
 	private ArrayList<BeaconDevice> beacons ;
 	private UUID mUuid;
 	private boolean mIsScanning = false;
+	private String bluetoothAdress;
 
-	public BeaconScanner(Context context, ScannerListener listener) {
+	BeaconScanner(Context context, ScannerListener listener ,String bluetoothAdress) {
 		super();
 		this.mContext = context;
 		this.mListener = listener;
+		this.bluetoothAdress = bluetoothAdress;
 		mUuid = BEACON_CONFIG_UUID;
 		BluetoothManager manager = (BluetoothManager) mContext
 				.getSystemService(Context.BLUETOOTH_SERVICE);
@@ -40,7 +41,7 @@ public class BeaconScanner {
 	/**
 	 * 开始扫描设备
 	 */
-	public void startScan() {
+	void startScan() {
 		if (!mIsScanning) {
 			mBluetoothAdapter.startLeScan(mLEScanCallback);
 			mIsScanning = true;
@@ -50,7 +51,7 @@ public class BeaconScanner {
 	/**
 	 * 停止蓝牙扫描
 	 */
-	public void stopScan() {
+	void stopScan() {
 		if (mIsScanning) {
 			mBluetoothAdapter.stopLeScan(mLEScanCallback);
 			mIsScanning = false;
@@ -67,13 +68,15 @@ public class BeaconScanner {
 		public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
 			if (device != null) {
 				try {
-//					if (ScannerServiceParser.decodeDeviceAdvData(scanRecord,
-//							mUuid)) {
-//						// On some devices device.getName() is always null. We
-//						// have to parse the name manually :(
-//						// This bug has been found on Sony Xperia Z1 (C6903)
-//						// with Android 4.3.
-//						// https://devzone.nordicsemi.com/index.php/cannot-see-device-name-in-sony-z1
+					if (ScannerServiceParser.decodeDeviceAdvData(scanRecord,
+							mUuid)&&device.getAddress().equals(bluetoothAdress)) {
+						// On some devices device.getName() is always null. We
+						// have to parse the name manually :(
+						// This bug has been found on Sony Xperia Z1 (C6903)
+						// with Android 4.3.
+						// https://devzone.nordicsemi.com/index.php/cannot-see-device-name-in-sony-z1
+						mListener.onDeviceSelected(device, ScannerServiceParser
+								.decodeDeviceName(scanRecord));
 //						BeaconDevice temp = new BeaconDevice(device, ScannerServiceParser
 //								.decodeDeviceName(scanRecord), rssi);
 //						if(beacons.contains(temp)){
@@ -81,7 +84,7 @@ public class BeaconScanner {
 //						}else{
 //							mListener.onNewBeacon(temp);
 //						}
-//					}
+					}
 				} catch (Exception e) {
 					Log.w(TAG,
 							"Invalid data in Advertisement packet "

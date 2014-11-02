@@ -8,7 +8,40 @@
 package com.lef.beaconsdk;
 
 public final class R {
+    public static final class array {
+        public static final int accelerate_frequency=0x7f050004;
+        public static final int light_frequency=0x7f050003;
+        public static final int temperature_frequency=0x7f050002;
+        public static final int yunziPower=0x7f050000;
+        public static final int yunziadvertize=0x7f050001;
+    }
     public static final class attr {
+    }
+    public static final class color {
+        public static final int config_name_bg_color=0x7f060003;
+        public static final int config_vlaue_color=0x7f060002;
+        public static final int contents_text=0x7f060004;
+        public static final int encode_view=0x7f060006;
+        public static final int ibeacon_attribute_name=0x7f060000;
+        public static final int ibeacon_attribute_value=0x7f060001;
+        public static final int lightgreen=0x7f060005;
+        public static final int possible_result_points=0x7f060007;
+        /**  Android standard ICS color 
+         */
+        public static final int result_minor_text=0x7f060008;
+        public static final int result_points=0x7f060009;
+        /**  Android standard ICS color 
+         */
+        public static final int result_text=0x7f06000a;
+        public static final int result_view=0x7f06000b;
+        public static final int status_text=0x7f06000c;
+        public static final int tablelayout=0x7f060010;
+        public static final int tablelayoutrow=0x7f060011;
+        public static final int transparent=0x7f06000d;
+        public static final int viewfinder_laser=0x7f06000e;
+        /**  Android standard ICS color 
+         */
+        public static final int viewfinder_mask=0x7f06000f;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -17,30 +50,129 @@ public final class R {
          screen margins) for sw720dp devices (e.g. 10" tablets) in landscape here.
     
          */
-        public static final int activity_horizontal_margin=0x7f040000;
-        public static final int activity_vertical_margin=0x7f040001;
+        public static final int activity_horizontal_margin=0x7f070000;
+        public static final int activity_vertical_margin=0x7f070001;
+        public static final int activity_vertical_margin_bottom=0x7f070009;
+        public static final int activity_vertical_margin_top=0x7f070008;
+        public static final int config_font_size=0x7f070005;
+        public static final int config_name_font_size=0x7f070006;
+        public static final int config_title_left_margin=0x7f07000a;
+        public static final int config_value_font_size=0x7f070007;
+        public static final int dfu_title_left_margin=0x7f07000c;
+        public static final int feature_horizontal_margin=0x7f07000f;
+        public static final int feature_section_padding=0x7f070011;
+        public static final int feature_vertical_margin_top=0x7f070010;
+        public static final int ibeacon_attribute_interval=0x7f070004;
+        public static final int ibeacon_attribute_name_size=0x7f070002;
+        public static final int ibeacon_attribute_value_size=0x7f070003;
+        public static final int item_height=0x7f07000d;
+        public static final int preference_icon_minWidth=0x7f070013;
+        public static final int preference_item_padding_inner=0x7f070014;
+        public static final int preference_item_padding_side=0x7f070012;
+        public static final int update_title_left_margin=0x7f07000b;
+        public static final int uuid_textSize=0x7f07000e;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int background=0x7f020000;
+        public static final int conn=0x7f020001;
+        public static final int disconn=0x7f020002;
+        public static final int earth_scan=0x7f020003;
+        public static final int frame=0x7f020004;
+        public static final int ic_action_save=0x7f020005;
+        public static final int ic_action_setting=0x7f020006;
+        public static final int ic_launcher=0x7f020007;
+        public static final int ic_list=0x7f020008;
+        public static final int ic_setting=0x7f020009;
+        public static final int icon_arrow=0x7f02000a;
+        public static final int icon_back=0x7f02000b;
+        public static final int icon_beacon_a=0x7f02000c;
+        public static final int icon_beacon_b=0x7f02000d;
+        public static final int icon_calendar=0x7f02000e;
+        public static final int icon_home=0x7f02000f;
+        public static final int icon_item_select=0x7f020010;
+        public static final int icon_loading=0x7f020011;
+        public static final int icon_page=0x7f020012;
+        public static final int icon_page_selected=0x7f020013;
+        public static final int icon_profile=0x7f020014;
+        public static final int icon_rssi1=0x7f020015;
+        public static final int icon_rssi2=0x7f020016;
+        public static final int icon_rssi3=0x7f020017;
+        public static final int icon_rssi4=0x7f020018;
+        public static final int icon_rssi5=0x7f020019;
+        public static final int icon_rssi6=0x7f02001a;
+        public static final int icon_settings=0x7f02001b;
+        public static final int menu_background=0x7f02001c;
+        public static final int setsave=0x7f02001d;
+        public static final int shadow=0x7f02001e;
+        public static final int smartset=0x7f02001f;
+        public static final int title_bar_menu=0x7f020020;
     }
     public static final class id {
-        public static final int action_settings=0x7f080005;
-        public static final int connect=0x7f080004;
-        public static final int major=0x7f080001;
-        public static final int minor=0x7f080002;
-        public static final int rssi=0x7f080003;
-        public static final int uuid=0x7f080000;
+        public static final int ID=0x7f0a0015;
+        public static final int action_settings=0x7f0a001e;
+        public static final int attr_value=0x7f0a000f;
+        public static final int canbeconnected=0x7f0a0013;
+        public static final int distance=0x7f0a0014;
+        public static final int iv_background=0x7f0a0016;
+        public static final int iv_icon=0x7f0a001c;
+        public static final int iv_shadow=0x7f0a0017;
+        public static final int layout_left_menu=0x7f0a0019;
+        public static final int layout_right_menu=0x7f0a001b;
+        public static final int major=0x7f0a0011;
+        public static final int major_minor_container=0x7f0a0003;
+        public static final int major_modify=0x7f0a0005;
+        public static final int major_title=0x7f0a0004;
+        public static final int minor=0x7f0a0012;
+        public static final int minor_modify=0x7f0a0007;
+        public static final int minor_title=0x7f0a0006;
+        public static final int progressScan=0x7f0a000c;
+        public static final int progressScantext=0x7f0a000d;
+        public static final int rssi=0x7f0a0010;
+        public static final int rssi_container=0x7f0a0008;
+        public static final int rssi_modify=0x7f0a000a;
+        public static final int rssi_title=0x7f0a0009;
+        public static final int rssi_unit=0x7f0a000b;
+        public static final int sv_left_menu=0x7f0a0018;
+        public static final int sv_right_menu=0x7f0a001a;
+        public static final int tv_title=0x7f0a001d;
+        public static final int uuid_container=0x7f0a0000;
+        public static final int uuid_modify=0x7f0a0002;
+        public static final int uuid_title=0x7f0a0001;
+        public static final int yunzilist=0x7f0a000e;
     }
     public static final class layout {
-        public static final int activity_main=0x7f030000;
+        public static final int activity_beacon_modify=0x7f030000;
+        public static final int activity_main=0x7f030001;
+        public static final int attr_modify_dialog=0x7f030002;
+        public static final int beaconadapter=0x7f030003;
+        public static final int residemenu=0x7f030004;
+        public static final int residemenu_item=0x7f030005;
     }
     public static final class menu {
-        public static final int main=0x7f070000;
+        public static final int beacon_modify=0x7f090000;
+        public static final int main=0x7f090001;
     }
     public static final class string {
-        public static final int action_settings=0x7f050001;
-        public static final int app_name=0x7f050000;
-        public static final int hello_world=0x7f050002;
+        public static final int ID=0x7f040006;
+        public static final int action_settings=0x7f040003;
+        public static final int app_name=0x7f040000;
+        public static final int distance=0x7f040005;
+        public static final int hello_world=0x7f040004;
+        public static final int ibeacon_attribute=0x7f040002;
+        public static final int ibeacon_list=0x7f040001;
+        public static final int title_activity_beacon_modify=0x7f040009;
+        public static final int title_activity_yun_zi=0x7f040008;
+        public static final int title_activity_yunzi_modify=0x7f040007;
+        public static final int update_connect_subtitle=0x7f040011;
+        public static final int update_connect_title=0x7f040010;
+        public static final int update_error_device_not_supported=0x7f040012;
+        public static final int update_error_other=0x7f040013;
+        public static final int update_major=0x7f04000c;
+        public static final int update_minor=0x7f04000d;
+        public static final int update_rssi=0x7f04000e;
+        public static final int update_rssi_unit=0x7f04000f;
+        public static final int update_title=0x7f04000a;
+        public static final int update_uuid=0x7f04000b;
     }
     public static final class style {
         /** 
@@ -64,10 +196,10 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f060000;
+        public static final int AppBaseTheme=0x7f080000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f060001;
+        public static final int AppTheme=0x7f080001;
     }
 }

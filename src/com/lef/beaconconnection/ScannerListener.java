@@ -8,21 +8,33 @@
  ******************************************************************************/
 package com.lef.beaconconnection;
 
+import android.bluetooth.BluetoothDevice;
 
 public interface ScannerListener {
+
 	/**
-	 * 扫描到新的beacon设备
-	 * @param beaconDevice
+	 * Called when user has selected the device.
+	 * 
+	 * @param device
+	 *            the selected device. May not be null.
+	 * @param the
+	 *            device name.
 	 */
-	public void onNewBeacon(BeaconDevice beaconDevice);
-	/**
-	 * 离开之前扫描到beacon设备
-	 * @param beaconDevice
-	 */
-	public void onGoneBeacon(BeaconDevice beaconDevice);
-	/**
-	 * 更新扫描到beacon设备的信息
-	 * @param beaconDevice
-	 */
-	public void onUpdateBeacon(BeaconDevice beaconDevice);
+	void onDeviceSelected(final BluetoothDevice device, final String name);
+
+	// /**
+	// * 扫描到新的beacon设备
+	// * @param beaconDevice
+	// */
+	// public void onNewBeacon(BeaconDevice beaconDevice);
+	// /**
+	// * 离开之前扫描到beacon设备
+	// * @param beaconDevice
+	// */
+	// public void onGoneBeacon(BeaconDevice beaconDevice);
+	// /**
+	// * 更新扫描到beacon设备的信息
+	// * @param beaconDevice
+	// */
+	// public void onUpdateBeacon(BeaconDevice beaconDevice);
 }
