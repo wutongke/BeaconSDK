@@ -46,7 +46,7 @@ public class MainActivity extends Activity implements
 	 * UI数据
 	 */
 	private ArrayList<IBeacon> beaconDataListB = new ArrayList<IBeacon>();
-	
+
 	// 云子数据Adapter
 	private BeaconAdapter beaconListAdapter;
 	// 数据常量
@@ -67,9 +67,9 @@ public class MainActivity extends Activity implements
 	private ResideMenuItem school;
 	private ResideMenuItem eMail;
 
-	private Handler handler = new Handler(){
+	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
-			switch(msg.what){
+			switch (msg.what) {
 			case UPDATEUI:
 				beaconDataListB.clear();
 				beaconDataListB.addAll(beaconDataListA);
@@ -81,11 +81,14 @@ public class MainActivity extends Activity implements
 				ProgressBarVisibile = false;
 				break;
 			case CLICKTOAST:
-				Toast.makeText(MainActivity.this, "请设置beacon部署模式", Toast.LENGTH_SHORT).show();
-			default:break;
+				Toast.makeText(MainActivity.this, "请设置beacon部署模式",
+						Toast.LENGTH_SHORT).show();
+			default:
+				break;
 			}
 		};
 	};
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -117,7 +120,7 @@ public class MainActivity extends Activity implements
 		progressScan = (ProgressBar) findViewById(R.id.progressScan);
 		progressScanTextView = (TextView) findViewById(R.id.progressScantext);
 
-		beaconListAdapter = new BeaconAdapter(this,beaconDataListB);
+		beaconListAdapter = new BeaconAdapter(this, beaconDataListB);
 		beaconListView.setAdapter(beaconListAdapter);
 		beaconListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -125,12 +128,15 @@ public class MainActivity extends Activity implements
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				if(beaconDataListB.get(position).isCanBeConnected()){
-					Intent mintent = new Intent(MainActivity.this,BeaconModify.class);
-//					mintent.putExtra("address", beaconDataListB.get(position).getBluetoothAddress());
-					mintent.putExtra("beacon", new IBeaconData(beaconDataListB.get(position)));
+				if (beaconDataListB.get(position).isCanBeConnected()) {
+					Intent mintent = new Intent(MainActivity.this,
+							BeaconModify.class);
+					// mintent.putExtra("address",
+					// beaconDataListB.get(position).getBluetoothAddress());
+					mintent.putExtra("beacon",
+							new IBeaconData(beaconDataListB.get(position)));
 					startActivity(mintent);
-				}else{
+				} else {
 					handler.sendEmptyMessage(CLICKTOAST);
 				}
 			}
@@ -141,19 +147,31 @@ public class MainActivity extends Activity implements
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		// 蓝牙dialog
-		initBluetooth();
-		
+		if (iBeaconManager!=null&&!iBeaconManager.isBound(this)) {
+			// 蓝牙dialog
+			initBluetooth();
+		}
+
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		if (iBeaconManager.isBound(this)) {
+			iBeaconManager.unBind(this);
+		}
 	}
 
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		if(iBeaconManager !=null&&iBeaconManager.isBound(this)){
+		if (iBeaconManager != null && iBeaconManager.isBound(this)) {
 			iBeaconManager.unBind(this);
 		}
 	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -210,7 +228,7 @@ public class MainActivity extends Activity implements
 
 			public void didRangeBeaconsInRegion(Collection<IBeacon> iBeacons,
 					Region region) {
-				if(ProgressBarVisibile){
+				if (ProgressBarVisibile) {
 					handler.sendEmptyMessage(PROGRESSBARGONE);
 				}
 				java.util.Iterator<IBeacon> iterator = iBeacons.iterator();
@@ -223,33 +241,32 @@ public class MainActivity extends Activity implements
 						beaconDataListA.add(temp);
 						handler.sendEmptyMessage(UPDATEUI);
 					}
-					
+
 				}
 
 			}
 		});
 		iBeaconManager.setMonitorNotifier(new MonitorNotifier() {
-			
+
 			@Override
 			public void didExitRegion(Region region) {
 				// TODO Auto-generated method stub
 			}
-			
+
 			@Override
 			public void didEnterRegion(Region region) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void didDetermineStateForRegion(int state, Region region) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 		try {
-			Region myRegion = new Region("myRangingUniqueId", null,
-					null, null);
+			Region myRegion = new Region("myRangingUniqueId", null, null, null);
 			iBeaconManager.startMonitoringBeaconsInRegion(myRegion);
 			iBeaconManager.startRangingBeaconsInRegion(myRegion);
 		} catch (RemoteException e) {

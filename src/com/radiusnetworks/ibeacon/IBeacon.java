@@ -170,6 +170,18 @@ public class IBeacon {
 		}
 		return proximity;		
 	}
+	public void setProximityUuid(String proximityUuid) {
+		this.proximityUuid = proximityUuid;
+	}
+	public void setMajor(int major) {
+		this.major = major;
+	}
+	public void setMinor(int minor) {
+		this.minor = minor;
+	}
+	public void setTxPower(int power){
+		this.txPower = power;
+	}
 	/**
 	 * @see #rssi
 	 * @return rssi

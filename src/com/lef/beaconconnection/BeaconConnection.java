@@ -22,7 +22,12 @@ public class BeaconConnection implements ScannerListener {
 
 	public static final int SUCCESS = 1;
 	public static final int FAILURE = 2;
-	public static final int INVALIDVALUE = 2;
+	public static final int INVALIDVALUE = 3;
+	public static final int CONNECTING = 4;
+	public static final int CONNECTED = 5;
+	public static final int DISCONNECTED = 6;
+	public static final int DISCONNECTTING = 7;
+
 	private UpdateService.ServiceBinder mBinder;
 	private boolean mBinded;
 	private Activity mContext;
@@ -63,12 +68,10 @@ public class BeaconConnection implements ScannerListener {
 			final int state = binder.getState();
 			switch (state) {
 			case UpdateService.STATE_DISCONNECTED:
-				mConnectionCallback.onConnectedState(mcurrentBeacon, FAILURE);
 				binder.connect();
 				break;
 			case UpdateService.STATE_CONNECTED:
 				isConnection = true;
-				mConnectionCallback.onConnectedState(mcurrentBeacon, SUCCESS);
 				break;
 			}
 		}
@@ -88,15 +91,17 @@ public class BeaconConnection implements ScannerListener {
 	 *            (范围:0~65535)
 	 */
 	public void setMajorMinor(int major, int minor) {
+		// TODO Auto-generated method stub
 		if (major < 0 || major > 0xFFF || minor < 0 || minor > 0xFFFF) {
-			// TODO Auto-generated method stub
+			mConnectionCallback.onSetMajoMinor(mcurrentBeacon, INVALIDVALUE);
+		} else {
 			if (mBinder.setMajorAndMinor(major, minor)) {
+				mcurrentBeacon.setMajor(major);
+				mcurrentBeacon.setMajor(minor);
 				mConnectionCallback.onSetMajoMinor(mcurrentBeacon, SUCCESS);
 			} else {
 				mConnectionCallback.onSetMajoMinor(mcurrentBeacon, FAILURE);
 			}
-		} else {
-			mConnectionCallback.onSetMajoMinor(mcurrentBeacon, INVALIDVALUE);
 		}
 	}
 
@@ -112,9 +117,10 @@ public class BeaconConnection implements ScannerListener {
 					.onSetProximityUUID(mcurrentBeacon, INVALIDVALUE);
 		} else {
 			UUID uuid = UUID.fromString(proximityUuid);
-			if (mBinder.setBeaconUuid(uuid))
+			if (mBinder.setBeaconUuid(uuid)) {
+				mcurrentBeacon.setProximityUuid(proximityUuid);
 				mConnectionCallback.onSetProximityUUID(mcurrentBeacon, SUCCESS);
-			else {
+			} else {
 				mConnectionCallback.onSetProximityUUID(mcurrentBeacon, FAILURE);
 			}
 		}
@@ -124,9 +130,10 @@ public class BeaconConnection implements ScannerListener {
 		if (rssi > 0 || rssi < -150) {
 			mConnectionCallback.onSetCalRssi(mcurrentBeacon, INVALIDVALUE);
 		} else {
-			if (mBinder.setCalibratedRssi(rssi))
+			if (mBinder.setCalibratedRssi(rssi)) {
+				mcurrentBeacon.setTxPower(rssi);
 				mConnectionCallback.onSetCalRssi(mcurrentBeacon, SUCCESS);
-			else {
+			} else {
 				mConnectionCallback.onSetCalRssi(mcurrentBeacon, FAILURE);
 			}
 		}
@@ -138,7 +145,8 @@ public class BeaconConnection implements ScannerListener {
 	 * @param device
 	 */
 	public void connect() {
-		bs = new BeaconScanner(mContext, this, mcurrentBeacon.getBluetoothAddress());
+		bs = new BeaconScanner(mContext, this,
+				mcurrentBeacon.getBluetoothAddress());
 		bs.startScan();
 	}
 
@@ -182,8 +190,16 @@ public class BeaconConnection implements ScannerListener {
 					mBinded = false;
 					break;
 				case UpdateService.STATE_CONNECTED:
+					mConnectionCallback.onConnectedState(mcurrentBeacon,
+							CONNECTED);
+					break;
 				case UpdateService.STATE_DISCONNECTING:
+					mConnectionCallback.onConnectedState(mcurrentBeacon,
+							DISCONNECTTING);
+					break;
 				case UpdateService.STATE_CONNECTING:
+					mConnectionCallback.onConnectedState(mcurrentBeacon,
+							CONNECTING);
 					break;
 				}
 			} else if (UpdateService.ACTION_UUID_READY.equals(action)) {
@@ -191,6 +207,7 @@ public class BeaconConnection implements ScannerListener {
 						.getParcelableExtra(UpdateService.EXTRA_DATA))
 						.getUuid();
 				mConnectionCallback.onGetUUID(uuid.toString());
+				
 			} else if (UpdateService.ACTION_MAJOR_MINOR_READY.equals(action)) {
 				int major = intent.getIntExtra(UpdateService.EXTRA_MAJOR, 0);
 				int minor = intent.getIntExtra(UpdateService.EXTRA_MINOR, 0);

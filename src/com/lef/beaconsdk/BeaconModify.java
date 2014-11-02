@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.EditText;
@@ -29,20 +28,34 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 
 	private BeaconConnection beaconConnection;
 	private static final int EMPTYVALUE = 1;
+	private static final int INVALIDVALUE = 6;
 	private static final int SETSUCCEED = 2;
 	private static final int SETFAILURE = 3;
+	private static final int CONNECTION_S = 4;
+	private static final int CONNECTION_F = 5;
+	
+	
 //	private static final int EmptyValue = 1;
 	private Handler handler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
 			switch(msg.what){
 			case EMPTYVALUE:
-				Toast.makeText(BeaconModify.this, "不合理值", Toast.LENGTH_SHORT).show();
+				Toast.makeText(BeaconModify.this, "不能为空", Toast.LENGTH_SHORT).show();
 				break;
 			case SETFAILURE:
 				Toast.makeText(BeaconModify.this, "设置失败，请重新连接", Toast.LENGTH_SHORT).show();
 				break;
 			case SETSUCCEED:
 				Toast.makeText(BeaconModify.this, "设置成功", Toast.LENGTH_SHORT).show();
+				break;
+			case CONNECTION_S:
+				Toast.makeText(BeaconModify.this, "连接成功", Toast.LENGTH_SHORT).show();
+				break;
+			case CONNECTION_F:
+				Toast.makeText(BeaconModify.this, "连接失败", Toast.LENGTH_SHORT).show();
+				break;
+			case INVALIDVALUE:
+				Toast.makeText(BeaconModify.this, "不合理值", Toast.LENGTH_SHORT).show();
 				break;
 			default :break;
 				
@@ -110,7 +123,7 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 						if(!attrValue.getText().toString().equals("")){
 							
 							try{
-								beaconConnection.setMajorMinor(Integer.valueOf(attrValue.getText().toString()), currentBeacon.getMinor());
+								beaconConnection.setMajorMinor(Integer.valueOf(attrValue.getText().toString()), Integer.valueOf(attrValue.getText().toString()));
 							}catch (Exception e){
 								handler.sendEmptyMessage(EMPTYVALUE);
 							}
@@ -142,7 +155,7 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 						// TODO Auto-generated method stub
 						if(!attrValue.getText().toString().equals("")){
 							try{
-								beaconConnection.setMajorMinor(currentBeacon.getMinor(),Integer.valueOf(attrValue.getText().toString()) );
+								beaconConnection.setMajorMinor(Integer.valueOf(attrValue.getText().toString()),Integer.valueOf(attrValue.getText().toString()) );
 							}catch (Exception e){
 								handler.sendEmptyMessage(EMPTYVALUE);
 							}
@@ -215,7 +228,10 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 	@Override
 	public void onConnectedState(IBeacon beacon, int status) {
 		// TODO Auto-generated method stub
-
+		if(status==BeaconConnection.CONNECTED){
+			handler.sendEmptyMessage(CONNECTION_S);
+			currentBeacon = beacon;
+		}
 	}
 
 	@Override
@@ -223,8 +239,12 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 		if (status ==BeaconConnection.SUCCESS) {
 			// TODO Auto-generated method stub
 			handler.sendEmptyMessage(SETSUCCEED);
-		}else{
+			majorTextView.setText(beacon.getMajor());
+			minorTextView.setText(beacon.getMinor());
+		}else if(status ==BeaconConnection.FAILURE){
 			handler.sendEmptyMessage(SETFAILURE);
+		}else{
+			handler.sendEmptyMessage(INVALIDVALUE);
 		}
 	}
 
@@ -240,8 +260,11 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 		if (status ==BeaconConnection.SUCCESS) {
 			// TODO Auto-generated method stub
 			handler.sendEmptyMessage(SETSUCCEED);
-		}else{
+			rssiTextView.setText(beacon.getTxPower());
+		}else if(status ==BeaconConnection.FAILURE){
 			handler.sendEmptyMessage(SETFAILURE);
+		}else{
+			handler.sendEmptyMessage(INVALIDVALUE);
 		}
 	}
 
@@ -251,8 +274,11 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 		if (status ==BeaconConnection.SUCCESS) {
 			// TODO Auto-generated method stub
 			handler.sendEmptyMessage(SETSUCCEED);
-		}else{
+			uuidTextView.setText(beacon.getProximity());
+		}else if(status ==BeaconConnection.FAILURE){
 			handler.sendEmptyMessage(SETFAILURE);
+		}else{
+			handler.sendEmptyMessage(INVALIDVALUE);
 		}
 	}
 
