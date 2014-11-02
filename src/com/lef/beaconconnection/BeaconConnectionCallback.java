@@ -5,87 +5,87 @@ import com.radiusnetworks.ibeacon.IBeacon;
 
 public interface BeaconConnectionCallback {
 	/**
-	 * è¿”å›è¿æ¥çŠ¶æ€
+	 * ·µ»ØÁ¬½Ó×´Ì¬
 	 * 
 	 * @param beacon
-	 *            å½“å‰è¿æ¥çš„beacon
+	 *            µ±Ç°Á¬½ÓµÄbeacon
 	 * @param status
-	 *            è¿”å›è¿æ¥çŠ¶æ€ {@link}UpdateService.STATE_CONNECTED å’Œ {@link}
+	 *            ·µ»ØÁ¬½Ó×´Ì¬ {@link}UpdateService.STATE_CONNECTED ºÍ {@link}
 	 *            UpdateService.STATE_DISCONNECTED
 	 */
 	public void onConnectedState(IBeacon beacon, int status);
 
 	/**
-	 * @exception è¿”å›MAJOREå’ŒMINORçš„è®¾ç½®ç»“æœ
-	 *                è¿”å›è®¾ç½®ç»“æœ
+	 * @exception ·µ»ØMAJOREºÍMINORµÄÉèÖÃ½á¹û
+	 *                ·µ»ØÉèÖÃ½á¹û
 	 * @param beacon
-	 *            å½“å‰è¿æ¥çš„beacon
+	 *            µ±Ç°Á¬½ÓµÄbeacon
 	 * @param status
-	 *            è¿”å›è®¾ç½®ç»“æœ {@link BeaconConnection#SUCCESS} ã€
-	 *            {@link BeaconConnection#INVALIDVALUE}å’Œ
+	 *            ·µ»ØÉèÖÃ½á¹û {@link BeaconConnection#SUCCESS} ¡¢
+	 *            {@link BeaconConnection#INVALIDVALUE}ºÍ
 	 *            {@link BeaconConnection#FAILURE}
 	 */
 	public void onSetMajoMinor(IBeacon beacon, int status);
 
 	/**
-	 * @exception è¿”å›åŸºæœ¬è®¾ç½®çš„è®¾ç½®ç»“æœ
-	 *                è¿”å›è®¾ç½®ç»“æœ
+	 * @exception ·µ»Ø»ù±¾ÉèÖÃµÄÉèÖÃ½á¹û
+	 *                ·µ»ØÉèÖÃ½á¹û
 	 * @param beacon
-	 *            å½“å‰è¿æ¥çš„beacon
+	 *            µ±Ç°Á¬½ÓµÄbeacon
 	 * @param status
-	 *            è¿”å›è®¾ç½®ç»“æœ {@link BeaconConnection#SUCCESS}ã€
-	 *            {@link BeaconConnection#INVALIDVALUE} å’Œ
+	 *            ·µ»ØÉèÖÃ½á¹û {@link BeaconConnection#SUCCESS}¡¢
+	 *            {@link BeaconConnection#INVALIDVALUE} ºÍ
 	 *            {@link BeaconConnection#FAILURE}
 	 */
 	public void onSetBaseSetting(IBeacon beacon, int status);
 
 	/**
-	 * @exception è¿”å›è®¡ç®—RSSIçš„è®¾ç½®ç»“æœ
-	 *                è¿”å›è®¾ç½®ç»“æœ
+	 * @exception ·µ»Ø¼ÆËãRSSIµÄÉèÖÃ½á¹û
+	 *                ·µ»ØÉèÖÃ½á¹û
 	 * @param beacon
-	 *            å½“å‰è¿æ¥çš„beacon
+	 *            µ±Ç°Á¬½ÓµÄbeacon
 	 * @param status
-	 *            è¿”å›è®¾ç½®ç»“æœ {@link BeaconConnection#SUCCESS}ã€
-	 *            {@link BeaconConnection#INVALIDVALUE} å’Œ
+	 *            ·µ»ØÉèÖÃ½á¹û {@link BeaconConnection#SUCCESS}¡¢
+	 *            {@link BeaconConnection#INVALIDVALUE} ºÍ
 	 *            {@link BeaconConnection#FAILURE}
 	 */
 	public void onSetCalRssi(IBeacon beacon, int status);
 
 	/**
-	 * @exception è¿”å›UUIDçš„è®¾ç½®ç»“æœ
-	 *                è¿”å›è®¾ç½®ç»“æœ
+	 * @exception ·µ»ØUUIDµÄÉèÖÃ½á¹û
+	 *                ·µ»ØÉèÖÃ½á¹û
 	 * @param beacon
-	 *            å½“å‰è¿æ¥çš„beacon
+	 *            µ±Ç°Á¬½ÓµÄbeacon
 	 * @param status
-	 *            è¿”å›è®¾ç½®ç»“æœ {@link BeaconConnection#SUCCESS} ã€
-	 *            {@link BeaconConnection#INVALIDVALUE}å’Œ
+	 *            ·µ»ØÉèÖÃ½á¹û {@link BeaconConnection#SUCCESS} ¡¢
+	 *            {@link BeaconConnection#INVALIDVALUE}ºÍ
 	 *            {@link BeaconConnection#FAILURE}
 	 */
 	public void onSetProximityUUID(IBeacon beacon, int status);
 
 	/**
-	 * è¿”å›å·²è¿æ¥è®¾å¤‡çš„uuid
+	 * ·µ»ØÒÑÁ¬½ÓÉè±¸µÄuuid
 	 * 
 	 * @param proximityUuid
 	 */
 	public void onGetUUID(String proximityUuid);
 
 	/**
-	 * è¿”å›å·²è¿æ¥è®¾å¤‡çš„major
+	 * ·µ»ØÒÑÁ¬½ÓÉè±¸µÄmajor
 	 * 
 	 * @param major
 	 */
 	public void onGetMajor(int major);
 
 	/**
-	 * è¿”å›å·²è¿æ¥è®¾å¤‡çš„minor
+	 * ·µ»ØÒÑÁ¬½ÓÉè±¸µÄminor
 	 * 
 	 * @param minor
 	 */
 	public void onGetMinor(int minor);
 
 	/**
-	 * è¿”å›å·²è¿æ¥è®¾å¤‡çš„è®¡ç®—Rssi
+	 * ·µ»ØÒÑÁ¬½ÓÉè±¸µÄ¼ÆËãRssi
 	 * 
 	 * @param rssi
 	 */

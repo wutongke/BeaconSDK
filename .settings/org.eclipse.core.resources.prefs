@@ -1,2 +1,6 @@
 eclipse.preferences.version=1
+encoding//src/com/lef/beaconconnection/BeaconConnection.java=gbk
+encoding//src/com/lef/beaconconnection/BeaconConnectionCallback.java=gbk
+encoding//src/com/lef/beaconconnection/BeaconScanner.java=gbk
+encoding//src/com/radiusnetworks/ibeacon/IBeacon.java=gbk
 encoding/<project>=UTF-8

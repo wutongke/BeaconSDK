@@ -37,7 +37,7 @@ public class BeaconConnection implements ScannerListener {
 	private BeaconScanner bs;
 
 	/**
-	 * 鏋勯�犲嚱鏁帮紝闇�瑕佸疄鐜扮洃鍚▼搴廈eaconConnectionCallback
+	 * 构造函数，需要实现监听程序BeaconConnectionCallback
 	 * 
 	 * @param context
 	 * @param beacon
@@ -83,12 +83,12 @@ public class BeaconConnection implements ScannerListener {
 	};
 
 	/**
-	 * 璁剧疆beacon鐨凪ajor鍜孧inor
+	 * 设置beacon的Major和Minor
 	 * 
 	 * @param major
-	 *            (鑼冨洿:0~65535)
+	 *            (范围:0~65535)
 	 * @param minor
-	 *            (鑼冨洿:0~65535)
+	 *            (范围:0~65535)
 	 */
 	public void setMajorMinor(int major, int minor) {
 		// TODO Auto-generated method stub
@@ -106,10 +106,10 @@ public class BeaconConnection implements ScannerListener {
 	}
 
 	/**
-	 * 璁剧疆beacon鐨刄UID
+	 * 设置beacon的UUID
 	 * 
 	 * @param UUID
-	 *            (鏍煎紡:"00000000-0000-0000-0000-000000000000")
+	 *            (格式:"00000000-0000-0000-0000-000000000000")
 	 */
 	public void setUUID(String proximityUuid) {
 		if (TextUtils.isEmpty(proximityUuid) || proximityUuid.length() != 36) {
@@ -140,7 +140,7 @@ public class BeaconConnection implements ScannerListener {
 	}
 
 	/**
-	 * 杩炴帴钃濈墮璁惧Beacon
+	 * 连接蓝牙设备Beacon
 	 * 
 	 * @param device
 	 */
@@ -151,7 +151,7 @@ public class BeaconConnection implements ScannerListener {
 	}
 
 	/**
-	 * 鏂紑杩炴帴beacon
+	 * 断开连接beacon
 	 */
 	public void disConnect() {
 
@@ -160,7 +160,7 @@ public class BeaconConnection implements ScannerListener {
 	}
 
 	/**
-	 * 鍒ゆ柇鏄惁杩炴帴beacon鎴愬姛
+	 * 判断是否连接beacon成功
 	 * 
 	 * @return isConnection
 	 */
@@ -224,11 +224,11 @@ public class BeaconConnection implements ScannerListener {
 
 				switch (error) {
 				case UpdateService.ERROR_UNSUPPORTED_DEVICE:
-					Toast.makeText(mContext, "璁惧涓嶆敮鎸丅LE", Toast.LENGTH_SHORT)
+					Toast.makeText(mContext, "设备不支持BLE", Toast.LENGTH_SHORT)
 							.show();
 					break;
 				default:
-					Toast.makeText(mContext, "鏈嶅姟鍑虹幇閿欒", Toast.LENGTH_SHORT)
+					Toast.makeText(mContext, "服务出现错误", Toast.LENGTH_SHORT)
 							.show();
 					break;
 				}

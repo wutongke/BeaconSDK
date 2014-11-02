@@ -251,7 +251,7 @@ public class IBeacon {
 	/**
 	 * Construct an iBeacon from a Bluetooth LE packet collected by Android's Bluetooth APIs,
      * including the raw bluetooth device info
-	 * è®¾å¤‡è®¾ç½®ä¸ºå¯è¿æ¥ä¹‹åï¼Œå¹¿æ’­æ•°æ®æœ‰æ‰€ä¸åŒ
+	 * Éè±¸ÉèÖÃÎª¿ÉÁ¬½ÓÖ®ºó£¬¹ã²¥Êı¾İÓĞËù²»Í¬
 	 * @param scanData The actual packet bytes
 	 * @param rssi The measured signal strength of the packet
      * @param device The bluetooth device that was detected
@@ -304,7 +304,7 @@ public class IBeacon {
 		}
 								
 		final IBeacon iBeacon = new IBeacon();
-		//è®¾å¤‡å¯è¿æ¥æ—¶ ï¼Œå¹¿æ’­æ•°æ®ä¸åŒï¼Œå½“è®¾ç½®ä¸ºå¯è¿æ¥æ—¶ï¼Œmajorå’Œminorå’Œtxpowerè®¾ç½®ä¸º-1
+		//Éè±¸¿ÉÁ¬½ÓÊ± £¬¹ã²¥Êı¾İ²»Í¬£¬µ±ÉèÖÃÎª¿ÉÁ¬½ÓÊ±£¬majorºÍminorºÍtxpowerÉèÖÃÎª-1
 		if (!canBeConnected) {
 			iBeacon.major = (scanData[startByte + 20] & 0xff) * 0x100
 					+ (scanData[startByte + 21] & 0xff);

@@ -39,7 +39,7 @@ public class BeaconScanner {
 	}
 
 	/**
-	 * å¼€å§‹æ‰«æè®¾å¤‡
+	 * ¿ªÊ¼É¨ÃèÉè±¸
 	 */
 	void startScan() {
 		if (!mIsScanning) {
@@ -49,7 +49,7 @@ public class BeaconScanner {
 	}
 
 	/**
-	 * åœæ­¢è“ç‰™æ‰«æ
+	 * Í£Ö¹À¶ÑÀÉ¨Ãè
 	 */
 	void stopScan() {
 		if (mIsScanning) {

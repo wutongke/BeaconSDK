@@ -22,19 +22,4 @@ public interface ScannerListener {
 	 */
 	void onDeviceSelected(final BluetoothDevice device, final String name);
 
-	// /**
-	// * 扫描到新的beacon设备
-	// * @param beaconDevice
-	// */
-	// public void onNewBeacon(BeaconDevice beaconDevice);
-	// /**
-	// * 离开之前扫描到beacon设备
-	// * @param beaconDevice
-	// */
-	// public void onGoneBeacon(BeaconDevice beaconDevice);
-	// /**
-	// * 更新扫描到beacon设备的信息
-	// * @param beaconDevice
-	// */
-	// public void onUpdateBeacon(BeaconDevice beaconDevice);
 }
