@@ -2,6 +2,7 @@ package com.lef.beaconconnection;
 
 import java.util.UUID;
 
+
 import com.radiusnetworks.ibeacon.IBeacon;
 
 import android.app.Activity;
@@ -155,8 +156,14 @@ public class BeaconConnection implements ScannerListener {
 	 */
 	public void disConnect() {
 
-		if (mBinded)
+		if (mBinded){
+			mBinder.disconnectAndClose();
+			LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mServiceBroadcastReceiver);
 			mContext.unbindService(mServiceConnection);
+			final Intent service = new Intent(mContext, UpdateService.class);
+			mContext.stopService(service);
+			isConnection =false;
+		}
 	}
 
 	/**
@@ -190,6 +197,7 @@ public class BeaconConnection implements ScannerListener {
 					mBinded = false;
 					break;
 				case UpdateService.STATE_CONNECTED:
+					isConnection = true;
 					mConnectionCallback.onConnectedState(mcurrentBeacon,
 							CONNECTED);
 					break;
