@@ -157,12 +157,12 @@ public class BeaconConnection implements ScannerListener {
 	public void disConnect() {
 
 		if (mBinded){
+			isConnection =false;
 			mBinder.disconnectAndClose();
 			LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mServiceBroadcastReceiver);
 			mContext.unbindService(mServiceConnection);
 			final Intent service = new Intent(mContext, UpdateService.class);
 			mContext.stopService(service);
-			isConnection =false;
 		}
 	}
 
@@ -189,12 +189,15 @@ public class BeaconConnection implements ScannerListener {
 
 				switch (state) {
 				case UpdateService.STATE_DISCONNECTED:
-
-					Intent service = new Intent(mContext, UpdateService.class);
-					mContext.unbindService(mServiceConnection);
-					mContext.stopService(service);
+					if (isConnection) {
+						Intent service = new Intent(mContext,
+								UpdateService.class);
+						mContext.unbindService(mServiceConnection);
+						mContext.stopService(service);
+					}
 					mBinder = null;
 					mBinded = false;
+					mConnectionCallback.onConnectedState(mcurrentBeacon, DISCONNECTED);
 					break;
 				case UpdateService.STATE_CONNECTED:
 					isConnection = true;
@@ -214,15 +217,19 @@ public class BeaconConnection implements ScannerListener {
 				UUID uuid = ((ParcelUuid) intent
 						.getParcelableExtra(UpdateService.EXTRA_DATA))
 						.getUuid();
+				mcurrentBeacon.setProximityUuid(uuid.toString());
 				mConnectionCallback.onGetUUID(uuid.toString());
 				
 			} else if (UpdateService.ACTION_MAJOR_MINOR_READY.equals(action)) {
 				int major = intent.getIntExtra(UpdateService.EXTRA_MAJOR, 0);
 				int minor = intent.getIntExtra(UpdateService.EXTRA_MINOR, 0);
+				mcurrentBeacon.setMajor(major);
+				mcurrentBeacon.setMinor(minor);
 				mConnectionCallback.onGetMajor(major);
 				mConnectionCallback.onGetMinor(minor);
 			} else if (UpdateService.ACTION_RSSI_READY.equals(action)) {
 				int rssi = intent.getIntExtra(UpdateService.EXTRA_DATA, 0);
+				mcurrentBeacon.setTxPower(rssi);
 				mConnectionCallback.onGetRssi(rssi);
 			} else if (UpdateService.ACTION_DONE.equals(action)) {
 				mBinder.read();
