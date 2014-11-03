@@ -13,7 +13,7 @@
  * with the License.  You may obtain a copy of the License at
  * 
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ * 封装rangeibeacon用到的一些参数，包括扫描时间参数和回调参数
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -31,6 +31,7 @@ public class StartRMData implements Parcelable {
     private long scanPeriod;
     private long betweenScanPeriod;
 	private String callbackPackageName;
+	private long inside_expiration_millis;
 	
     public StartRMData(RegionData regionData, String callbackPackageName) {
     	this.regionData = regionData;
@@ -41,17 +42,21 @@ public class StartRMData implements Parcelable {
         this.betweenScanPeriod = betweenScanPeriod;
     }
 
-    public StartRMData(RegionData regionData, String callbackPackageName, long scanPeriod, long betweenScanPeriod) {
+    public StartRMData(RegionData regionData, String callbackPackageName, long scanPeriod, long betweenScanPeriod,long inside_expiration_millis) {
         this.scanPeriod = scanPeriod;
         this.betweenScanPeriod = betweenScanPeriod;
         this.regionData = regionData;
         this.callbackPackageName = callbackPackageName;
+        this.inside_expiration_millis = inside_expiration_millis;
     }
 
 
     public long getScanPeriod() { return scanPeriod; }
     public long getBetweenScanPeriod() { return betweenScanPeriod; }
-    public RegionData getRegionData() {
+    public long getInside_expiration_millis() {
+		return inside_expiration_millis;
+	}
+	public RegionData getRegionData() {
     	return regionData;
     }
     public String getCallbackPackageName() {
@@ -66,6 +71,7 @@ public class StartRMData implements Parcelable {
         out.writeString(callbackPackageName);
         out.writeLong(scanPeriod);
         out.writeLong(betweenScanPeriod);
+        out.writeLong(inside_expiration_millis);
     }
 
     public static final Parcelable.Creator<StartRMData> CREATOR
@@ -84,6 +90,7 @@ public class StartRMData implements Parcelable {
         callbackPackageName = in.readString();
         scanPeriod = in.readLong();
         betweenScanPeriod = in.readLong();
+        inside_expiration_millis = in.readLong();
     }
 
 }

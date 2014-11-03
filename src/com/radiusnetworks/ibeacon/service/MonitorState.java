@@ -29,13 +29,14 @@ import android.util.Log;
 
 public class MonitorState {
 	private static final String TAG = "MonitorState";
-	public static long INSIDE_EXPIRATION_MILLIS = 10000l;
+	private long inside_expiration_millis;
 	private boolean inside = false;
 	private long lastSeenTime = 0l;
 	private Callback callback;
 	
-	public MonitorState(Callback c) {
-		callback = c;		
+	public MonitorState(Callback c,long inside_expiration_millis) {
+		callback = c;
+		this.inside_expiration_millis = inside_expiration_millis;
 	}
 	
 	public Callback getCallback() {
@@ -53,9 +54,9 @@ public class MonitorState {
 	}
 	public boolean isNewlyOutside() {
 		if (inside) {
-			if (lastSeenTime > 0 && (new Date()).getTime() - lastSeenTime > INSIDE_EXPIRATION_MILLIS) {
+			if (lastSeenTime > 0 && (new Date()).getTime() - lastSeenTime > inside_expiration_millis) {
 				inside = false;
-				Log.d(TAG, "We are newly outside the region because the lastSeenTime of "+lastSeenTime+" was "+((new Date()).getTime() - lastSeenTime)+" seconds ago, and that is over the expiration duration of  "+INSIDE_EXPIRATION_MILLIS);
+				Log.d(TAG, "We are newly outside the region because the lastSeenTime of "+lastSeenTime+" was "+((new Date()).getTime() - lastSeenTime)+" seconds ago, and that is over the expiration duration of  "+inside_expiration_millis);
 				lastSeenTime = 0l;
 				return true;
 			}			

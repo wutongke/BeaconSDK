@@ -62,7 +62,8 @@ import java.util.UUID;
 @TargetApi(5)
 public class IBeaconService extends Service {
 	public static final String TAG = "IBeaconService";
-	public static final UUID BEACON_CONFIG_UUID = UUID.fromString("955A1523-0FE2-F5AA-0A094-84B8D4F3E8AD");
+	public static final UUID BEACON_CONFIG_UUID = UUID
+			.fromString("955A1523-0FE2-F5AA-0A094-84B8D4F3E8AD");
 
 	private Map<Region, RangeState> rangedRegionState = new HashMap<Region, RangeState>();
 	private Map<Region, MonitorState> monitoredRegionState = new HashMap<Region, MonitorState>();
@@ -98,6 +99,7 @@ public class IBeaconService extends Service {
 	 */
 
 	private long scanPeriod = IBeaconManager.DEFAULT_FOREGROUND_SCAN_PERIOD;
+	private long inside_expiration_millis = IBeaconManager.DEFAULT_INSIDE_EXPIRATION_MILLIS;
 
 	public long getScanPeriod() {
 		return scanPeriod;
@@ -149,10 +151,10 @@ public class IBeaconService extends Service {
 				switch (msg.what) {
 				case MSG_START_RANGING:
 					Log.i(TAG, "start ranging received");
-					service.startRangingBeaconsInRegion(
-							startRMData.getRegionData(),
-							new com.radiusnetworks.ibeacon.service.Callback(startRMData
-									.getCallbackPackageName()));
+					service.startRangingBeaconsInRegion(startRMData
+							.getRegionData(),
+							new com.radiusnetworks.ibeacon.service.Callback(
+									startRMData.getCallbackPackageName()));
 					service.setScanPeriods(startRMData.getScanPeriod(),
 							startRMData.getBetweenScanPeriod());
 					break;
@@ -165,12 +167,13 @@ public class IBeaconService extends Service {
 					break;
 				case MSG_START_MONITORING:
 					Log.i(TAG, "start monitoring received");
-					service.startMonitoringBeaconsInRegion(
-							startRMData.getRegionData(),
-							new com.radiusnetworks.ibeacon.service.Callback(startRMData
-									.getCallbackPackageName()));
+					service.startMonitoringBeaconsInRegion(startRMData
+							.getRegionData(),
+							new com.radiusnetworks.ibeacon.service.Callback(
+									startRMData.getCallbackPackageName()));
 					service.setScanPeriods(startRMData.getScanPeriod(),
 							startRMData.getBetweenScanPeriod());
+					service.setInside_expiration_millis(startRMData.getInside_expiration_millis());
 					break;
 				case MSG_STOP_MONITORING:
 					Log.i(TAG, "stop monitoring received");
@@ -178,6 +181,7 @@ public class IBeaconService extends Service {
 							.getRegionData());
 					service.setScanPeriods(startRMData.getScanPeriod(),
 							startRMData.getBetweenScanPeriod());
+					service.setInside_expiration_millis(startRMData.getInside_expiration_millis());
 					break;
 				case MSG_SET_SCAN_PERIODS:
 					Log.i(TAG, "set scan intervals received");
@@ -320,7 +324,7 @@ public class IBeaconService extends Service {
 														// retained because they
 														// are .equal
 			}
-			monitoredRegionState.put(region, new MonitorState(callback));
+			monitoredRegionState.put(region, new MonitorState(callback,inside_expiration_millis));
 		}
 		if (IBeaconManager.debug)
 			Log.d(TAG, "Currently monitoring " + monitoredRegionState.size()
@@ -376,6 +380,9 @@ public class IBeaconService extends Service {
 			}
 		}
 	}
+	public void setInside_expiration_millis(long inside_expiration_millis) {
+		this.inside_expiration_millis = inside_expiration_millis;
+	}
 
 	private long lastScanStartTime = 0l;
 	private long lastScanEndTime = 0l;
@@ -411,21 +418,30 @@ public class IBeaconService extends Service {
 			}
 		}
 		if (enable) {
-			/*
-			 * long millisecondsUntilStart = nextScanStartTime - (new
-			 * Date().getTime()); if (millisecondsUntilStart > 0) { if
-			 * (IBeaconManager.debug) Log.d(TAG,
-			 * "Waiting to start next bluetooth scan for another " +
-			 * millisecondsUntilStart + " milliseconds"); // Don't actually wait
-			 * until the next scan time -- only wait up to 1 second. this //
-			 * allows us to start scanning sooner if a consumer enters the
-			 * foreground and expects // results more quickly
-			 * handler.postDelayed(new Runnable() {
-			 * 
-			 * @Override public void run() { scanLeDevice(true); } },
-			 * millisecondsUntilStart > 1000 ? 1000 : millisecondsUntilStart);
-			 * return; }
-			 */
+
+			long millisecondsUntilStart = nextScanStartTime
+					- (new Date().getTime());
+			/*if中的内容可能有问题*/
+			if (millisecondsUntilStart > 0) {
+				if (IBeaconManager.debug)
+					Log.d(TAG,
+							"Waiting to start next bluetooth scan for another "
+									+ millisecondsUntilStart + " milliseconds");
+				// Don't actually wait
+				// until the next scan time -- only wait up to 1 second. this //
+				// allows us to start scanning sooner if a consumer enters the
+				// foreground and expects // results more quickly
+				handler.postDelayed(new Runnable() {
+
+					@Override
+					public void run() {
+						scanLeDevice(true);
+					}
+				}, millisecondsUntilStart > 1000 ? 1000
+						: millisecondsUntilStart);
+				return;
+			}
+
 			trackedBeacons = new HashSet<IBeacon>();
 			trackedBeaconsPacketCount = 0;
 			if (scanning == false || scanningPaused == true) {
