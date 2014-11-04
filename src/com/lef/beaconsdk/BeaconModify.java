@@ -2,7 +2,7 @@ package com.lef.beaconsdk;
 
 import com.lef.beaconconnection.BeaconConnection;
 import com.lef.beaconconnection.BeaconConnectionCallback;
-import com.radiusnetworks.ibeacon.IBeacon;
+import com.lef.ibeacon.IBeacon;
 
 import android.os.Bundle;
 import android.os.Handler;

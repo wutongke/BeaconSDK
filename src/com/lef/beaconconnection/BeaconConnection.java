@@ -3,7 +3,7 @@ package com.lef.beaconconnection;
 import java.util.UUID;
 
 
-import com.radiusnetworks.ibeacon.IBeacon;
+import com.lef.ibeacon.IBeacon;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;

@@ -1,6 +1,6 @@
 package com.lef.beaconconnection;
 
-import com.radiusnetworks.ibeacon.IBeacon;
+import com.lef.ibeacon.IBeacon;
 
 
 public interface BeaconConnectionCallback {

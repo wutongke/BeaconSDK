@@ -3,12 +3,12 @@ package com.lef.beaconsdk;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.radiusnetworks.ibeacon.IBeacon;
-import com.radiusnetworks.ibeacon.IBeaconManager;
-import com.radiusnetworks.ibeacon.MonitorNotifier;
-import com.radiusnetworks.ibeacon.RangeNotifier;
-import com.radiusnetworks.ibeacon.Region;
-import com.radiusnetworks.ibeacon.service.IBeaconData;
+import com.lef.ibeacon.IBeacon;
+import com.lef.ibeacon.IBeaconManager;
+import com.lef.ibeacon.MonitorNotifier;
+import com.lef.ibeacon.RangeNotifier;
+import com.lef.ibeacon.Region;
+import com.lef.ibeacon.service.IBeaconData;
 import com.special.ResideMenu.ResideMenu;
 import com.special.ResideMenu.ResideMenuItem;
 
@@ -33,7 +33,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class MainActivity extends Activity implements
-		com.radiusnetworks.ibeacon.IBeaconConsumer {
+		com.lef.ibeacon.IBeaconConsumer {
 	// 启动蓝牙请求码
 	protected static final int BLUTETOOTH = 1;
 	private IBeaconManager iBeaconManager;
