@@ -261,7 +261,9 @@ public class MainActivity extends Activity implements
 				java.util.Iterator<IBeacon> iterator = iBeacons.iterator();
 				while (iterator.hasNext()) {
 					IBeacon temp = iterator.next();
-					beaconDataListA.remove(temp);
+					if (beaconDataListA.contains(temp)) {
+						beaconDataListA.remove(temp);
+					}
 					handler.sendEmptyMessage(UPDATEUI);
 				}
 			}
@@ -273,7 +275,10 @@ public class MainActivity extends Activity implements
 				java.util.Iterator<IBeacon> iterator = iBeacons.iterator();
 				while (iterator.hasNext()) {
 					IBeacon temp = iterator.next();
-					beaconDataListA.set(beaconDataListA.indexOf(temp), temp);
+					if (beaconDataListA.contains(temp)) {
+						beaconDataListA
+								.set(beaconDataListA.indexOf(temp), temp);
+					}
 					handler.sendEmptyMessage(UPDATEUI);
 				}
 			}
