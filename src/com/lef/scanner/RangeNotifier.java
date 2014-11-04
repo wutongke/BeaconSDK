@@ -21,9 +21,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.lef.ibeacon;
+package com.lef.scanner;
 
 import java.util.Collection;
+
 /**
  * This interface is implemented by classes that receive iBeacon ranging notifications
  * 
@@ -42,6 +43,11 @@ public interface RangeNotifier {
 	 * @param region the <code>Region</code> object that defines the criteria for the ranged iBeacons
 	 */
 	public void didRangeBeaconsInRegion(Collection<IBeacon> iBeacons, Region region);
+	/**
+	 * 
+	 * @param iBeacons
+	 * @param region
+	 */
 	public void onNewBeacons(Collection<IBeacon> iBeacons, Region region);
 	public void onGoneBeacons(Collection<IBeacon> iBeacons, Region region);
 	public void onUpdateBeacon(Collection<IBeacon> iBeacons, Region region);

@@ -23,7 +23,7 @@
  */
 package com.lef.ibeacon.service;
 
-import com.lef.ibeacon.Region;
+import com.lef.scanner.Region;
 
 import android.os.Parcel;
 import android.os.Parcelable;

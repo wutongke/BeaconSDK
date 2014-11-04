@@ -8,8 +8,8 @@ import java.util.Iterator;
 
 import android.util.Log;
 
-import com.lef.ibeacon.IBeacon;
-import com.lef.ibeacon.IBeaconManager;
+import com.lef.scanner.IBeacon;
+import com.lef.scanner.IBeaconManager;
 
 public class RangedIBeacon extends IBeacon{
 	private static String TAG = "RangedIBeacon";

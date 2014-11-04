@@ -8,8 +8,8 @@ import java.util.Map;
 
 import android.util.Log;
 
-import com.lef.ibeacon.IBeacon;
-import com.lef.ibeacon.IBeaconManager;
+import com.lef.scanner.IBeacon;
+import com.lef.scanner.IBeaconManager;
 
 public class RangingTracker {
 	private static String TAG = "RangingTracker";	

@@ -25,7 +25,7 @@ package com.lef.ibeacon;
 
 /**
  * Indicates that low energy bluetooth is not available on this device
- * @see com.lef.ibeacon.IBeaconManager#CheckAvailability
+ * @see com.lef.scanner.IBeaconManager#CheckAvailability
  * @author David G. Young
  *
  */

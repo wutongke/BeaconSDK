@@ -1,6 +1,6 @@
 package com.lef.beaconconnection;
 
-import com.lef.ibeacon.IBeacon;
+import com.lef.scanner.IBeacon;
 
 
 public interface BeaconConnectionCallback {

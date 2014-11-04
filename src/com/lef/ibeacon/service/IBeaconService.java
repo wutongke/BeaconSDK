@@ -40,9 +40,9 @@ import android.os.Messenger;
 import android.util.Log;
 
 import com.lef.bluetooth.BluetoothCrashResolver;
-import com.lef.ibeacon.IBeacon;
-import com.lef.ibeacon.IBeaconManager;
-import com.lef.ibeacon.Region;
+import com.lef.scanner.IBeacon;
+import com.lef.scanner.IBeaconManager;
+import com.lef.scanner.Region;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

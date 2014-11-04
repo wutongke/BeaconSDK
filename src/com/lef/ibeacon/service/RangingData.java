@@ -26,9 +26,9 @@ package com.lef.ibeacon.service;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.lef.ibeacon.IBeacon;
-import com.lef.ibeacon.IBeaconManager;
-import com.lef.ibeacon.Region;
+import com.lef.scanner.IBeacon;
+import com.lef.scanner.IBeaconManager;
+import com.lef.scanner.Region;
 
 import android.os.Parcel;
 import android.os.Parcelable;

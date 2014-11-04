@@ -1,6 +1,7 @@
 package com.lef.ibeacon;
 
 import com.lef.client.DataProviderException;
+import com.lef.scanner.IBeacon;
 
 public interface IBeaconDataNotifier {
 	/**

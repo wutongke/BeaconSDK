@@ -3,7 +3,7 @@ package com.lef.beaconsdk;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lef.ibeacon.IBeacon;
+import com.lef.scanner.IBeacon;
 
 import android.content.Context;
 import android.view.LayoutInflater;

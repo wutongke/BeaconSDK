@@ -21,7 +21,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.lef.ibeacon;
+package com.lef.scanner;
+
 
 /**
  * This interface is implemented by classes that receive iBeacon monitoring notifications

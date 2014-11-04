@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import com.lef.ibeacon.IBeacon;
+import com.lef.scanner.IBeacon;
 
 import android.bluetooth.BluetoothDevice;
 import android.os.Parcel;

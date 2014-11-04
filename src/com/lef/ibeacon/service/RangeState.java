@@ -29,7 +29,7 @@ import java.util.Set;
 
 import android.util.Log;
 
-import com.lef.ibeacon.IBeacon;
+import com.lef.scanner.IBeacon;
 
 public class RangeState {
 	private static final String TAG = "RangeState";

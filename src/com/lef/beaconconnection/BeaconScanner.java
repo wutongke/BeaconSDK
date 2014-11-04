@@ -1,6 +1,5 @@
 package com.lef.beaconconnection;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 import com.lef.ibeacon.service.ScannerServiceParser;
@@ -21,7 +20,6 @@ public class BeaconScanner {
 			.fromString("955A1523-0FE2-F5AA-0A094-84B8D4F3E8AD");
 	private ScannerListener mListener;
 	
-	private ArrayList<BeaconDevice> beacons ;
 	private UUID mUuid;
 	private boolean mIsScanning = false;
 	private String bluetoothAdress;
@@ -35,7 +33,6 @@ public class BeaconScanner {
 		BluetoothManager manager = (BluetoothManager) mContext
 				.getSystemService(Context.BLUETOOTH_SERVICE);
 		mBluetoothAdapter = manager.getAdapter();
-		beacons = new ArrayList<BeaconDevice>();
 	}
 
 	/**

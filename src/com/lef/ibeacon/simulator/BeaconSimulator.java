@@ -1,6 +1,6 @@
 package com.lef.ibeacon.simulator;
 
-import com.lef.ibeacon.IBeacon;
+import com.lef.scanner.IBeacon;
 
 import java.util.List;
 

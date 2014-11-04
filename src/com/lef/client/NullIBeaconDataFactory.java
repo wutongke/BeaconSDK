@@ -2,8 +2,8 @@ package com.lef.client;
 
 import android.os.Handler;
 
-import com.lef.ibeacon.IBeacon;
 import com.lef.ibeacon.IBeaconDataNotifier;
+import com.lef.scanner.IBeacon;
 
 public class NullIBeaconDataFactory implements IBeaconDataFactory {
 

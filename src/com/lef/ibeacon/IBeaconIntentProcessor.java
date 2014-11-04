@@ -26,6 +26,10 @@ package com.lef.ibeacon;
 import com.lef.ibeacon.service.IBeaconData;
 import com.lef.ibeacon.service.MonitoringData;
 import com.lef.ibeacon.service.RangingData;
+import com.lef.scanner.IBeacon;
+import com.lef.scanner.IBeaconManager;
+import com.lef.scanner.MonitorNotifier;
+import com.lef.scanner.RangeNotifier;
 
 import android.annotation.TargetApi;
 import android.app.IntentService;

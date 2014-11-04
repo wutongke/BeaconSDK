@@ -265,7 +265,8 @@ public class BluetoothCrashResolver {
         }
     }
 
-    @TargetApi(17)
+    @SuppressWarnings("unused")
+	@TargetApi(17)
     private void startRecovery() {
         // The discovery operation will start by clearing out the bluetooth mac list to only the 256
         // most recently seen BLE mac addresses.

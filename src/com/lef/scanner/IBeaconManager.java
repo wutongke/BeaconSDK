@@ -21,7 +21,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.lef.ibeacon;
+package com.lef.scanner;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.lef.ibeacon.BleNotAvailableException;
 import com.lef.ibeacon.service.IBeaconService;
 import com.lef.ibeacon.service.RegionData;
 import com.lef.ibeacon.service.StartRMData;
@@ -719,7 +720,7 @@ public class IBeaconManager {
 		this.dataRequestNotifier = notifier;
 	}
 
-	protected RangeNotifier getDataRequestNotifier() {
+	public RangeNotifier getDataRequestNotifier() {
 		return this.dataRequestNotifier;
 	}
 
