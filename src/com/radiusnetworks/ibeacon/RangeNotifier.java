@@ -42,4 +42,8 @@ public interface RangeNotifier {
 	 * @param region the <code>Region</code> object that defines the criteria for the ranged iBeacons
 	 */
 	public void didRangeBeaconsInRegion(Collection<IBeacon> iBeacons, Region region);
+	public void onNewBeacons(Collection<IBeacon> iBeacons, Region region);
+	public void onGoneBeacons(Collection<IBeacon> iBeacons, Region region);
+	public void onUpdateBeacon(Collection<IBeacon> iBeacons, Region region);
+	
 }

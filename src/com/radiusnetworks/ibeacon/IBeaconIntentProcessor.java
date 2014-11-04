@@ -47,10 +47,17 @@ public class IBeaconIntentProcessor extends IntentService {
 		
 		MonitoringData monitoringData = null;
 		RangingData rangingData = null;
+		RangingData rangingNewBeaocn = null;
+		RangingData rangingUpdateBeacons = null;
+		RangingData rangingGoneBeaocn = null;
+		
 		
 		if (intent != null && intent.getExtras() != null) {
 			monitoringData = (MonitoringData) intent.getExtras().get("monitoringData");
-			rangingData = (RangingData) intent.getExtras().get("rangingData");			
+			rangingData = (RangingData) intent.getExtras().get("rangingData");	
+			rangingNewBeaocn = (RangingData) intent.getExtras().get("rangingDataNewBeacon");
+			rangingUpdateBeacons = (RangingData) intent.getExtras().get("rangingDataUpdateBeacons");
+			rangingGoneBeaocn = (RangingData) intent.getExtras().get("rangingDataGoneBeacon");
 		}
 		
 		if (rangingData != null) {
@@ -72,6 +79,25 @@ public class IBeaconIntentProcessor extends IntentService {
                 dataNotifier.didRangeBeaconsInRegion(iBeacons, rangingData.getRegion());
             }
 
+		}
+		if(rangingNewBeaocn!=null){
+			if (IBeaconManager.debug) Log.d(TAG, "got ranging data");
+            if (rangingData.getIBeacons() == null) {
+                Log.w(TAG, "Ranging data has a null iBeacons collection");
+            }
+			RangeNotifier notifier = IBeaconManager.getInstanceForApplication(this).getRangingNotifier();
+//            java.util.Collection<IBeacon> iBeacons = IBeaconData.fromIBeaconDatas(rangingData.getIBeacons());
+            java.util.Collection<IBeacon> iBeacons = IBeaconData.fromIBeaconDatas(rangingData.getIBeacons());
+			if (notifier != null) {
+				notifier.onNewBeacons(iBeacons, rangingData.getRegion());
+			}
+            else {
+                if (IBeaconManager.debug) Log.d(TAG, "but ranging notifier is null, so we're dropping it.");
+            }
+            RangeNotifier dataNotifier = IBeaconManager.getInstanceForApplication(this).getDataRequestNotifier();
+            if (dataNotifier != null) {
+                dataNotifier.onNewBeacons(iBeacons, rangingData.getRegion());
+            }
 		}
 		if (monitoringData != null) {
 			if (IBeaconManager.debug) Log.d(TAG, "got monitoring data");

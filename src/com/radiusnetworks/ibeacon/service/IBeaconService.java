@@ -53,6 +53,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -173,7 +174,8 @@ public class IBeaconService extends Service {
 									startRMData.getCallbackPackageName()));
 					service.setScanPeriods(startRMData.getScanPeriod(),
 							startRMData.getBetweenScanPeriod());
-					service.setInside_expiration_millis(startRMData.getInside_expiration_millis());
+					service.setInside_expiration_millis(startRMData
+							.getInside_expiration_millis());
 					break;
 				case MSG_STOP_MONITORING:
 					Log.i(TAG, "stop monitoring received");
@@ -181,7 +183,8 @@ public class IBeaconService extends Service {
 							.getRegionData());
 					service.setScanPeriods(startRMData.getScanPeriod(),
 							startRMData.getBetweenScanPeriod());
-					service.setInside_expiration_millis(startRMData.getInside_expiration_millis());
+					service.setInside_expiration_millis(startRMData
+							.getInside_expiration_millis());
 					break;
 				case MSG_SET_SCAN_PERIODS:
 					Log.i(TAG, "set scan intervals received");
@@ -287,7 +290,8 @@ public class IBeaconService extends Service {
 													// will be retained because
 													// they are .equal
 			}
-			rangedRegionState.put(region, new RangeState(callback));
+			rangedRegionState.put(region, new RangeState(callback,
+					inside_expiration_millis));
 		}
 		if (IBeaconManager.debug)
 			Log.d(TAG, "Currently ranging " + rangedRegionState.size()
@@ -324,7 +328,8 @@ public class IBeaconService extends Service {
 														// retained because they
 														// are .equal
 			}
-			monitoredRegionState.put(region, new MonitorState(callback,inside_expiration_millis));
+			monitoredRegionState.put(region, new MonitorState(callback,
+					inside_expiration_millis));
 		}
 		if (IBeaconManager.debug)
 			Log.d(TAG, "Currently monitoring " + monitoredRegionState.size()
@@ -380,6 +385,7 @@ public class IBeaconService extends Service {
 			}
 		}
 	}
+
 	public void setInside_expiration_millis(long inside_expiration_millis) {
 		this.inside_expiration_millis = inside_expiration_millis;
 	}
@@ -421,7 +427,7 @@ public class IBeaconService extends Service {
 
 			long millisecondsUntilStart = nextScanStartTime
 					- (new Date().getTime());
-			/*if中的内容可能有问题*/
+			/* if中的内容可能有问题 */
 			if (millisecondsUntilStart > 0) {
 				if (IBeaconManager.debug)
 					Log.d(TAG,
@@ -652,6 +658,44 @@ public class IBeaconService extends Service {
 			if (IBeaconManager.debug)
 				Log.d(TAG, "Calling ranging callback with "
 						+ rangeState.getIBeacons().size() + " iBeacons");
+			Set<IBeacon> tempAll = rangeState.getAllIBeacons();
+			Iterator<IBeacon> tempAllIterator = tempAll.iterator();
+			Set<IBeacon> temp = rangeState.getIBeacons();
+			Iterator<IBeacon> tempIterator = temp.iterator();
+
+			// 用于update的set<IBeacon>
+			Set<IBeacon> updateIBeacons = new HashSet<IBeacon>();
+			Set<IBeacon> newIBeacons = new HashSet<IBeacon>();
+			Set<IBeacon> goneIBeacons = new HashSet<IBeacon>();
+
+			// 通过遍历新扫描到的beacon，判断有无心出现的beacon
+			while (tempIterator.hasNext()) {
+				IBeacon tempBeacon = tempIterator.next();
+				if (!tempAll.contains(tempBeacon)) {
+					tempAll.add(tempBeacon);
+					newIBeacons.add(tempBeacon);
+				} else {
+					updateIBeacons.add(tempBeacon);
+				}
+			}
+
+			// * 判断是否有离开的beacon
+			while (tempAllIterator.hasNext()) {
+				IBeacon tempBeacon = tempIterator.next();
+				if (rangeState.isOutofRange(tempBeacon)) {
+					goneIBeacons.add(tempBeacon);
+					temp.remove(tempBeacon);
+				}
+			}
+			rangeState.getCallback().call(IBeaconService.this,
+					"rangingDataNewBeacon",
+					new RangingData(newIBeacons, region));
+			rangeState.getCallback().callForUpdateBeacons(IBeaconService.this,
+					"rangingDataUpdateBeacons",
+					new RangingData(updateIBeacons, region));
+			rangeState.getCallback().call(IBeaconService.this,
+					"rangingDataGoneBeacon",
+					new RangingData(goneIBeacons, region));
 			rangeState.getCallback().call(IBeaconService.this, "rangingData",
 					new RangingData(rangeState.getIBeacons(), region));
 			synchronized (rangeState) {

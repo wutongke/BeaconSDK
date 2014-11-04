@@ -23,12 +23,10 @@
  */
 package com.radiusnetworks.ibeacon;
 
-import com.lef.beaconconnection.UpdateService;
+import java.util.Date;
+
 import com.radiusnetworks.client.IBeaconDataFactory;
 import com.radiusnetworks.client.NullIBeaconDataFactory;
-import com.radiusnetworks.ibeacon.service.IBeaconService;
-import com.radiusnetworks.ibeacon.service.ScannerServiceParser;
-
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothDevice;
 import android.util.Log;
@@ -115,6 +113,10 @@ public class IBeacon {
 	 */
 	protected int txPower;
 	/**
+	 * 获取beacon的时间
+	 */
+	protected long updateTime;
+	/**
 	 * canBeConnected
 	 */
 	protected boolean canBeConnected;
@@ -140,6 +142,7 @@ public class IBeacon {
 	 * @see #accuracy
 	 * @return accuracy
 	 */
+	
 	public double getAccuracy() {
 		if (accuracy == null) {
 			accuracy = calculateAccuracy(txPower, runningAverageRssi != null ? runningAverageRssi : rssi );		
@@ -181,6 +184,12 @@ public class IBeacon {
 	}
 	public void setTxPower(int power){
 		this.txPower = power;
+	}
+	public long getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(long updateTime) {
+		this.updateTime = updateTime;
 	}
 	/**
 	 * @see #rssi
@@ -349,6 +358,7 @@ public class IBeacon {
             iBeacon.bluetoothAddress = device.getAddress();
             iBeacon.bluetoothDevice = device;
             iBeacon.canBeConnected = canBeConnected;
+            iBeacon.updateTime = new Date().getTime();
         }
 		return iBeacon;
 	}
@@ -368,6 +378,7 @@ public class IBeacon {
         this.bluetoothAddress = otherIBeacon.bluetoothAddress;
         this.bluetoothDevice = otherIBeacon.bluetoothDevice;
         this.canBeConnected = otherIBeacon.canBeConnected;
+        this.updateTime = otherIBeacon.updateTime;
 	}
 	
 	protected IBeacon() {

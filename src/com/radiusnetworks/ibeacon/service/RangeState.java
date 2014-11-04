@@ -23,36 +23,67 @@
  */
 package com.radiusnetworks.ibeacon.service;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import android.util.Log;
 
 import com.radiusnetworks.ibeacon.IBeacon;
 
 public class RangeState {
+	private static final String TAG = "RangeState";
 	private Callback callback;
 	private Set<IBeacon> iBeacons = new HashSet<IBeacon>();
-	
-	public RangeState(Callback c) {
-		callback = c;		
+	private Set<IBeacon> allIBeacons = new HashSet<IBeacon>();
+	private long inside_expiration_millis;
+
+	public RangeState(Callback c, long inside_expiration_millis) {
+		callback = c;
+		this.inside_expiration_millis = inside_expiration_millis;
 	}
-	
+
 	public Callback getCallback() {
 		return callback;
 	}
+
 	public void clearIBeacons() {
 		synchronized (iBeacons) {
 			iBeacons.clear();
 		}
 	}
+
 	public Set<IBeacon> getIBeacons() {
 		return iBeacons;
 	}
+
+	public Set<IBeacon> getAllIBeacons() {
+		return allIBeacons;
+	}
+
+	public long getInside_expiration_millis() {
+		return inside_expiration_millis;
+	}
+
 	public void addIBeacon(IBeacon iBeacon) {
 		synchronized (iBeacons) {
 			iBeacons.add(iBeacon);
 		}
 	}
-	
+
+	public boolean isOutofRange(IBeacon iBeacon) {
+		if (iBeacon.getUpdateTime() > 0
+				&& (new Date()).getTime() - iBeacon.getUpdateTime() > inside_expiration_millis) {
+			Log.d(TAG,
+					"有个Beacon从区域中消失 "
+							+ iBeacon.getUpdateTime()
+							+ " was "
+							+ ((new Date()).getTime() - iBeacon.getUpdateTime())
+							+ " seconds ago, and that is over the expiration duration of  "
+							+ inside_expiration_millis);
+			return true;
+		}
+		return false;
+	}
 
 }

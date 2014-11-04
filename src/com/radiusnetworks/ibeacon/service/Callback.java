@@ -65,4 +65,52 @@ public class Callback {
 		}
 		return false;
 	}
+	/**
+	 * 当检测到区域中新的beacon时，回调
+	 * @param context
+	 * @param dataName
+	 * @param data
+	 * @return
+	 */
+	public boolean callForNewBeacon(Context context, String dataName, Parcelable data) {
+		if (intent != null) {
+			Log.d(TAG, "attempting callback via intent: "+intent.getComponent());
+			intent.putExtra(dataName, data);
+			context.startService(intent);		
+			return true;			
+		}
+		return false;
+	}
+	/**
+	 * 当检测到有beacon消失时，回调
+	 * @param context
+	 * @param dataName
+	 * @param data
+	 * @return
+	 */
+	public boolean callForGoneBeacon(Context context, String dataName, Parcelable data) {
+		if (intent != null) {
+			Log.d(TAG, "attempting callback via intent: "+intent.getComponent());
+			intent.putExtra(dataName, data);
+			context.startService(intent);		
+			return true;			
+		}
+		return false;
+	}
+	/**
+	 * 更新beacon数据
+	 * @param context
+	 * @param dataName
+	 * @param data
+	 * @return
+	 */
+	public boolean callForUpdateBeacons(Context context, String dataName, Parcelable data) {
+		if (intent != null) {
+			Log.d(TAG, "attempting callback via intent: "+intent.getComponent());
+			intent.putExtra(dataName, data);
+			context.startService(intent);		
+			return true;			
+		}
+		return false;
+	}
 }

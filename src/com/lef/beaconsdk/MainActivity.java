@@ -246,6 +246,28 @@ public class MainActivity extends Activity implements
 				}
 
 			}
+
+			@Override
+			public void onNewBeacons(Collection<IBeacon> iBeacons, Region region) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onGoneBeacons(Collection<IBeacon> iBeacons,
+					Region region) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onUpdateBeacon(Collection<IBeacon> iBeacons,
+					Region region) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			
 		});
 		iBeaconManager.setMonitorNotifier(new MonitorNotifier() {
 

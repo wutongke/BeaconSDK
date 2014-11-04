@@ -56,7 +56,12 @@ public class IBeaconData extends IBeacon implements Parcelable {
         }
     	return iBeacons;
     }
-
+    public static IBeacon fromIBeaconDatas(IBeaconData iBeaconData){
+    	return iBeaconData;
+    }
+    public static IBeaconData fromIBeacon(IBeacon iBeacon){
+    	return new IBeaconData(iBeacon);
+    }
 	public int describeContents() {
         return 0;
     }
@@ -70,11 +75,14 @@ public class IBeaconData extends IBeacon implements Parcelable {
         out.writeInt(rssi);
         out.writeInt(txPower);
         out.writeString(bluetoothAddress);
+        out.writeParcelable(bluetoothDevice, flags);
         if(canBeConnected){
         	out.writeInt(1);
         }else{
         	out.writeInt(0);
         }
+        out.writeLong(updateTime);
+        
     }
 
     public static final Parcelable.Creator<IBeaconData> CREATOR
@@ -97,6 +105,8 @@ public class IBeaconData extends IBeacon implements Parcelable {
         rssi = in.readInt();
         txPower = in.readInt();
         bluetoothAddress = in.readString();
+        bluetoothDevice = in.readParcelable(this.getClass().getClassLoader());
         canBeConnected = in.readInt()!=0?true:false;
+        updateTime = in.readLong();
     }
 }
