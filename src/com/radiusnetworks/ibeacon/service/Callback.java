@@ -34,20 +34,29 @@ import android.util.Log;
 
 public class Callback {
 	private String TAG = "Callback";
-	private Messenger messenger;
-	private Intent intent;
+//	private Messenger messenger;
+	private Intent intentForNew;
+	private Intent intentForUpdate;
+	private Intent intentForGone;
+	private Intent intentForFind;
 	public Callback(String intentPackageName) {
 		if (intentPackageName != null) {
-			intent = new Intent();
-            intent.setComponent(new ComponentName(intentPackageName, "com.radiusnetworks.ibeacon.IBeaconIntentProcessor"));
+			intentForNew = new Intent();
+			intentForNew.setComponent(new ComponentName(intentPackageName, "com.radiusnetworks.ibeacon.IBeaconIntentProcessor"));
+			intentForUpdate = new Intent();
+			intentForUpdate.setComponent(new ComponentName(intentPackageName, "com.radiusnetworks.ibeacon.IBeaconIntentProcessor"));
+			intentForGone = new Intent();
+			intentForGone.setComponent(new ComponentName(intentPackageName, "com.radiusnetworks.ibeacon.IBeaconIntentProcessor"));
+			intentForFind = new Intent();
+			intentForFind.setComponent(new ComponentName(intentPackageName, "com.radiusnetworks.ibeacon.IBeaconIntentProcessor"));
         }
 	}
-	public Intent getIntent() {
-		return intent;
-	}
-	public void setIntent(Intent intent) {
-		this.intent = intent;
-	}
+//	public Intent getIntent() {
+//		return intent;
+//	}
+//	public void setIntent(Intent intent) {
+//		this.intent = intent;
+//	}
 	/**
 	 * Tries making the callback, first via messenger, then via intent
 	 * 
@@ -57,10 +66,10 @@ public class Callback {
 	 * @return false if it callback cannot be made
 	 */
 	public boolean call(Context context, String dataName, Parcelable data) {
-		if (intent != null) {
-			Log.d(TAG, "attempting callback via intent: "+intent.getComponent());
-			intent.putExtra(dataName, data);
-			context.startService(intent);		
+		if (intentForFind != null) {
+			Log.d(TAG, "attempting callback via intent: "+intentForFind.getComponent());
+			intentForFind.putExtra(dataName, data);
+			context.startService(intentForFind);		
 			return true;			
 		}
 		return false;
@@ -73,10 +82,10 @@ public class Callback {
 	 * @return
 	 */
 	public boolean callForNewBeacon(Context context, String dataName, Parcelable data) {
-		if (intent != null) {
-			Log.d(TAG, "attempting callback via intent: "+intent.getComponent());
-			intent.putExtra(dataName, data);
-			context.startService(intent);		
+		if (intentForNew != null) {
+			Log.d(TAG, "attempting callback via intent: "+intentForNew.getComponent());
+			intentForNew.putExtra(dataName, data);
+			context.startService(intentForNew);		
 			return true;			
 		}
 		return false;
@@ -89,10 +98,10 @@ public class Callback {
 	 * @return
 	 */
 	public boolean callForGoneBeacon(Context context, String dataName, Parcelable data) {
-		if (intent != null) {
-			Log.d(TAG, "attempting callback via intent: "+intent.getComponent());
-			intent.putExtra(dataName, data);
-			context.startService(intent);		
+		if (intentForUpdate != null) {
+			Log.d(TAG, "attempting callback via intent: "+intentForUpdate.getComponent());
+			intentForUpdate.putExtra(dataName, data);
+			context.startService(intentForUpdate);		
 			return true;			
 		}
 		return false;
@@ -105,10 +114,10 @@ public class Callback {
 	 * @return
 	 */
 	public boolean callForUpdateBeacons(Context context, String dataName, Parcelable data) {
-		if (intent != null) {
-			Log.d(TAG, "attempting callback via intent: "+intent.getComponent());
-			intent.putExtra(dataName, data);
-			context.startService(intent);		
+		if (intentForFind != null) {
+			Log.d(TAG, "attempting callback via intent: "+intentForFind.getComponent());
+			intentForFind.putExtra(dataName, data);
+			context.startService(intentForFind);		
 			return true;			
 		}
 		return false;

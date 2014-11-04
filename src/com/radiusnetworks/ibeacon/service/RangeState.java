@@ -54,7 +54,9 @@ public class RangeState {
 	}
 
 	public Set<IBeacon> getIBeacons() {
-		return iBeacons;
+		synchronized (iBeacons) {
+			return iBeacons;
+		}
 	}
 
 	public Set<IBeacon> getAllIBeacons() {

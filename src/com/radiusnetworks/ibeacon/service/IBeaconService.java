@@ -658,10 +658,9 @@ public class IBeaconService extends Service {
 			if (IBeaconManager.debug)
 				Log.d(TAG, "Calling ranging callback with "
 						+ rangeState.getIBeacons().size() + " iBeacons");
-			Set<IBeacon> tempAll = rangeState.getAllIBeacons();
-			Iterator<IBeacon> tempAllIterator = tempAll.iterator();
-			Set<IBeacon> temp = rangeState.getIBeacons();
-			Iterator<IBeacon> tempIterator = temp.iterator();
+			final Set<IBeacon> tempAll = new HashSet<IBeacon>(rangeState.getAllIBeacons());
+			final Set<IBeacon> temp = new HashSet<IBeacon>(rangeState.getIBeacons());
+			final Iterator<IBeacon> tempIterator = temp.iterator();
 
 			// 用于update的set<IBeacon>
 			Set<IBeacon> updateIBeacons = new HashSet<IBeacon>();
@@ -672,34 +671,40 @@ public class IBeaconService extends Service {
 			while (tempIterator.hasNext()) {
 				IBeacon tempBeacon = tempIterator.next();
 				if (!tempAll.contains(tempBeacon)) {
-					tempAll.add(tempBeacon);
+					rangeState.getAllIBeacons().add(tempBeacon);
 					newIBeacons.add(tempBeacon);
 				} else {
+					rangeState.getAllIBeacons().remove(tempBeacon);
+					rangeState.getAllIBeacons().add(tempBeacon);
 					updateIBeacons.add(tempBeacon);
 				}
 			}
 
 			// * 判断是否有离开的beacon
+			final Iterator<IBeacon> tempAllIterator = tempAll.iterator();
 			while (tempAllIterator.hasNext()) {
-				IBeacon tempBeacon = tempIterator.next();
+				IBeacon tempBeacon = tempAllIterator.next();
 				if (rangeState.isOutofRange(tempBeacon)) {
 					goneIBeacons.add(tempBeacon);
-					temp.remove(tempBeacon);
+					rangeState.getAllIBeacons().remove(tempBeacon);
 				}
 			}
-			rangeState.getCallback().call(IBeaconService.this,
+			rangeState.getCallback().callForNewBeacon(IBeaconService.this,
 					"rangingDataNewBeacon",
 					new RangingData(newIBeacons, region));
 			rangeState.getCallback().callForUpdateBeacons(IBeaconService.this,
 					"rangingDataUpdateBeacons",
 					new RangingData(updateIBeacons, region));
-			rangeState.getCallback().call(IBeaconService.this,
+			rangeState.getCallback().callForGoneBeacon(IBeaconService.this,
 					"rangingDataGoneBeacon",
 					new RangingData(goneIBeacons, region));
 			rangeState.getCallback().call(IBeaconService.this, "rangingData",
 					new RangingData(rangeState.getIBeacons(), region));
 			synchronized (rangeState) {
 				rangeState.clearIBeacons();
+				newIBeacons.clear();
+				updateIBeacons.clear();
+				goneIBeacons.clear();
 			}
 		}
 

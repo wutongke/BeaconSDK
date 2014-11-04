@@ -82,21 +82,58 @@ public class IBeaconIntentProcessor extends IntentService {
 		}
 		if(rangingNewBeaocn!=null){
 			if (IBeaconManager.debug) Log.d(TAG, "got ranging data");
-            if (rangingData.getIBeacons() == null) {
+            if (rangingNewBeaocn.getIBeacons() == null) {
                 Log.w(TAG, "Ranging data has a null iBeacons collection");
             }
 			RangeNotifier notifier = IBeaconManager.getInstanceForApplication(this).getRangingNotifier();
 //            java.util.Collection<IBeacon> iBeacons = IBeaconData.fromIBeaconDatas(rangingData.getIBeacons());
-            java.util.Collection<IBeacon> iBeacons = IBeaconData.fromIBeaconDatas(rangingData.getIBeacons());
+            java.util.Collection<IBeacon> iBeacons = IBeaconData.fromIBeaconDatas(rangingNewBeaocn.getIBeacons());
 			if (notifier != null) {
-				notifier.onNewBeacons(iBeacons, rangingData.getRegion());
+				notifier.onNewBeacons(iBeacons, rangingNewBeaocn.getRegion());
 			}
             else {
                 if (IBeaconManager.debug) Log.d(TAG, "but ranging notifier is null, so we're dropping it.");
             }
             RangeNotifier dataNotifier = IBeaconManager.getInstanceForApplication(this).getDataRequestNotifier();
             if (dataNotifier != null) {
-                dataNotifier.onNewBeacons(iBeacons, rangingData.getRegion());
+                dataNotifier.onNewBeacons(iBeacons, rangingNewBeaocn.getRegion());
+            }
+		}
+		if(rangingUpdateBeacons!=null){
+			if (IBeaconManager.debug) Log.d(TAG, "got ranging data");
+            if (rangingUpdateBeacons.getIBeacons() == null) {
+                Log.w(TAG, "Ranging data has a null iBeacons collection");
+            }
+			RangeNotifier notifier = IBeaconManager.getInstanceForApplication(this).getRangingNotifier();
+//            java.util.Collection<IBeacon> iBeacons = IBeaconData.fromIBeaconDatas(rangingData.getIBeacons());
+            java.util.Collection<IBeacon> iBeacons = IBeaconData.fromIBeaconDatas(rangingUpdateBeacons.getIBeacons());
+			if (notifier != null) {
+				notifier.onUpdateBeacon(iBeacons, rangingUpdateBeacons.getRegion());
+			}
+            else {
+                if (IBeaconManager.debug) Log.d(TAG, "but ranging notifier is null, so we're dropping it.");
+            }
+            RangeNotifier dataNotifier = IBeaconManager.getInstanceForApplication(this).getDataRequestNotifier();
+            if (dataNotifier != null) {
+                dataNotifier.onUpdateBeacon(iBeacons, rangingUpdateBeacons.getRegion());
+            }
+		}
+		if(rangingGoneBeaocn!=null){
+			if (IBeaconManager.debug) Log.d(TAG, "got ranging data");
+            if (rangingGoneBeaocn.getIBeacons() == null) {
+                Log.w(TAG, "Ranging data has a null iBeacons collection");
+            }
+			RangeNotifier notifier = IBeaconManager.getInstanceForApplication(this).getRangingNotifier();
+            java.util.Collection<IBeacon> iBeacons = IBeaconData.fromIBeaconDatas(rangingGoneBeaocn.getIBeacons());
+			if (notifier != null) {
+				notifier.onGoneBeacons(iBeacons, rangingGoneBeaocn.getRegion());
+			}
+            else {
+                if (IBeaconManager.debug) Log.d(TAG, "but ranging notifier is null, so we're dropping it.");
+            }
+            RangeNotifier dataNotifier = IBeaconManager.getInstanceForApplication(this).getDataRequestNotifier();
+            if (dataNotifier != null) {
+                dataNotifier.onGoneBeacons(iBeacons, rangingGoneBeaocn.getRegion());
             }
 		}
 		if (monitoringData != null) {

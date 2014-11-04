@@ -232,39 +232,50 @@ public class MainActivity extends Activity implements
 				if (ProgressBarVisibile) {
 					handler.sendEmptyMessage(PROGRESSBARGONE);
 				}
-				java.util.Iterator<IBeacon> iterator = iBeacons.iterator();
-				while (iterator.hasNext()) {
-					IBeacon temp = iterator.next();
-					if (beaconDataListA.contains(temp)) {
-						beaconDataListA.set(beaconDataListA.indexOf(temp), temp);
-						handler.sendEmptyMessage(UPDATEUI);
-					} else {
-						beaconDataListA.add(temp);
-						handler.sendEmptyMessage(UPDATEUI);
-					}
-
-				}
+//				java.util.Iterator<IBeacon> iterator = iBeacons.iterator();
+//				while (iterator.hasNext()) {
+//					IBeacon temp = iterator.next();
+//					if (beaconDataListA.contains(temp)) {
+//						beaconDataListA.set(beaconDataListA.indexOf(temp), temp);
+//						handler.sendEmptyMessage(UPDATEUI);
+//					} else {
+//						beaconDataListA.add(temp);
+//						handler.sendEmptyMessage(UPDATEUI);
+//					}
+//
+//				}
 
 			}
 
 			@Override
 			public void onNewBeacons(Collection<IBeacon> iBeacons, Region region) {
 				// TODO Auto-generated method stub
-				
+				beaconDataListA.addAll(iBeacons);
+				handler.sendEmptyMessage(UPDATEUI);
 			}
 
 			@Override
 			public void onGoneBeacons(Collection<IBeacon> iBeacons,
 					Region region) {
 				// TODO Auto-generated method stub
-				
+				java.util.Iterator<IBeacon> iterator = iBeacons.iterator();
+				while (iterator.hasNext()) {
+					IBeacon temp = iterator.next();
+					beaconDataListA.remove(temp);
+					handler.sendEmptyMessage(UPDATEUI);
+				}
 			}
 
 			@Override
 			public void onUpdateBeacon(Collection<IBeacon> iBeacons,
 					Region region) {
 				// TODO Auto-generated method stub
-				
+				java.util.Iterator<IBeacon> iterator = iBeacons.iterator();
+				while (iterator.hasNext()) {
+					IBeacon temp = iterator.next();
+					beaconDataListA.set(beaconDataListA.indexOf(temp), temp);
+					handler.sendEmptyMessage(UPDATEUI);
+				}
 			}
 
 			
@@ -290,7 +301,7 @@ public class MainActivity extends Activity implements
 		});
 		try {
 			Region myRegion = new Region("myRangingUniqueId", null, null, null);
-			iBeaconManager.startMonitoringBeaconsInRegion(myRegion);
+//			iBeaconManager.startMonitoringBeaconsInRegion(myRegion);
 			iBeaconManager.startRangingBeaconsInRegion(myRegion);
 		} catch (RemoteException e) {
 			e.printStackTrace();
