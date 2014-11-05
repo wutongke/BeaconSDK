@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.lef.scanner.IBeacon;
+import com.lef.scanner.IBeaconData;
 import com.lef.scanner.IBeaconManager;
 import com.lef.scanner.Region;
 

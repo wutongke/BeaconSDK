@@ -3,8 +3,8 @@ package com.lef.beaconsdk;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.lef.ibeacon.service.IBeaconData;
 import com.lef.scanner.IBeacon;
+import com.lef.scanner.IBeaconData;
 import com.lef.scanner.IBeaconManager;
 import com.lef.scanner.MonitorNotifier;
 import com.lef.scanner.RangeNotifier;

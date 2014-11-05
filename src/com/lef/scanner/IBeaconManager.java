@@ -141,7 +141,7 @@ public class IBeaconManager {
 	 */
 	public static final long DEFAULT_BACKGROUND_BETWEEN_SCAN_PERIOD = 5 * 60 * 1000;
 	/**
-	 * é»˜è®¤å­˜æ´»æ—¶é—´
+	 * Ä¬ÈÏ´æ»îÊ±¼ä
 	 */
 	public static final long DEFAULT_INSIDE_EXPIRATION_MILLIS = 10000l;
 	private long foregroundScanPeriod = DEFAULT_FOREGROUND_SCAN_PERIOD;
@@ -201,7 +201,7 @@ public class IBeaconManager {
 	}
 
 	/**
-	 * è®¾ç½®beaconçš„å­˜æ´»æ—¶é—´ï¼Œå¦‚æœè¶…æ—¶æ²¡æœ‰å†æ¬¡è¯»åˆ°ï¼Œåˆ™ä»listä¸­åˆ é™¤
+	 * ÉèÖÃbeaconµÄ´æ»îÊ±¼ä£¬Èç¹û³¬Ê±Ã»ÓĞÔÙ´Î¶Áµ½£¬Ôò´ÓlistÖĞÉ¾³ı
 	 * @param inside_expiration_millis
 	 */
 	public void setInside_expiration_millis(long inside_expiration_millis) {

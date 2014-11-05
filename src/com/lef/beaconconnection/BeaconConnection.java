@@ -3,6 +3,9 @@ package com.lef.beaconconnection;
 import java.util.UUID;
 
 
+import com.lef.ibeacon.service.BeaconScanner;
+import com.lef.ibeacon.service.ScannerListener;
+import com.lef.ibeacon.service.UpdateService;
 import com.lef.scanner.IBeacon;
 
 import android.app.Activity;
@@ -40,9 +43,9 @@ public class BeaconConnection implements ScannerListener {
 	/**
 	 * 构造函数，需要实现监听程序BeaconConnectionCallback
 	 * 
-	 * @param context
-	 * @param beacon
-	 * @param callback
+	 * @param context-连接beacon的Activity
+	 * @param beacon-需要连接的beacon
+	 * @param callback -实现BeaconConnectionCallback接口，用于连接成功后对beacon进行设置
 	 */
 	public BeaconConnection(Activity context, IBeacon beacon,
 			BeaconConnectionCallback callback) {
@@ -126,13 +129,16 @@ public class BeaconConnection implements ScannerListener {
 			}
 		}
 	}
-
-	public void setCalRssi(int rssi) {
-		if (rssi > 0 || rssi < -150) {
+/**
+ * 设置距离一米是beacon的信号强度，用于根据信号强度计算智能终端与beacon之间的距离
+ * @param txPower
+ */
+	public void setCalRssi(int txPower) {
+		if (txPower > 0 || txPower < -150) {
 			mConnectionCallback.onSetCalRssi(mcurrentBeacon, INVALIDVALUE);
 		} else {
-			if (mBinder.setCalibratedRssi(rssi)) {
-				mcurrentBeacon.setTxPower(rssi);
+			if (mBinder.setCalibratedRssi(txPower)) {
+				mcurrentBeacon.setTxPower(txPower);
 				mConnectionCallback.onSetCalRssi(mcurrentBeacon, SUCCESS);
 			} else {
 				mConnectionCallback.onSetCalRssi(mcurrentBeacon, FAILURE);

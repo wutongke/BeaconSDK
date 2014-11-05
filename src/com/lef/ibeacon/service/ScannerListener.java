@@ -6,7 +6,7 @@
  * Licensees are granted free, non-transferable use of the information. NO WARRANTY of ANY KIND is provided. 
  * This heading must NOT be removed from the file.
  ******************************************************************************/
-package com.lef.beaconconnection;
+package com.lef.ibeacon.service;
 
 import android.bluetooth.BluetoothDevice;
 
@@ -20,6 +20,6 @@ public interface ScannerListener {
 	 * @param the
 	 *            device name.
 	 */
-	void onDeviceSelected(final BluetoothDevice device, final String name);
+	public void onDeviceSelected(final BluetoothDevice device, final String name);
 
 }

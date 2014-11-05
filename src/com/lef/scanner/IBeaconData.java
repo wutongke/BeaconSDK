@@ -13,7 +13,6 @@
  * with the License.  You may obtain a copy of the License at
  * 
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 开发中不需要用到，封装ibeacon，实现parcelable接口，提供了一些静态方法
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -21,15 +20,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.lef.ibeacon.service;
+package com.lef.scanner;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import com.lef.scanner.IBeacon;
 
-import android.bluetooth.BluetoothDevice;
 import android.os.Parcel;
 import android.os.Parcelable;
 

@@ -115,7 +115,7 @@ public class IBeacon {
 	 */
 	protected int txPower;
 	/**
-	 * 锟斤拷取beacon锟斤拷时锟斤拷
+	 * ��ȡbeacon��ʱ��
 	 */
 	protected long updateTime;
 	/**
@@ -262,7 +262,6 @@ public class IBeacon {
 	/**
 	 * Construct an iBeacon from a Bluetooth LE packet collected by Android's Bluetooth APIs,
      * including the raw bluetooth device info
-	 * 锟借备锟斤拷锟斤拷为锟斤拷锟斤拷锟斤拷之锟襟，广播锟斤拷锟斤拷锟斤拷锟酵�
 	 * @param scanData The actual packet bytes
 	 * @param rssi The measured signal strength of the packet
      * @param device The bluetooth device that was detected
@@ -315,7 +314,6 @@ public class IBeacon {
 		}
 								
 		final IBeacon iBeacon = new IBeacon();
-		//锟借备锟斤拷锟斤拷锟斤拷时 锟斤拷锟姐播锟斤拷莶锟酵拷锟斤拷锟斤拷锟斤拷锟轿拷锟斤拷锟斤拷锟绞憋拷锟絤ajor锟斤拷minor锟斤拷txpower锟斤拷锟斤拷为-1
 		if (!canBeConnected) {
 			iBeacon.major = (scanData[startByte + 20] & 0xff) * 0x100
 					+ (scanData[startByte + 21] & 0xff);

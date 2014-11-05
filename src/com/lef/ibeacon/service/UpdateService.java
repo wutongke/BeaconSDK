@@ -6,7 +6,7 @@
  * Licensees are granted free, non-transferable use of the information. NO WARRANTY of ANY KIND is provided. 
  * This heading must NOT be removed from the file.
  ******************************************************************************/
-package com.lef.beaconconnection;
+package com.lef.ibeacon.service;
 
 import java.lang.reflect.Method;
 import java.util.UUID;
@@ -34,29 +34,29 @@ import android.util.Pair;
 public class UpdateService extends Service {
 	private static final String TAG = "UpdateService";
 
-	protected final static String ACTION_STATE_CHANGED = "no.nordicsemi.android.nrfbeacon.ACTION_STATE_CHANGED";
-	protected final static String ACTION_GATT_ERROR = "no.nordicsemi.android.nrfbeacon.ACTION_GATT_ERROR";
-	protected final static String ACTION_DONE = "no.nordicsemi.android.nrfbeacon.ACTION_DONE";
-	protected final static String ACTION_UUID_READY = "no.nordicsemi.android.nrfbeacon.ACTION_UUID_READY";
-	protected final static String ACTION_MAJOR_MINOR_READY = "no.nordicsemi.android.nrfbeacon.ACTION_MAJOR_MINOR_READY";
-	protected final static String ACTION_RSSI_READY = "no.nordicsemi.android.nrfbeacon.ACTION_RSSI_READY";
+	public final static String ACTION_STATE_CHANGED = "no.nordicsemi.android.nrfbeacon.ACTION_STATE_CHANGED";
+	public final static String ACTION_GATT_ERROR = "no.nordicsemi.android.nrfbeacon.ACTION_GATT_ERROR";
+	public final static String ACTION_DONE = "no.nordicsemi.android.nrfbeacon.ACTION_DONE";
+	public final static String ACTION_UUID_READY = "no.nordicsemi.android.nrfbeacon.ACTION_UUID_READY";
+	public final static String ACTION_MAJOR_MINOR_READY = "no.nordicsemi.android.nrfbeacon.ACTION_MAJOR_MINOR_READY";
+	public final static String ACTION_RSSI_READY = "no.nordicsemi.android.nrfbeacon.ACTION_RSSI_READY";
 
-	protected final static String EXTRA_DATA = "no.nordicsemi.android.nrfbeacon.EXTRA_DATA";
-	protected final static String EXTRA_MAJOR = "no.nordicsemi.android.nrfbeacon.EXTRA_MAJOR";
-	protected final static String EXTRA_MINOR = "no.nordicsemi.android.nrfbeacon.EXTRA_MINOR";
+	public final static String EXTRA_DATA = "no.nordicsemi.android.nrfbeacon.EXTRA_DATA";
+	public final static String EXTRA_MAJOR = "no.nordicsemi.android.nrfbeacon.EXTRA_MAJOR";
+	public final static String EXTRA_MINOR = "no.nordicsemi.android.nrfbeacon.EXTRA_MINOR";
 
-	protected final static int ERROR_UNSUPPORTED_DEVICE = -1;
+	public final static int ERROR_UNSUPPORTED_DEVICE = -1;
 
 	private int mConnectionState;
-	protected final static int STATE_DISCONNECTED = 0;
-	protected final static int STATE_CONNECTING = 1;
-	protected final static int STATE_DISCOVERING_SERVICES = 2;
-	protected final static int STATE_CONNECTED = 3;
-	protected final static int STATE_DISCONNECTING = 4;
+	public final static int STATE_DISCONNECTED = 0;
+	public final static int STATE_CONNECTING = 1;
+	public final static int STATE_DISCOVERING_SERVICES = 2;
+	public final static int STATE_CONNECTED = 3;
+	public final static int STATE_DISCONNECTING = 4;
 
-	protected final static int SERVICE_UUID = 1;
-	protected final static int SERVICE_MAJOR_MINOR = 2;
-	protected final static int SERVICE_CALIBRATION = 3;
+	public final static int SERVICE_UUID = 1;
+	public final static int SERVICE_MAJOR_MINOR = 2;
+	public final static int SERVICE_CALIBRATION = 3;
 
 	private static final UUID CONFIG_SERVICE_UUID = new UUID(
 			0x955A15230FE2F5AAl, 0x0A09484B8D4F3E8ADl);

@@ -1,8 +1,7 @@
-package com.lef.beaconconnection;
+package com.lef.ibeacon.service;
 
 import java.util.UUID;
 
-import com.lef.ibeacon.service.ScannerServiceParser;
 
 
 import android.bluetooth.BluetoothAdapter;
@@ -24,7 +23,7 @@ public class BeaconScanner {
 	private boolean mIsScanning = false;
 	private String bluetoothAdress;
 
-	BeaconScanner(Context context, ScannerListener listener ,String bluetoothAdress) {
+	public BeaconScanner(Context context, ScannerListener listener ,String bluetoothAdress) {
 		super();
 		this.mContext = context;
 		this.mListener = listener;
@@ -38,7 +37,7 @@ public class BeaconScanner {
 	/**
 	 * ø™ º…®√Ë…Ë±∏
 	 */
-	void startScan() {
+	public void startScan() {
 		if (!mIsScanning) {
 			mBluetoothAdapter.startLeScan(mLEScanCallback);
 			mIsScanning = true;
@@ -48,7 +47,7 @@ public class BeaconScanner {
 	/**
 	 * Õ£÷π¿∂—¿…®√Ë
 	 */
-	void stopScan() {
+	public void stopScan() {
 		if (mIsScanning) {
 			mBluetoothAdapter.stopLeScan(mLEScanCallback);
 			mIsScanning = false;

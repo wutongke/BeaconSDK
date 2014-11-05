@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.lef.beaconconnection.UpdateService" />
+        <service android:name="com.lef.ibeacon.service.UpdateService" />
         <service
             android:name="com.lef.ibeacon.service.IBeaconService"
             android:enabled="true"
