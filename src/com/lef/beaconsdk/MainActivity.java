@@ -137,6 +137,9 @@ public class MainActivity extends Activity implements
 							new IBeaconData(beaconDataListB.get(position)));
 					startActivity(mintent);
 //					beaconDataListA.remove(position);
+					if (iBeaconManager != null && iBeaconManager.isBound(MainActivity.this)) {
+						iBeaconManager.unBind(MainActivity.this);
+					}
 				} else {
 					handler.sendEmptyMessage(CLICKTOAST);
 				}
@@ -149,6 +152,9 @@ public class MainActivity extends Activity implements
 		// TODO Auto-generated method stub
 		super.onResume();
 		if (iBeaconManager!=null&&!iBeaconManager.isBound(this)) {
+			if(beaconDataListA.size()>0){
+				beaconDataListA.clear();
+			}
 			// 蓝牙dialog
 			initBluetooth();
 		}
