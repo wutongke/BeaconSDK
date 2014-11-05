@@ -164,6 +164,7 @@ public class BeaconConnection implements ScannerListener {
 
 		if (mBinded){
 			isConnection =false;
+			mBinded=false;
 			mBinder.disconnectAndClose();
 			LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mServiceBroadcastReceiver);
 			mContext.unbindService(mServiceConnection);
@@ -253,7 +254,10 @@ public class BeaconConnection implements ScannerListener {
 							.show();
 					break;
 				}
-				mBinder.disconnectAndClose();
+				//防止提前点击了断开连接
+				if (mBinded) {
+					mBinder.disconnectAndClose();
+				}
 			}
 		};
 	};

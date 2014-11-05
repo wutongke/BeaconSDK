@@ -136,7 +136,7 @@ public class MainActivity extends Activity implements
 					mintent.putExtra("beacon",
 							new IBeaconData(beaconDataListB.get(position)));
 					startActivity(mintent);
-					beaconDataListA.remove(position);
+//					beaconDataListA.remove(position);
 				} else {
 					handler.sendEmptyMessage(CLICKTOAST);
 				}
