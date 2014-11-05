@@ -658,8 +658,13 @@ public class IBeaconService extends Service {
 			if (IBeaconManager.debug)
 				Log.d(TAG, "Calling ranging callback with "
 						+ rangeState.getIBeacons().size() + " iBeacons");
+			//使用这种方式创建对象时，隐藏了遍历，存在并发安全问题
+			//使用锁解决并发问题
 			final Set<IBeacon> tempAll = new HashSet<IBeacon>(rangeState.getAllIBeacons());
-			final Set<IBeacon> temp = new HashSet<IBeacon>(rangeState.getIBeacons());
+			Set<IBeacon> temp = new HashSet<IBeacon>();
+			synchronized (temp) {
+				temp = rangeState.getIBeacons();
+			}
 			final Iterator<IBeacon> tempIterator = temp.iterator();
 
 			// 用于update的set<IBeacon>
@@ -667,26 +672,31 @@ public class IBeaconService extends Service {
 			Set<IBeacon> newIBeacons = new HashSet<IBeacon>();
 			Set<IBeacon> goneIBeacons = new HashSet<IBeacon>();
 
-			// 通过遍历新扫描到的beacon，判断有无心出现的beacon
-			while (tempIterator.hasNext()) {
-				IBeacon tempBeacon = tempIterator.next();
-				if (!tempAll.contains(tempBeacon)) {
-					rangeState.getAllIBeacons().add(tempBeacon);
-					newIBeacons.add(tempBeacon);
-				} else {
-					rangeState.getAllIBeacons().remove(tempBeacon);
-					rangeState.getAllIBeacons().add(tempBeacon);
-					updateIBeacons.add(tempBeacon);
+			synchronized (temp) {
+				// 通过遍历新扫描到的beacon，判断有无心出现的beacon
+				while (tempIterator.hasNext()) {
+					IBeacon tempBeacon = tempIterator.next();
+					if (!tempAll.contains(tempBeacon)) {
+						rangeState.getAllIBeacons().add(tempBeacon);
+						if (!tempBeacon.isCanBeConnected()) {
+							newIBeacons.add(tempBeacon);
+						}
+					} else {
+						rangeState.getAllIBeacons().remove(tempBeacon);
+						rangeState.getAllIBeacons().add(tempBeacon);
+						updateIBeacons.add(tempBeacon);
+					}
 				}
 			}
-
-			// * 判断是否有离开的beacon
-			final Iterator<IBeacon> tempAllIterator = tempAll.iterator();
-			while (tempAllIterator.hasNext()) {
-				IBeacon tempBeacon = tempAllIterator.next();
-				if (rangeState.isOutofRange(tempBeacon)) {
-					goneIBeacons.add(tempBeacon);
-					rangeState.getAllIBeacons().remove(tempBeacon);
+			synchronized (tempAll) {
+				// * 判断是否有离开的beacon
+				final Iterator<IBeacon> tempAllIterator = tempAll.iterator();
+				while (tempAllIterator.hasNext()) {
+					IBeacon tempBeacon = tempAllIterator.next();
+					if (rangeState.isOutofRange(tempBeacon)) {
+						goneIBeacons.add(tempBeacon);
+						rangeState.getAllIBeacons().remove(tempBeacon);
+					}
 				}
 			}
 			rangeState.getCallback().callForNewBeacon(IBeaconService.this,

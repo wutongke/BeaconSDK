@@ -159,9 +159,9 @@ public class MainActivity extends Activity implements
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		if (iBeaconManager.isBound(this)) {
-			iBeaconManager.unBind(this);
-		}
+//		if (iBeaconManager.isBound(this)) {
+//			iBeaconManager.unBind(this);
+//		}
 	}
 
 	@Override
