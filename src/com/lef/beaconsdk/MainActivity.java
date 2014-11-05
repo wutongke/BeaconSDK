@@ -256,8 +256,16 @@ public class MainActivity extends Activity implements
 			@Override
 			public void onNewBeacons(Collection<IBeacon> iBeacons, Region region) {
 				// TODO Auto-generated method stub
-				beaconDataListA.addAll(iBeacons);
-				handler.sendEmptyMessage(UPDATEUI);
+//				beaconDataListA.addAll(iBeacons);
+//				handler.sendEmptyMessage(UPDATEUI);
+				java.util.Iterator<IBeacon> iterator = iBeacons.iterator();
+				while (iterator.hasNext()) {
+					IBeacon temp = iterator.next();
+					if (!beaconDataListA.contains(temp)) {
+						beaconDataListA.add(temp);
+					}
+					handler.sendEmptyMessage(UPDATEUI);
+				}
 			}
 
 			@Override
@@ -312,7 +320,6 @@ public class MainActivity extends Activity implements
 		});
 		try {
 			Region myRegion = new Region("myRangingUniqueId", null, null, null);
-//			iBeaconManager.startMonitoringBeaconsInRegion(myRegion);
 			iBeaconManager.startRangingBeaconsInRegion(myRegion);
 		} catch (RemoteException e) {
 			e.printStackTrace();

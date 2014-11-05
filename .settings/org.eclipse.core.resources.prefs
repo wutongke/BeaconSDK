@@ -5,4 +5,7 @@ encoding//src/com/lef/ibeacon/service/BeaconScanner.java=gbk
 encoding//src/com/lef/scanner/IBeacon.java=gbk
 encoding//src/com/lef/scanner/IBeaconData.java=gbk
 encoding//src/com/lef/scanner/IBeaconManager.java=gbk
+encoding//src/com/lef/scanner/MonitorNotifier.java=gbk
+encoding//src/com/lef/scanner/RangeNotifier.java=gbk
+encoding//src/com/lef/scanner/Region.java=gbk
 encoding/<project>=UTF-8

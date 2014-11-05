@@ -2,8 +2,6 @@
  * Radius Networks, Inc.
  * http://www.radiusnetworks.com
  * 
- * @author David G. Young
- * 
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -56,6 +54,11 @@ public class IBeaconData extends IBeacon implements Parcelable {
     public static IBeacon fromIBeaconDatas(IBeaconData iBeaconData){
     	return iBeaconData;
     }
+    /**
+     * 封装IBeacon，可用于在intent中传递IBeacon
+     * @param iBeacon
+     * @return
+     */
     public static IBeaconData fromIBeacon(IBeacon iBeacon){
     	return new IBeaconData(iBeacon);
     }

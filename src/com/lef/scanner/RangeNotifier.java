@@ -33,23 +33,33 @@ import java.util.Collection;
  * @see Region
  * @see IBeacon
  * 
- * @author David G. Young
  *
  */
 public interface RangeNotifier {
 	/**
+	 * 按自定义的扫描周期回调显示所有扫描到的beacon
 	 * Called once per second to give an estimate of the distance to visible iBeacons
 	 * @param iBeacons a collection of <code>IBeacon<code> objects that have been seen in the past second
 	 * @param region the <code>Region</code> object that defines the criteria for the ranged iBeacons
 	 */
 	public void didRangeBeaconsInRegion(Collection<IBeacon> iBeacons, Region region);
 	/**
-	 * 
+	 * 回调显示region中新扫描到的beacon
 	 * @param iBeacons
 	 * @param region
 	 */
 	public void onNewBeacons(Collection<IBeacon> iBeacons, Region region);
+	/**
+	 * 回调显示region中消失的beacon
+	 * @param iBeacons
+	 * @param region
+	 */
 	public void onGoneBeacons(Collection<IBeacon> iBeacons, Region region);
+	/**
+	 * 回调更新region中beacon的信息
+	 * @param iBeacons
+	 * @param region
+	 */
 	public void onUpdateBeacon(Collection<IBeacon> iBeacons, Region region);
 	
 }

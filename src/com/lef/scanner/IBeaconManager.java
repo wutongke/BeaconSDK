@@ -54,49 +54,46 @@ import android.util.Log;
  * conjunction with <code>IBeaconConsumer</code> interface, which provides a
  * callback when the <code>IBeaconService</code> is ready to use. Until this
  * callback is made, ranging and monitoring of iBeacons is not possible.
- * 
- * In the example below, an Activity implements the <code>IBeaconConsumer</code>
- * interface, binds to the service, then when it gets the callback saying the
- * service is ready, it starts ranging.
- * 
- * <pre>
- * <code>
- *  public class RangingActivity extends Activity implements IBeaconConsumer {
- *  	protected static final String TAG = "RangingActivity";
- *  	private IBeaconManager iBeaconManager = IBeaconManager.getInstanceForApplication(this);
- *  	 {@literal @}Override
- *  	protected void onCreate(Bundle savedInstanceState) {
- *  		super.onCreate(savedInstanceState);
- *  		setContentView(R.layout.activity_ranging);
- *  		iBeaconManager.bind(this);
- *  	}
- *  	 {@literal @}Override 
- *  	protected void onDestroy() {
- *  		super.onDestroy();
- *  		iBeaconManager.unBind(this);
- *  	}
- *  	 {@literal @}Override
- *  	public void onIBeaconServiceConnect() {
- *  		iBeaconManager.setRangeNotifier(new RangeNotifier() {
- *        	 {@literal @}Override 
- *        	public void didRangeBeaconsInRegion(Collection<IBeacon> iBeacons, Region region) {
- *     			if (iBeacons.size() > 0) {
- *       			Log.i(TAG, "The first iBeacon I see is about "+iBeacons.iterator().next().getAccuracy()+" meters away.");		
- *     			}
- *        	}
- *  		});
- *  		
- *  		try {
- *  			iBeaconManager.startRangingBeaconsInRegion(new Region("myRangingUniqueId", null, null, null));
- *  		} catch (RemoteException e) {	}
- *  	}
- *  }
- *  </code>
- * </pre>
- * 
- * @author David G. Young
- * 
+ * @version 1.0
  */
+//* In the example below, an Activity implements the <code>IBeaconConsumer</code>
+//* interface, binds to the service, then when it gets the callback saying the
+//* service is ready, it starts ranging.
+//* 
+//* <pre>
+//* <code>
+//*  public class RangingActivity extends Activity implements IBeaconConsumer {
+//*  	protected static final String TAG = "RangingActivity";
+//*  	private IBeaconManager iBeaconManager = IBeaconManager.getInstanceForApplication(this);
+//*  	 {@literal @}Override
+//*  	protected void onCreate(Bundle savedInstanceState) {
+//*  		super.onCreate(savedInstanceState);
+//*  		setContentView(R.layout.activity_ranging);
+//*  		iBeaconManager.bind(this);
+//*  	}
+//*  	 {@literal @}Override 
+//*  	protected void onDestroy() {
+//*  		super.onDestroy();
+//*  		iBeaconManager.unBind(this);
+//*  	}
+//*  	 {@literal @}Override
+//*  	public void onIBeaconServiceConnect() {
+//*  		iBeaconManager.setRangeNotifier(new RangeNotifier() {
+//*        	 {@literal @}Override 
+//*        	public void didRangeBeaconsInRegion(Collection<IBeacon> iBeacons, Region region) {
+//*     			if (iBeacons.size() > 0) {
+//*       			Log.i(TAG, "The first iBeacon I see is about "+iBeacons.iterator().next().getAccuracy()+" meters away.");		
+//*     			}
+//*        	}
+//*  		});
+//*  		
+//*  		try {
+//*  			iBeaconManager.startRangingBeaconsInRegion(new Region("myRangingUniqueId", null, null, null));
+//*  		} catch (RemoteException e) {	}
+//*  	}
+//*  }
+//*  </code>
+//* </pre>
 @TargetApi(4)
 public class IBeaconManager {
 	private static final String TAG = "IBeaconManager";
@@ -111,6 +108,7 @@ public class IBeaconManager {
 	private ArrayList<Region> rangedRegions = new ArrayList<Region>();
 
 	/**
+	 * 调试指示
 	 * set to true if you want to see debug messages associated with this
 	 * library
 	 */
@@ -121,27 +119,31 @@ public class IBeaconManager {
 	}
 
 	/**
+	 * 默认蓝牙扫描周期<br>
 	 * The default duration in milliseconds of the bluetooth scan cycle
 	 */
 	public static final long DEFAULT_FOREGROUND_SCAN_PERIOD = 1100;
 	/**
+	 * 默认扫描周期之间的间隔<br>
 	 * The default duration in milliseconds spent not scanning between each
 	 * bluetooth scan cycle
 	 */
 	public static final long DEFAULT_FOREGROUND_BETWEEN_SCAN_PERIOD = 0;
 	/**
+	 * 默认后台扫描周期<br>
 	 * The default duration in milliseconds of the bluetooth scan cycle when no
 	 * ranging/monitoring clients are in the foreground
 	 */
 	public static final long DEFAULT_BACKGROUND_SCAN_PERIOD = 10000;
 	/**
+	 * 默认后台扫描周期间隔<br>
 	 * The default duration in milliseconds spent not scanning between each
 	 * bluetooth scan cycle when no ranging/monitoring clients are in the
 	 * foreground
 	 */
 	public static final long DEFAULT_BACKGROUND_BETWEEN_SCAN_PERIOD = 5 * 60 * 1000;
 	/**
-	 * 默认存活时间
+	 * 默认存活时间<br>
 	 */
 	public static final long DEFAULT_INSIDE_EXPIRATION_MILLIS = 10000l;
 	private long foregroundScanPeriod = DEFAULT_FOREGROUND_SCAN_PERIOD;
@@ -151,6 +153,7 @@ public class IBeaconManager {
 	private long inside_expiration_millis = DEFAULT_INSIDE_EXPIRATION_MILLIS;
 
 	/**
+	 * 设置前台扫描时间<br>
 	 * Sets the duration in milliseconds of each Bluetooth LE scan cycle to look
 	 * for iBeacons. This function is used to setup the period before calling
 	 * {@link #bind} or when switching between background/foreground. To have it
@@ -201,7 +204,7 @@ public class IBeaconManager {
 	}
 
 	/**
-	 * 设置beacon的存活时间，如果超时没有再次读到，则从list中删除
+	 * 设置beacon的存活时间，如果超时没有再次读到，则标示离开该beacon区域<br>
 	 * @param inside_expiration_millis
 	 */
 	public void setInside_expiration_millis(long inside_expiration_millis) {
@@ -228,6 +231,8 @@ public class IBeaconManager {
 	}
 
 	/**
+	 * 判断是否是安卓4.3以上，判断是否有低功耗蓝牙，判断蓝牙是否启动
+	 * 全部正常返回true<br>
 	 * Check if Bluetooth LE is supported by this Android device, and if so,
 	 * make sure it is enabled. Throws a BleNotAvailableException if Bluetooth
 	 * LE is not supported. (Note: The Android emulator will do this)
@@ -255,6 +260,7 @@ public class IBeaconManager {
 	}
 
 	/**
+	 * 绑定到服务或者Activity
 	 * Binds an Android <code>Activity</code> or <code>Service</code> to the
 	 * <code>IBeaconService</code>. The <code>Activity</code> or
 	 * <code>Service</code> must implement the <code>IBeaconConsuemr</code>
@@ -298,6 +304,7 @@ public class IBeaconManager {
 	}
 
 	/**
+	 * 解绑定<br>
 	 * Unbinds an Android <code>Activity</code> or <code>Service</code> to the
 	 * <code>IBeaconService</code>. This should typically be called in the
 	 * onDestroy() method.
@@ -330,6 +337,7 @@ public class IBeaconManager {
 	}
 
 	/**
+	 * 判断是否应用是否绑定服务<br>
 	 * Tells you if the passed iBeacon consumer is bound to the service
 	 * 
 	 * @param consumer
@@ -343,6 +351,7 @@ public class IBeaconManager {
 	}
 
 	/**
+	 * 设置蓝牙扫描模式为前台或后台，后台模式比较省电<br>
 	 * This method notifies the iBeacon service that the IBeaconConsumer is
 	 * either moving to background mode or foreground mode When in background
 	 * mode, BluetoothLE scans to look for iBeacons are executed less frequently
@@ -399,6 +408,7 @@ public class IBeaconManager {
 	}
 
 	/**
+	 * 设置扫描通知<br>
 	 * Specifies a class that should be called each time the
 	 * <code>IBeaconService</code> gets ranging data, which is nominally once
 	 * per second when iBeacons are detected.
@@ -407,8 +417,8 @@ public class IBeaconManager {
 	 * If two different activities or services set different RangeNotifier
 	 * instances, the last one set will receive all the notifications.
 	 * 
-	 * @see RangeNotifier
-	 * @param notifier
+	 * @see RangeNotifier 
+	 * @param notifier 需要开发者自己实现，SDK启动后将回调
 	 */
 	public void setRangeNotifier(RangeNotifier notifier) {
 		rangeNotifier = notifier;
@@ -434,6 +444,7 @@ public class IBeaconManager {
 	}
 
 	/**
+	 * 启动扫描定义的一个region 的beacon，扫描到的beacon将更加定义的region过滤<br>
 	 * Tells the <code>IBeaconService</code> to start looking for iBeacons that
 	 * match the passed <code>Region</code> object, and providing updates on the
 	 * estimated distance very seconds while iBeacons in the Region are visible.
@@ -471,6 +482,7 @@ public class IBeaconManager {
 	}
 
 	/**
+	 * 停止某个区域的通知<br>
 	 * Tells the <code>IBeaconService</code> to stop looking for iBeacons that
 	 * match the passed <code>Region</code> object and providing distance
 	 * information for them.
@@ -512,6 +524,7 @@ public class IBeaconManager {
 	}
 
 	/**
+	 * 启动监测是否进入某个定义的region<br>
 	 * Tells the <code>IBeaconService</code> to start looking for iBeacons that
 	 * match the passed <code>Region</code> object. Note that the Region's
 	 * unique identifier must be retained to later call the
@@ -548,6 +561,7 @@ public class IBeaconManager {
 	}
 
 	/**
+	 * 停止监测<br>
 	 * Tells the <code>IBeaconService</code> to stop looking for iBeacons that
 	 * match the passed <code>Region</code> object. Note that the Region's
 	 * unique identifier is used to match it to and existing monitored Region.
@@ -589,6 +603,7 @@ public class IBeaconManager {
 	}
 
 	/**
+	 * 更新扫描时间设置<br>
 	 * Updates an already running scan with scanPeriod/betweenScanPeriod
 	 * according to Background/Foreground state. Change will take effect on the
 	 * start of the next scan cycle.

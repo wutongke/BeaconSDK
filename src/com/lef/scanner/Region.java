@@ -41,7 +41,6 @@ import android.util.Log;
  * which indicates that they are a wildcard and will match any value.  Note that this differs
  * from the iOS implementation that does not let you set a wildcard on the proximityUuid field.
  * 
- * @author dyoung
  *
  */
 public class Region  {
@@ -65,9 +64,9 @@ public class Region  {
 	/**
 	 * Constructs a new Region object to be used for Ranging or Monitoring
 	 * @param uniqueId - A unique identifier used to later cancel Ranging and Monitoring, or change the region being Ranged/Monitored
-	 * @param proximityUuid
-	 * @param major
-	 * @param minor
+	 * @param proximityUuid - region中过滤的uuid
+	 * @param major - region中过滤的major
+	 * @param minor - region中过滤的minor
 	 */
 	public Region(String uniqueId, String proximityUuid, Integer major, Integer minor) {
 		this.major = major;

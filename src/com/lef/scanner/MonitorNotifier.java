@@ -31,31 +31,35 @@ package com.lef.scanner;
  * @see IBeaconManager#startMonitoringBeaconsInRegion(Region region)
  * @see Region
  * 
- * @author David G. Young
  */
 public interface MonitorNotifier {
 	/**
+	 * 指示智能终端进入了自定义的region<br>
 	 * Indicates the Android device is inside the Region of iBeacons
 	 */
 	public static final int INSIDE = 1;
 	/**
+	 * 指示智能终端离开了自定义的region<br>
 	 * Indicates the Android device is outside the Region of iBeacons
 	 */
 	public static final int OUTSIDE = 0;
 	
 	/**
+	 * 当进入自定义的region时回调
 	 * Called when at least one iBeacon in a <code>Region</code> is visible.
 	 * @param region a Region that defines the criteria of iBeacons to look for
 	 */
 	public void didEnterRegion(Region region);
 
 	/**
+	 * 当离开自定义的region时回调
 	 * Called when no iBeacons in a <code>Region</code> are visible.
 	 * @param region a Region that defines the criteria of iBeacons to look for
 	 */
 	public void didExitRegion(Region region);
 	
 	/**
+	 * 当进入离开region时状态发生变化时回调
 	 * Called with a state value of MonitorNotifier.INSIDE when at least one iBeacon in a <code>Region</code> is visible.
 	 * Called with a state value of MonitorNotifier.OUTSIDE when no iBeacons in a <code>Region</code> are visible.
 	 * @param state either MonitorNotifier.INSIDE or MonitorNotifier.OUTSIDE

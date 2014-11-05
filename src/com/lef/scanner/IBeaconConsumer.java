@@ -74,11 +74,11 @@ import android.content.ServiceConnection;
  * 
  * @see IBeaconManager
  * 
- * @author David G. Young
  *
  */
 public interface IBeaconConsumer {
 	/**
+	 * 当服务连接成功时回调<br>
 	 * Called when the iBeacon service is running and ready to accept your commands through the IBeaconManager
 	 */
 	public void onIBeaconServiceConnect();

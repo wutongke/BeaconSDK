@@ -2,7 +2,12 @@ package com.lef.beaconconnection;
 
 import com.lef.scanner.IBeacon;
 
-
+/**
+ *  An interface for an Android <code>Activity</code> 
+ * that wants to interact with iBeacons.  
+ * @author lief
+ *
+ */
 public interface BeaconConnectionCallback {
 	/**
 	 * 返回连接状态
@@ -28,7 +33,7 @@ public interface BeaconConnectionCallback {
 	public void onSetMajoMinor(IBeacon beacon, int status);
 
 	/**
-	 * @exception 返回基本设置的设置结果
+	 * @exception 返回基本设置的设置结果，目前还没有启用该功能，将用于设置发射功率和发射频率
 	 *                返回设置结果
 	 * @param beacon
 	 *            当前连接的beacon

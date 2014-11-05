@@ -664,8 +664,9 @@ public class IBeaconService extends Service {
 			Set<IBeacon> temp = new HashSet<IBeacon>();
 			synchronized (temp) {
 				temp = rangeState.getIBeacons();
+				
 			}
-			final Iterator<IBeacon> tempIterator = temp.iterator();
+			
 
 			// 用于update的set<IBeacon>
 			Set<IBeacon> updateIBeacons = new HashSet<IBeacon>();
@@ -674,6 +675,7 @@ public class IBeaconService extends Service {
 
 			synchronized (temp) {
 				// 通过遍历新扫描到的beacon，判断有无心出现的beacon
+				final Iterator<IBeacon> tempIterator = temp.iterator();
 				while (tempIterator.hasNext()) {
 					IBeacon tempBeacon = tempIterator.next();
 					if (!tempAll.contains(tempBeacon)) {

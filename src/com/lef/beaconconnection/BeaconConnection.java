@@ -2,7 +2,6 @@ package com.lef.beaconconnection;
 
 import java.util.UUID;
 
-
 import com.lef.ibeacon.service.BeaconScanner;
 import com.lef.ibeacon.service.ScannerListener;
 import com.lef.ibeacon.service.UpdateService;
@@ -21,15 +20,38 @@ import android.os.ParcelUuid;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
-
+/**
+ *  * An class for an Android <code>Activity</code> 
+ * that wants to interact with iBeacons.  
+ */
 public class BeaconConnection implements ScannerListener {
-
+	/**
+	 * 设置成功
+	 */
 	public static final int SUCCESS = 1;
+	/**
+	 * 设置失败
+	 */
 	public static final int FAILURE = 2;
+	/**
+	 * 设置时采用了不合理的值
+	 */
 	public static final int INVALIDVALUE = 3;
+	/**
+	 * 正在连接beacon
+	 */
 	public static final int CONNECTING = 4;
+	/**
+	 * 连接beacon成功
+	 */
 	public static final int CONNECTED = 5;
+	/**
+	 * 断开beacon连接
+	 */
 	public static final int DISCONNECTED = 6;
+	/**
+	 * 正在断开beacon连接
+	 */
 	public static final int DISCONNECTTING = 7;
 
 	private UpdateService.ServiceBinder mBinder;
@@ -43,9 +65,12 @@ public class BeaconConnection implements ScannerListener {
 	/**
 	 * 构造函数，需要实现监听程序BeaconConnectionCallback
 	 * 
-	 * @param context-连接beacon的Activity
-	 * @param beacon-需要连接的beacon
-	 * @param callback -实现BeaconConnectionCallback接口，用于连接成功后对beacon进行设置
+	 * @param context
+	 *            -连接beacon的Activity
+	 * @param beacon
+	 *            -需要连接的beacon
+	 * @param callback
+	 *            -实现BeaconConnectionCallback接口，用于连接成功后对beacon进行设置
 	 */
 	public BeaconConnection(Activity context, IBeacon beacon,
 			BeaconConnectionCallback callback) {
@@ -129,10 +154,12 @@ public class BeaconConnection implements ScannerListener {
 			}
 		}
 	}
-/**
- * 设置距离一米是beacon的信号强度，用于根据信号强度计算智能终端与beacon之间的距离
- * @param txPower
- */
+
+	/**
+	 * 设置距离一米是beacon的信号强度，用于根据信号强度计算智能终端与beacon之间的距离
+	 * 
+	 * @param txPower 
+	 */
 	public void setCalRssi(int txPower) {
 		if (txPower > 0 || txPower < -150) {
 			mConnectionCallback.onSetCalRssi(mcurrentBeacon, INVALIDVALUE);
@@ -147,7 +174,7 @@ public class BeaconConnection implements ScannerListener {
 	}
 
 	/**
-	 * 连接蓝牙设备Beacon
+	 * 启动连接Beacon
 	 * 
 	 * @param device
 	 */
@@ -162,11 +189,12 @@ public class BeaconConnection implements ScannerListener {
 	 */
 	public void disConnect() {
 
-		if (mBinded){
-			isConnection =false;
-			mBinded=false;
+		if (mBinded) {
+			isConnection = false;
+			mBinded = false;
 			mBinder.disconnectAndClose();
-			LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mServiceBroadcastReceiver);
+			LocalBroadcastManager.getInstance(mContext).unregisterReceiver(
+					mServiceBroadcastReceiver);
 			mContext.unbindService(mServiceConnection);
 			final Intent service = new Intent(mContext, UpdateService.class);
 			mContext.stopService(service);
@@ -174,7 +202,7 @@ public class BeaconConnection implements ScannerListener {
 	}
 
 	/**
-	 * 判断是否连接beacon成功
+	 * 判断beacon是否已经连接
 	 * 
 	 * @return isConnection
 	 */
@@ -204,7 +232,8 @@ public class BeaconConnection implements ScannerListener {
 					}
 					mBinder = null;
 					mBinded = false;
-					mConnectionCallback.onConnectedState(mcurrentBeacon, DISCONNECTED);
+					mConnectionCallback.onConnectedState(mcurrentBeacon,
+							DISCONNECTED);
 					break;
 				case UpdateService.STATE_CONNECTED:
 					isConnection = true;
@@ -226,7 +255,7 @@ public class BeaconConnection implements ScannerListener {
 						.getUuid();
 				mcurrentBeacon.setProximityUuid(uuid.toString());
 				mConnectionCallback.onGetUUID(uuid.toString());
-				
+
 			} else if (UpdateService.ACTION_MAJOR_MINOR_READY.equals(action)) {
 				int major = intent.getIntExtra(UpdateService.EXTRA_MAJOR, 0);
 				int minor = intent.getIntExtra(UpdateService.EXTRA_MINOR, 0);
@@ -254,7 +283,7 @@ public class BeaconConnection implements ScannerListener {
 							.show();
 					break;
 				}
-				//防止提前点击了断开连接
+				// 防止提前点击了断开连接
 				if (mBinded) {
 					mBinder.disconnectAndClose();
 				}
@@ -262,6 +291,11 @@ public class BeaconConnection implements ScannerListener {
 		};
 	};
 
+	/**
+	 * SDK自动回调，开发者不需要调用
+	 * @param BluetoothDevice
+	 * @param BluetoothDeviceName
+	 */
 	@Override
 	public void onDeviceSelected(BluetoothDevice device, String name) {
 		// TODO Auto-generated method stub

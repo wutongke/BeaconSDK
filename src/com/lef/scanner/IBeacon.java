@@ -53,7 +53,6 @@ import android.util.Log;
 * distance measurement (the accuracy field) and group it into a more reliable buckets of 
 * distance (the proximity field.)
 * 
-* @author  David G. Young
 * @see     Region#matchesIBeacon(IBeacon iBeacon)
 */
 public class IBeacon { 
@@ -115,7 +114,7 @@ public class IBeacon {
 	 */
 	protected int txPower;
 	/**
-	 * 锟斤拷取beacon锟斤拷时锟斤拷
+	 * beacon更新时间
 	 */
 	protected long updateTime;
 	/**
@@ -260,6 +259,7 @@ public class IBeacon {
     }
 
 	/**
+	 * SDK自动调用，开发者无需调用<br>
 	 * Construct an iBeacon from a Bluetooth LE packet collected by Android's Bluetooth APIs,
      * including the raw bluetooth device info
 	 * @param scanData The actual packet bytes
