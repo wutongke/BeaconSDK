@@ -678,6 +678,7 @@ public class IBeaconService extends Service {
 					IBeacon tempBeacon = tempIterator.next();
 					if (!tempAll.contains(tempBeacon)) {
 						rangeState.getAllIBeacons().add(tempBeacon);
+//						newIBeacons.add(tempBeacon);
 						if (!tempBeacon.isCanBeConnected()) {
 							newIBeacons.add(tempBeacon);
 						}
