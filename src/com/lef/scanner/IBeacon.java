@@ -28,6 +28,7 @@ import java.util.Date;
 import com.lef.client.IBeaconDataFactory;
 import com.lef.client.NullIBeaconDataFactory;
 import com.lef.ibeacon.IBeaconDataNotifier;
+import com.lef.scanner.BaseSettings.AdvertisingInterval;
 
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothDevice;
@@ -118,6 +119,19 @@ public class IBeacon {
 	 */
 	protected long updateTime;
 	/**
+	 * 发射频率
+	 */
+	protected int advertisingInterval;
+	/**
+	 * 发射功率
+	 */
+	protected int transmitPower;
+	/**
+	 * beacon 的基本设置，包括发射功率和频率
+	 */
+	protected BaseSettings baseSettings;
+	
+	/**
 	 * canBeConnected
 	 */
 	protected boolean canBeConnected;
@@ -174,22 +188,22 @@ public class IBeacon {
 		}
 		return proximity;		
 	}
-	public void setProximityUuid(String proximityUuid) {
+	protected void setProximityUuid(String proximityUuid) {
 		this.proximityUuid = proximityUuid;
 	}
-	public void setMajor(int major) {
+	protected void setMajor(int major) {
 		this.major = major;
 	}
-	public void setMinor(int minor) {
+	protected void setMinor(int minor) {
 		this.minor = minor;
 	}
-	public void setTxPower(int power){
+	protected void setTxPower(int power){
 		this.txPower = power;
 	}
 	public long getUpdateTime() {
 		return updateTime;
 	}
-	public void setUpdateTime(long updateTime) {
+	protected void setUpdateTime(long updateTime) {
 		this.updateTime = updateTime;
 	}
 	/**
@@ -226,6 +240,26 @@ public class IBeacon {
 
 	public BluetoothDevice getBluetoothDevice() {
 		return bluetoothDevice;
+	}
+	protected int getAdvertisingInterval() {
+		return advertisingInterval;
+	}
+	protected int getTransmitPower() {
+		return transmitPower;
+	}
+	public BaseSettings getBaseSettings() {
+		return baseSettings;
+	}
+	protected void setBaseSettings(BaseSettings baseSettings) {
+		this.baseSettings = baseSettings;
+	}
+	protected void setAdvertisingInterval(int advertisingInterval) {
+		this.advertisingInterval = advertisingInterval;
+		this.baseSettings.setaInterval(BaseSettings.getAdvertisingIntervalByInt(advertisingInterval));
+	}
+	protected void setTransmitPower(int transmitPower) {
+		this.transmitPower = transmitPower;
+		this.baseSettings.settPower(BaseSettings.getTransmitPowerByInt(transmitPower));
 	}
 	public boolean isCanBeConnected() {
 		return canBeConnected;
@@ -359,6 +393,9 @@ public class IBeacon {
             iBeacon.bluetoothDevice = device;
             iBeacon.canBeConnected = canBeConnected;
             iBeacon.updateTime = new Date().getTime();
+            iBeacon.baseSettings = new BaseSettings();
+            iBeacon.advertisingInterval = BaseSettings.AdvertisingInterval.UNKNOWN.aValue;
+            iBeacon.transmitPower = BaseSettings.AdvertisingInterval.UNKNOWN.aValue;
         }
 		return iBeacon;
 	}
@@ -379,6 +416,7 @@ public class IBeacon {
         this.bluetoothDevice = otherIBeacon.bluetoothDevice;
         this.canBeConnected = otherIBeacon.canBeConnected;
         this.updateTime = otherIBeacon.updateTime;
+        this.baseSettings = otherIBeacon.baseSettings;
 	}
 	
 	protected IBeacon() {

@@ -1,11 +1,10 @@
-package com.lef.beaconconnection;
+package com.lef.scanner;
 
 import java.util.UUID;
 
 import com.lef.ibeacon.service.BeaconScanner;
 import com.lef.ibeacon.service.ScannerListener;
 import com.lef.ibeacon.service.UpdateService;
-import com.lef.scanner.IBeacon;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
@@ -20,9 +19,10 @@ import android.os.ParcelUuid;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
+
 /**
- *  * An class for an Android <code>Activity</code> 
- * that wants to interact with iBeacons.  
+ * * An class for an Android <code>Activity</code> that wants to interact with
+ * iBeacons.
  */
 public class BeaconConnection implements ScannerListener {
 	/**
@@ -85,6 +85,8 @@ public class BeaconConnection implements ScannerListener {
 		filter.addAction(UpdateService.ACTION_MAJOR_MINOR_READY);
 		filter.addAction(UpdateService.ACTION_RSSI_READY);
 		filter.addAction(UpdateService.ACTION_GATT_ERROR);
+		filter.addAction(UpdateService.ACTION_ADVERTISINGINTERVAL_READY);
+		filter.addAction(UpdateService.ACTION_TRANSMITPOWER_READY);
 		LocalBroadcastManager.getInstance(mContext).registerReceiver(
 				mServiceBroadcastReceiver, filter);
 	}
@@ -158,7 +160,7 @@ public class BeaconConnection implements ScannerListener {
 	/**
 	 * 设置距离一米是beacon的信号强度，用于根据信号强度计算智能终端与beacon之间的距离
 	 * 
-	 * @param txPower 
+	 * @param txPower
 	 */
 	public void setCalRssi(int txPower) {
 		if (txPower > 0 || txPower < -150) {
@@ -170,6 +172,33 @@ public class BeaconConnection implements ScannerListener {
 			} else {
 				mConnectionCallback.onSetCalRssi(mcurrentBeacon, FAILURE);
 			}
+		}
+	}
+
+	/**
+	 * 设置基本配置中的发射频率，回调onSetBaseSetting
+	 * @param advertisingInterval
+	 */
+	public void setAdvertisingInterval(
+			BaseSettings.AdvertisingInterval advertisingInterval) {
+		if (mBinder.setAdvertisingInterval(advertisingInterval.aValue)) {
+			mcurrentBeacon.setAdvertisingInterval(advertisingInterval.aValue);
+			mConnectionCallback.onSetBaseSetting(mcurrentBeacon, SUCCESS);
+		} else {
+			mConnectionCallback.onSetBaseSetting(mcurrentBeacon, FAILURE);
+		}
+	}
+	/**
+	 * 设置基本配置中的发射功率，回调onSetBaseSetting
+	 * @param advertisingInterval
+	 */
+	public void setTransmitPower(
+			BaseSettings.TransmitPower ransmitPower) {
+		if (mBinder.setTransmitPower(ransmitPower.aValue)) {
+			mcurrentBeacon.setTransmitPower(ransmitPower.aValue);
+			mConnectionCallback.onSetBaseSetting(mcurrentBeacon, SUCCESS);
+		} else {
+			mConnectionCallback.onSetBaseSetting(mcurrentBeacon, FAILURE);
 		}
 	}
 
@@ -267,8 +296,24 @@ public class BeaconConnection implements ScannerListener {
 				int rssi = intent.getIntExtra(UpdateService.EXTRA_DATA, 0);
 				mcurrentBeacon.setTxPower(rssi);
 				mConnectionCallback.onGetRssi(rssi);
+			} else if (UpdateService.ACTION_ADVERTISINGINTERVAL_READY
+					.equals(action)) {
+				int advertisinginterval = intent.getIntExtra(
+						UpdateService.EXTRA_DATA, 0);
+				mcurrentBeacon.setAdvertisingInterval(advertisinginterval);
+				// mConnectionCallback.onGetRssi(advertisinginterval);
+			} else if (UpdateService.ACTION_TRANSMITPOWER_READY.equals(action)) {
+				int transmitpower = intent.getIntExtra(
+						UpdateService.EXTRA_DATA, 0);
+				mcurrentBeacon.setTransmitPower(transmitpower);
+				// mConnectionCallback.onGetRssi(advertisinginterval);
 			} else if (UpdateService.ACTION_DONE.equals(action)) {
 				mBinder.read();
+				// 注释掉的内容错误是空指针
+				// mcurrentBeacon.setProximityUuid(mBinder.getBeaconUuid().toString());
+				// mcurrentBeacon.setTxPower(mBinder.getCalibratedRssi());
+				// mcurrentBeacon.setMajor(mBinder.getMajorAndMinor().first);
+				// mcurrentBeacon.setMinor(mBinder.getMajorAndMinor().second);
 			} else if (UpdateService.ACTION_GATT_ERROR.equals(action)) {
 				final int error = intent.getIntExtra(UpdateService.EXTRA_DATA,
 						0);
@@ -293,6 +338,7 @@ public class BeaconConnection implements ScannerListener {
 
 	/**
 	 * SDK自动回调，开发者不需要调用
+	 * 
 	 * @param BluetoothDevice
 	 * @param BluetoothDeviceName
 	 */

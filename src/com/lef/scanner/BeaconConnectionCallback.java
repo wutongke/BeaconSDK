@@ -1,6 +1,5 @@
-package com.lef.beaconconnection;
+package com.lef.scanner;
 
-import com.lef.scanner.IBeacon;
 
 /**
  *  An interface for an Android <code>Activity</code> 

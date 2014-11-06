@@ -40,6 +40,8 @@ public class UpdateService extends Service {
 	public final static String ACTION_UUID_READY = "no.nordicsemi.android.nrfbeacon.ACTION_UUID_READY";
 	public final static String ACTION_MAJOR_MINOR_READY = "no.nordicsemi.android.nrfbeacon.ACTION_MAJOR_MINOR_READY";
 	public final static String ACTION_RSSI_READY = "no.nordicsemi.android.nrfbeacon.ACTION_RSSI_READY";
+	public final static String ACTION_ADVERTISINGINTERVAL_READY = "no.nordicsemi.android.nrfbeacon.ACTION_ADVERTISINGINTERVAL_READY";
+	public final static String ACTION_TRANSMITPOWER_READY = "no.nordicsemi.android.nrfbeacon.ACTION_TRANSMITPOWER_READY";
 
 	public final static String EXTRA_DATA = "no.nordicsemi.android.nrfbeacon.EXTRA_DATA";
 	public final static String EXTRA_MAJOR = "no.nordicsemi.android.nrfbeacon.EXTRA_MAJOR";
@@ -66,6 +68,10 @@ public class UpdateService extends Service {
 			0x955A15250FE2F5AAl, 0x0A09484B8D4F3E8ADl);
 	private static final UUID CONFIG_MAJOR_MINOR_CHARACTERISTIC_UUID = new UUID(
 			0x955A15260FE2F5AAl, 0x0A09484B8D4F3E8ADl);
+	private static final UUID CONFIG_TRANSMITPOWER_CHARACTERISTIC_UUID = new UUID(
+			0x955A15280FE2F5AAl, 0x0A09484B8D4F3E8ADl);
+	private static final UUID CONFIG_ADVERTISINGINTERVAL_CHARACTERISTIC_UUID = new UUID(
+			0x955A15270FE2F5AAl, 0x0A09484B8D4F3E8ADl);
 
 	private BluetoothAdapter mAdapter;
 	private BluetoothDevice mBluetoothDevice;
@@ -73,6 +79,8 @@ public class UpdateService extends Service {
 	private BluetoothGattCharacteristic mUuidCharacteristic;
 	private BluetoothGattCharacteristic mMajorMinorCharacteristic;
 	private BluetoothGattCharacteristic mRssiCharacteristic;
+	private BluetoothGattCharacteristic mAdvertisingintervalCharacteristic;
+	private BluetoothGattCharacteristic mTransmitpowerCharacteristic;
 
 	private Handler mHandler;
 
@@ -108,8 +116,8 @@ public class UpdateService extends Service {
 				return;
 			}
 
-			// We have successfully connected
-			setState(STATE_CONNECTED);
+			// We have successfully connected 欲设置为所有数据读取完成后再setState
+//			setState(STATE_CONNECTED);
 
 			// Search for config service
 			final BluetoothGattService configService = gatt
@@ -128,15 +136,23 @@ public class UpdateService extends Service {
 					.getCharacteristic(CONFIG_MAJOR_MINOR_CHARACTERISTIC_UUID);
 			mRssiCharacteristic = configService
 					.getCharacteristic(CONFIG_RSSI_CHARACTERISTIC_UUID);
+			mTransmitpowerCharacteristic = configService
+					.getCharacteristic(CONFIG_TRANSMITPOWER_CHARACTERISTIC_UUID);
+			mAdvertisingintervalCharacteristic = configService
+					.getCharacteristic(CONFIG_ADVERTISINGINTERVAL_CHARACTERISTIC_UUID);
 
 			if (mUuidCharacteristic != null
 					|| mMajorMinorCharacteristic != null
-					|| mRssiCharacteristic != null)
+					|| mRssiCharacteristic != null
+					|| mTransmitpowerCharacteristic != null
+					|| mAdvertisingintervalCharacteristic != null)
 				broadcastOperationCompleted();
 
 			if (mUuidCharacteristic == null
 					&& mMajorMinorCharacteristic == null
-					&& mRssiCharacteristic == null) {
+					&& mRssiCharacteristic == null
+					&& mTransmitpowerCharacteristic == null
+					&& mAdvertisingintervalCharacteristic == null) {
 				// Config characteristics is not present
 				broadcastError(ERROR_UNSUPPORTED_DEVICE);
 				setState(STATE_DISCONNECTING);
@@ -169,6 +185,18 @@ public class UpdateService extends Service {
 				final int rssi = characteristic.getIntValue(
 						BluetoothGattCharacteristic.FORMAT_SINT8, 0);
 				broadcastRssi(rssi);
+			} else if (CONFIG_ADVERTISINGINTERVAL_CHARACTERISTIC_UUID
+					.equals(characteristic.getUuid())) {
+				final int advertisinginterval = characteristic.getIntValue(
+						BluetoothGattCharacteristic.FORMAT_SINT8, 0);
+				broadcastAdvertisinginterval(advertisinginterval);
+			} else if (CONFIG_TRANSMITPOWER_CHARACTERISTIC_UUID
+					.equals(characteristic.getUuid())) {
+				final int advertisinginterval = characteristic.getIntValue(
+						BluetoothGattCharacteristic.FORMAT_SINT8, 0);
+				broadcastTransmitpower(advertisinginterval);
+				//所有数据读取完成后设置成功，这样返回的mcurrnentBeacon所有配置就被设置了
+				setState(STATE_CONNECTED);
 			}
 		}
 
@@ -200,6 +228,25 @@ public class UpdateService extends Service {
 				final int rssi = characteristic.getIntValue(
 						BluetoothGattCharacteristic.FORMAT_SINT8, 0);
 				broadcastRssi(rssi);
+				if (mAdvertisingintervalCharacteristic.getValue()==null){
+					gatt.readCharacteristic(mAdvertisingintervalCharacteristic);
+				}
+			}
+			else if (CONFIG_ADVERTISINGINTERVAL_CHARACTERISTIC_UUID
+					.equals(characteristic.getUuid())) {
+				final int advertisinginterval = characteristic.getIntValue(
+						BluetoothGattCharacteristic.FORMAT_SINT8, 0);
+				broadcastAdvertisinginterval(advertisinginterval);
+				if(mTransmitpowerCharacteristic.getValue()==null){
+					gatt.readCharacteristic(mTransmitpowerCharacteristic);
+				}
+			} else if (CONFIG_TRANSMITPOWER_CHARACTERISTIC_UUID
+					.equals(characteristic.getUuid())) {
+				final int advertisinginterval = characteristic.getIntValue(
+						BluetoothGattCharacteristic.FORMAT_SINT8, 0);
+				broadcastTransmitpower(advertisinginterval);
+				//所有数据读取完成后设置成功，这样返回的mcurrnentBeacon所有配置就被设置了
+				setState(STATE_CONNECTED);
 			}
 		}
 	};
@@ -282,6 +329,12 @@ public class UpdateService extends Service {
 				return true;
 			} else if (mRssiCharacteristic != null) {
 				mBluetoothGatt.readCharacteristic(mRssiCharacteristic);
+				return true;
+			} else if (mAdvertisingintervalCharacteristic != null) {
+				mBluetoothGatt.readCharacteristic(mAdvertisingintervalCharacteristic);
+				return true;
+			} else if (mTransmitpowerCharacteristic != null) {
+				mBluetoothGatt.readCharacteristic(mTransmitpowerCharacteristic);
 				return true;
 			}
 			return false;
@@ -379,6 +432,7 @@ public class UpdateService extends Service {
 			}
 			return null;
 		}
+		
 
 		/**
 		 * Overwrites the beacon calibration RSSI value.
@@ -398,7 +452,70 @@ public class UpdateService extends Service {
 			mBluetoothGatt.writeCharacteristic(mRssiCharacteristic);
 			return true;
 		}
+		/**
+		 * 重写beacon的发射频率
+		 * @param advertisingInterval
+		 * @return
+		 */
+		public boolean setAdvertisingInterval(final int advertisingInterval) {
+			if (mAdvertisingintervalCharacteristic == null)
+				return false;
 
+			mAdvertisingintervalCharacteristic.setValue(advertisingInterval,
+					BluetoothGattCharacteristic.FORMAT_SINT8, 0);
+			mBluetoothGatt.writeCharacteristic(mAdvertisingintervalCharacteristic);
+			return true;
+		}
+		/**
+		 * 重写beacon的发射功率
+		 * @param transmitPower
+		 * @return
+		 */
+		public boolean setTransmitPower(final int transmitPower) {
+			if (mTransmitpowerCharacteristic == null)
+				return false;
+
+			mTransmitpowerCharacteristic.setValue(transmitPower,
+					BluetoothGattCharacteristic.FORMAT_SINT8, 0);
+			mBluetoothGatt.writeCharacteristic(mTransmitpowerCharacteristic);
+			return true;
+		}
+		/**
+		 * Obtains the cached value of the AdvertisingInterval characteristic. If the value has
+		 * not been obtained yet using {@link #read()}, or the characteristic
+		 * has not been found on the beacon, <code>null</code> is returned.
+		 * 
+		 * @return the RSSI value or <code>null</code>
+		 */
+		public Integer getAdvertisingInterval() {
+			final BluetoothGattCharacteristic characteristic = mAdvertisingintervalCharacteristic;
+			if (characteristic != null) {
+				final byte[] data = characteristic.getValue();
+				if (data == null || data.length < 1)
+					return null;
+				return characteristic.getIntValue(
+						BluetoothGattCharacteristic.FORMAT_SINT8, 0);
+			}
+			return null;
+		}
+		/**
+		 * Obtains the cached value of the AdvertisingInterval characteristic. If the value has
+		 * not been obtained yet using {@link #read()}, or the characteristic
+		 * has not been found on the beacon, <code>null</code> is returned.
+		 * 
+		 * @return the RSSI value or <code>null</code>
+		 */
+		public Integer getTransmitPower() {
+			final BluetoothGattCharacteristic characteristic = mTransmitpowerCharacteristic;
+			if (characteristic != null) {
+				final byte[] data = characteristic.getValue();
+				if (data == null || data.length < 1)
+					return null;
+				return characteristic.getIntValue(
+						BluetoothGattCharacteristic.FORMAT_SINT8, 0);
+			}
+			return null;
+		}
 		/**
 		 * Obtains the cached value of the RSSI characteristic. If the value has
 		 * not been obtained yet using {@link #read()}, or the characteristic
@@ -417,7 +534,6 @@ public class UpdateService extends Service {
 			}
 			return null;
 		}
-
 		public int getState() {
 			return mConnectionState;
 		}
@@ -491,6 +607,18 @@ public class UpdateService extends Service {
 	private void broadcastRssi(final int rssi) {
 		final Intent intent = new Intent(ACTION_RSSI_READY);
 		intent.putExtra(EXTRA_DATA, rssi);
+		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+	}
+
+	private void broadcastAdvertisinginterval(final int advertisinginterval) {
+		final Intent intent = new Intent(ACTION_ADVERTISINGINTERVAL_READY);
+		intent.putExtra(EXTRA_DATA, advertisinginterval);
+		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+	}
+
+	private void broadcastTransmitpower(final int transmitpower) {
+		final Intent intent = new Intent(ACTION_TRANSMITPOWER_READY);
+		intent.putExtra(EXTRA_DATA, transmitpower);
 		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 	}
 

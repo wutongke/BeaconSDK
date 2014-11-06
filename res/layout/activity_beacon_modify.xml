@@ -82,6 +82,54 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/advertise_container"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/feature_section_padding"
+        android:paddingRight="@dimen/feature_section_padding" >
+
+        <TextView
+            android:id="@+id/advertise_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="advertiseInterval" />
+
+        <TextView
+            android:id="@+id/advertise_modify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="26sp" />
+
+    </LinearLayout>
+      <LinearLayout
+        android:id="@+id/transmit_container"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/feature_section_padding"
+        android:paddingRight="@dimen/feature_section_padding" >
+
+        <TextView
+            android:id="@+id/transmit_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="transmitPower" />
+
+        <TextView
+            android:id="@+id/transmit_modify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="26sp" />
+
+    </LinearLayout>
+      <LinearLayout
         android:id="@+id/rssi_container"
         android:layout_width="match_parent"
         android:layout_height="44dp"
@@ -113,7 +161,7 @@
             android:text="@string/update_rssi_unit"
             android:textSize="12sp" />
     </LinearLayout>
-
+	
     <Button
         android:id="@+id/disconnect"
         android:layout_width="wrap_content"
