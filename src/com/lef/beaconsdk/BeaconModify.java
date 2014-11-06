@@ -452,29 +452,4 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 			handler.sendEmptyMessage(INVALIDVALUE);
 		}
 	}
-
-	@Override
-	public void onGetUUID(String proximityUuid) {
-		// TODO Auto-generated method stub
-//		 uuidTextView.setText(proximityUuid);
-	}
-
-	@Override
-	public void onGetMajor(int major) {
-		// TODO Auto-generated method stub
-//		 majorTextView.setText(major + "");
-	}
-
-	@Override
-	public void onGetMinor(int minor) {
-		// TODO Auto-generated method stub
-//		 minorTextView.setText(minor + "");
-	}
-
-	@Override
-	public void onGetRssi(int rssi) {
-		// TODO Auto-generated method stub
-//		 rssiTextView.setText(rssi + "");
-	}
-
 }

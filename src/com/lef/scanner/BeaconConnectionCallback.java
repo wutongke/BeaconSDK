@@ -67,31 +67,31 @@ public interface BeaconConnectionCallback {
 	 */
 	public void onSetProximityUUID(IBeacon beacon, int status);
 
-	/**
-	 * 返回已连接设备的uuid
-	 * 
-	 * @param proximityUuid
-	 */
-	public void onGetUUID(String proximityUuid);
-
-	/**
-	 * 返回已连接设备的major
-	 * 
-	 * @param major
-	 */
-	public void onGetMajor(int major);
-
-	/**
-	 * 返回已连接设备的minor
-	 * 
-	 * @param minor
-	 */
-	public void onGetMinor(int minor);
-
-	/**
-	 * 返回已连接设备的计算Rssi
-	 * 
-	 * @param rssi
-	 */
-	public void onGetRssi(int rssi);
+//	/**
+//	 * 返回已连接设备的uuid
+//	 * 
+//	 * @param proximityUuid
+//	 */
+//	public void onGetUUID(String proximityUuid);
+//
+//	/**
+//	 * 返回已连接设备的major
+//	 * 
+//	 * @param major
+//	 */
+//	public void onGetMajor(int major);
+//
+//	/**
+//	 * 返回已连接设备的minor
+//	 * 
+//	 * @param minor
+//	 */
+//	public void onGetMinor(int minor);
+//
+//	/**
+//	 * 返回已连接设备的计算Rssi
+//	 * 
+//	 * @param rssi
+//	 */
+//	public void onGetRssi(int rssi);
 }

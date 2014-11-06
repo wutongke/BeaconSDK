@@ -283,19 +283,19 @@ public class BeaconConnection implements ScannerListener {
 						.getParcelableExtra(UpdateService.EXTRA_DATA))
 						.getUuid();
 				mcurrentBeacon.setProximityUuid(uuid.toString());
-				mConnectionCallback.onGetUUID(uuid.toString());
+//				mConnectionCallback.onGetUUID(uuid.toString());
 
 			} else if (UpdateService.ACTION_MAJOR_MINOR_READY.equals(action)) {
 				int major = intent.getIntExtra(UpdateService.EXTRA_MAJOR, 0);
 				int minor = intent.getIntExtra(UpdateService.EXTRA_MINOR, 0);
 				mcurrentBeacon.setMajor(major);
 				mcurrentBeacon.setMinor(minor);
-				mConnectionCallback.onGetMajor(major);
-				mConnectionCallback.onGetMinor(minor);
+//				mConnectionCallback.onGetMajor(major);
+//				mConnectionCallback.onGetMinor(minor);
 			} else if (UpdateService.ACTION_RSSI_READY.equals(action)) {
 				int rssi = intent.getIntExtra(UpdateService.EXTRA_DATA, 0);
 				mcurrentBeacon.setTxPower(rssi);
-				mConnectionCallback.onGetRssi(rssi);
+//				mConnectionCallback.onGetRssi(rssi);
 			} else if (UpdateService.ACTION_ADVERTISINGINTERVAL_READY
 					.equals(action)) {
 				int advertisinginterval = intent.getIntExtra(
