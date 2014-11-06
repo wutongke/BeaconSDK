@@ -1,7 +1,5 @@
 package com.lef.scanner;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 
 public class BaseSettings {
 	public AdvertisingInterval advertisingInterval;
@@ -16,8 +14,44 @@ public class BaseSettings {
 		this.advertisingInterval = getAdvertisingIntervalByInt(advertisingInterval);
 		this.transmitPower = getTransmitPowerByInt(transmitPower);
 	}
+	/**
+	 * �㲥Ƶ��<br>
+	 * VERYHIGH(0),HIGH(1),MEDIUM(2),LOW(3),VERYLOW(4),MIN(5),UNKNOWN(6);<br>
+	 * 0:100ms<br>
+	 * 1:300ms<br>
+	 * 2:500ms<br>
+	 * 3:1s<br>
+	 * 4:2s<br>
+	 * 5:5s<br>
+	 * @author lief
+	 *
+	 */
 	public enum AdvertisingInterval {
-		VERYHIGH(0),HIGH(1),MEDIUM(2),LOW(3),VERYLOW(4),MIN(5),UNKNOWN(6);
+		/**
+		 * 0:100ms
+		 */
+		VERYHIGH(0),
+		/**
+		 * 1:300ms
+		 */
+		HIGH(1),
+		/**
+		 * 2:500ms
+		 */
+		MEDIUM(2),
+		/**
+		 * 3:1s
+		 */
+		LOW(3),
+		/**
+		 * 4:2s
+		 */
+		VERYLOW(4),
+		/**
+		 * 5:5s
+		 */
+		MIN(5),
+		UNKNOWN(6);
 		int aValue;
 		private AdvertisingInterval(int aValue){
 			this.aValue = aValue;
@@ -28,6 +62,19 @@ public class BaseSettings {
         }
 		
 	}
+	/**
+	 * ���书��<br>
+	 * MAX(0),VERYHIGH(1),HIGH(2),MEDIUM(3),LOW(4),VERYLOW(5),MIN(6),UNKNOWN(7);<br>
+	 * 0:4dbm<br>
+	 * 1:0dbm<br>
+	 * 2:-4dbm<br>
+	 * 3:-8dbm<br>
+	 * 4:-12dbm<br>
+	 * 5:-16dbm<br>
+	 * 6:-20dbm<br>
+	 * @author lief
+	 *
+	 */
 	public enum TransmitPower{
 		MAX(0),VERYHIGH(1),HIGH(2),MEDIUM(3),LOW(4),VERYLOW(5),MIN(6),UNKNOWN(7);
 		int aValue;
@@ -40,7 +87,7 @@ public class BaseSettings {
         }
 	}
 	/**
-	 * 获取基本配置，开发者不需要使用，最好设置成选择式的方式
+	 * ��ȡ�������ã������߲���Ҫʹ�ã�������ó�ѡ��ʽ�ķ�ʽ
 	 * @param aValue
 	 * @return
 	 */
@@ -54,7 +101,7 @@ public class BaseSettings {
 		return AdvertisingInterval.UNKNOWN;
 	}
 	/**
-	 * 获取基本配置，开发者不需要使用，最好设置成选择式的方式
+	 * ��ȡ�������ã������߲���Ҫʹ�ã�������ó�ѡ��ʽ�ķ�ʽ
 	 * @param aValue
 	 * @return
 	 */
@@ -68,14 +115,14 @@ public class BaseSettings {
 		return TransmitPower.UNKNOWN;
 	}
 	/**
-	 * 获取广播频率
+	 * ��ȡ�㲥Ƶ��
 	 * @return
 	 */
 	public  AdvertisingInterval getAdvertisingInterval() {
 		return advertisingInterval;
 	}
 	/**
-	 * 获取发射功率
+	 * ��ȡ���书��
 	 * @return
 	 */
 	public TransmitPower getTransmitPower() {
