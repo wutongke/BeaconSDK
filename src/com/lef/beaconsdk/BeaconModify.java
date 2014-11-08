@@ -109,13 +109,14 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 			}
 		});
 		uuidTextView.setOnClickListener(new OnClickListener() {
-			LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
-					R.layout.attr_modify_dialog, null);
-			final EditText attrValue = (EditText) ll
-					.findViewById(R.id.attr_value);
+			
 
 			@Override
 			public void onClick(View v) {
+				LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
+						R.layout.attr_modify_dialog, null);
+				final EditText attrValue = (EditText) ll
+						.findViewById(R.id.attr_value);
 				// TODO Auto-generated method stub
 				new AlertDialog.Builder(BeaconModify.this)
 						.setIcon(R.drawable.title_bar_menu)
@@ -142,13 +143,14 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 			}
 		});
 		majorTextView.setOnClickListener(new OnClickListener() {
-			LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
-					R.layout.attr_modify_dialog, null);
-			final EditText attrValue = (EditText) ll
-					.findViewById(R.id.attr_value);
+			
 
 			@Override
 			public void onClick(View v) {
+				LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
+						R.layout.attr_modify_dialog, null);
+				final EditText attrValue = (EditText) ll
+						.findViewById(R.id.attr_value);
 				// TODO Auto-generated method stub
 				new AlertDialog.Builder(BeaconModify.this)
 						.setIcon(R.drawable.title_bar_menu)
@@ -164,16 +166,14 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 										if (!attrValue.getText().toString()
 												.equals("")) {
 
-											try {
+											
 												beaconConnection.setMajorMinor(
 														Integer.valueOf(attrValue
 																.getText()
 																.toString()),
 														currentBeacon
 																.getMinor());
-											} catch (Exception e) {
-												handler.sendEmptyMessage(EMPTYVALUE);
-											}
+											
 
 										} else {
 											handler.sendEmptyMessage(EMPTYVALUE);
@@ -185,13 +185,14 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 			}
 		});
 		minorTextView.setOnClickListener(new OnClickListener() {
-			LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
-					R.layout.attr_modify_dialog, null);
-			final EditText attrValue = (EditText) ll
-					.findViewById(R.id.attr_value);
+			
 
 			@Override
 			public void onClick(View v) {
+				LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
+						R.layout.attr_modify_dialog, null);
+				final EditText attrValue = (EditText) ll
+						.findViewById(R.id.attr_value);
 				// TODO Auto-generated method stub
 				new AlertDialog.Builder(BeaconModify.this)
 						.setIcon(R.drawable.title_bar_menu)
@@ -206,16 +207,14 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 										// TODO Auto-generated method stub
 										if (!attrValue.getText().toString()
 												.equals("")) {
-											try {
+											
 												beaconConnection.setMajorMinor(
 														currentBeacon
 																.getMajor(),
 														Integer.valueOf(attrValue
 																.getText()
 																.toString()));
-											} catch (Exception e) {
-												handler.sendEmptyMessage(EMPTYVALUE);
-											}
+											
 										} else {
 											handler.sendEmptyMessage(EMPTYVALUE);
 										}
@@ -226,14 +225,15 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 			}
 		});
 		rssiTextView.setOnClickListener(new OnClickListener() {
-			LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
-					R.layout.attr_modify_dialog, null);
-			final EditText attrValue = (EditText) ll
-					.findViewById(R.id.attr_value);
+			
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
+						R.layout.attr_modify_dialog, null);
+				final EditText attrValue = (EditText) ll
+						.findViewById(R.id.attr_value);
 				new AlertDialog.Builder(BeaconModify.this)
 						.setIcon(R.drawable.title_bar_menu)
 						.setTitle("设置计算RSSI")
@@ -265,14 +265,16 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 			}
 		});
 		advertiseView.setOnClickListener(new OnClickListener() {
-			LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
-					R.layout.attr_modify_dialog, null);
-			final EditText attrValue = (EditText) ll
-					.findViewById(R.id.attr_value);
+			
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				//view 的获取需要写在onclick中，否则第二次调用的时候报错
+				LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
+						R.layout.attr_modify_dialog, null);
+				final EditText attrValue = (EditText) ll
+						.findViewById(R.id.attr_value);
 				new AlertDialog.Builder(BeaconModify.this)
 						.setIcon(R.drawable.title_bar_menu)
 						.setTitle("设置广播频率")
@@ -305,14 +307,15 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 			}
 		});
 		transmitView.setOnClickListener(new OnClickListener() {
-			LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
-					R.layout.attr_modify_dialog, null);
-			final EditText attrValue = (EditText) ll
-					.findViewById(R.id.attr_value);
+			
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
+						R.layout.attr_modify_dialog, null);
+				final EditText attrValue = (EditText) ll
+						.findViewById(R.id.attr_value);
 				new AlertDialog.Builder(BeaconModify.this)
 						.setIcon(R.drawable.title_bar_menu)
 						.setTitle("设置发射功率")
@@ -402,8 +405,8 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 		if (status == BeaconConnection.SUCCESS) {
 			// TODO Auto-generated method stub
 			handler.sendEmptyMessage(SETSUCCEED);
-			majorTextView.setText(beacon.getMajor());
-			minorTextView.setText(beacon.getMinor());
+			majorTextView.setText(beacon.getMajor()+"");
+			minorTextView.setText(beacon.getMinor()+"");
 		} else if (status == BeaconConnection.FAILURE) {
 			handler.sendEmptyMessage(SETFAILURE);
 		} else {

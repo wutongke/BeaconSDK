@@ -128,7 +128,7 @@ public class BeaconConnection implements ScannerListener {
 		} else {
 			if (mBinder.setMajorAndMinor(major, minor)) {
 				mcurrentBeacon.setMajor(major);
-				mcurrentBeacon.setMajor(minor);
+				mcurrentBeacon.setMinor(minor);
 				mConnectionCallback.onSetMajoMinor(mcurrentBeacon, SUCCESS);
 			} else {
 				mConnectionCallback.onSetMajoMinor(mcurrentBeacon, FAILURE);
