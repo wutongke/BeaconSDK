@@ -369,10 +369,12 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		if (beaconConnection != null && beaconConnection.isConnection()) {
+		//无需在这里判断是否连接成功，disconnect中会判断，所以只要connection不为空，就应该dis，
+		//否则在未连接成功时则不dis，会出现错误
+		if (beaconConnection != null ) {
 			beaconConnection.disConnect();
 		}
-
+		this.finish();
 	}
 
 	@Override

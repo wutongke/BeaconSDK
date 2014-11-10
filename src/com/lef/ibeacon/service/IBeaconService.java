@@ -152,10 +152,10 @@ public class IBeaconService extends Service {
 				switch (msg.what) {
 				case MSG_START_RANGING:
 					Log.i(TAG, "start ranging received");
-					service.startRangingBeaconsInRegion(startRMData
-							.getRegionData(),
-							new com.lef.ibeacon.service.Callback(
-									startRMData.getCallbackPackageName()));
+					service.startRangingBeaconsInRegion(
+							startRMData.getRegionData(),
+							new com.lef.ibeacon.service.Callback(startRMData
+									.getCallbackPackageName()));
 					service.setScanPeriods(startRMData.getScanPeriod(),
 							startRMData.getBetweenScanPeriod());
 					break;
@@ -168,10 +168,10 @@ public class IBeaconService extends Service {
 					break;
 				case MSG_START_MONITORING:
 					Log.i(TAG, "start monitoring received");
-					service.startMonitoringBeaconsInRegion(startRMData
-							.getRegionData(),
-							new com.lef.ibeacon.service.Callback(
-									startRMData.getCallbackPackageName()));
+					service.startMonitoringBeaconsInRegion(
+							startRMData.getRegionData(),
+							new com.lef.ibeacon.service.Callback(startRMData
+									.getCallbackPackageName()));
 					service.setScanPeriods(startRMData.getScanPeriod(),
 							startRMData.getBetweenScanPeriod());
 					service.setInside_expiration_millis(startRMData
@@ -650,6 +650,11 @@ public class IBeaconService extends Service {
 		public boolean canBeConnected;
 	}
 
+	/**
+	 * 处理读取到beacon<br>
+	 * 根据定义的region，通知到每一个region<br>
+	 * 在遍历时通过使用同步锁实现了同步
+	 */
 	private void processRangeData() {
 		Iterator<Region> regionIterator = rangedRegionState.keySet().iterator();
 		while (regionIterator.hasNext()) {
@@ -658,15 +663,15 @@ public class IBeaconService extends Service {
 			if (IBeaconManager.debug)
 				Log.d(TAG, "Calling ranging callback with "
 						+ rangeState.getIBeacons().size() + " iBeacons");
-			//使用这种方式创建对象时，隐藏了遍历，存在并发安全问题
-			//使用锁解决并发问题
-			final Set<IBeacon> tempAll = new HashSet<IBeacon>(rangeState.getAllIBeacons());
+			// 使用这种方式创建对象时，隐藏了遍历，存在并发安全问题
+			// 使用锁解决并发问题
+			final Set<IBeacon> tempAll = new HashSet<IBeacon>(
+					rangeState.getAllIBeacons());
 			Set<IBeacon> temp = new HashSet<IBeacon>();
 			synchronized (temp) {
 				temp = rangeState.getIBeacons();
-				
+
 			}
-			
 
 			// 用于update的set<IBeacon>
 			Set<IBeacon> updateIBeacons = new HashSet<IBeacon>();
@@ -681,9 +686,9 @@ public class IBeaconService extends Service {
 					if (!tempAll.contains(tempBeacon)) {
 						rangeState.getAllIBeacons().add(tempBeacon);
 						newIBeacons.add(tempBeacon);
-//						if (!tempBeacon.isCanBeConnected()) {
-//							newIBeacons.add(tempBeacon);
-//						}
+						// if (!tempBeacon.isCanBeConnected()) {
+						// newIBeacons.add(tempBeacon);
+						// }
 					} else {
 						rangeState.getAllIBeacons().remove(tempBeacon);
 						rangeState.getAllIBeacons().add(tempBeacon);
