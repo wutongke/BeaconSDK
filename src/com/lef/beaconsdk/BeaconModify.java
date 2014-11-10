@@ -1,8 +1,9 @@
 package com.lef.beaconsdk;
 
-import com.lef.beaconconnection.BeaconConnection;
-import com.lef.beaconconnection.BeaconConnectionCallback;
-import com.radiusnetworks.ibeacon.IBeacon;
+import com.lef.scanner.BeaconConnection;
+import com.lef.scanner.BeaconConnectionCallback;
+import com.lef.scanner.IBeacon;
+import com.lef.scanner.BaseSettings;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +29,8 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 	private TextView majorTextView;
 	private TextView minorTextView;
 	private TextView rssiTextView;
+	private TextView advertiseView;
+	private TextView transmitView;
 
 	private BeaconConnection beaconConnection;
 	private static final int EMPTYVALUE = 1;
@@ -56,6 +59,12 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 			case CONNECTION_S:
 				Toast.makeText(BeaconModify.this, "连接成功", Toast.LENGTH_SHORT)
 						.show();
+				uuidTextView.setText(currentBeacon.getProximityUuid());
+				majorTextView.setText(currentBeacon.getMajor()+"");
+				minorTextView.setText(currentBeacon.getMinor()+"");
+				rssiTextView.setText(currentBeacon.getTxPower()+"");
+				advertiseView.setText(currentBeacon.getBaseSettings().getAdvertisingInterval().toString());
+				transmitView.setText(currentBeacon.getBaseSettings().getTransmitPower().toString());
 				break;
 			case CONNECTION_F:
 				Toast.makeText(BeaconModify.this, "连接失败", Toast.LENGTH_SHORT)
@@ -86,6 +95,8 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 		majorTextView = (TextView) findViewById(R.id.major_modify);
 		minorTextView = (TextView) findViewById(R.id.minor_modify);
 		rssiTextView = (TextView) findViewById(R.id.rssi_modify);
+		advertiseView = (TextView) findViewById(R.id.advertise_modify);
+		transmitView = (TextView) findViewById(R.id.transmit_modify);
 		Button disconnectBtn = (Button) findViewById(R.id.disconnect);
 		disconnectBtn.setOnClickListener(new OnClickListener() {
 
@@ -98,13 +109,14 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 			}
 		});
 		uuidTextView.setOnClickListener(new OnClickListener() {
-			LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
-					R.layout.attr_modify_dialog, null);
-			final EditText attrValue = (EditText) ll
-					.findViewById(R.id.attr_value);
+			
 
 			@Override
 			public void onClick(View v) {
+				LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
+						R.layout.attr_modify_dialog, null);
+				final EditText attrValue = (EditText) ll
+						.findViewById(R.id.attr_value);
 				// TODO Auto-generated method stub
 				new AlertDialog.Builder(BeaconModify.this)
 						.setIcon(R.drawable.title_bar_menu)
@@ -131,13 +143,14 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 			}
 		});
 		majorTextView.setOnClickListener(new OnClickListener() {
-			LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
-					R.layout.attr_modify_dialog, null);
-			final EditText attrValue = (EditText) ll
-					.findViewById(R.id.attr_value);
+			
 
 			@Override
 			public void onClick(View v) {
+				LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
+						R.layout.attr_modify_dialog, null);
+				final EditText attrValue = (EditText) ll
+						.findViewById(R.id.attr_value);
 				// TODO Auto-generated method stub
 				new AlertDialog.Builder(BeaconModify.this)
 						.setIcon(R.drawable.title_bar_menu)
@@ -153,17 +166,14 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 										if (!attrValue.getText().toString()
 												.equals("")) {
 
-											try {
+											
 												beaconConnection.setMajorMinor(
 														Integer.valueOf(attrValue
 																.getText()
 																.toString()),
-														Integer.valueOf(attrValue
-																.getText()
-																.toString()));
-											} catch (Exception e) {
-												handler.sendEmptyMessage(EMPTYVALUE);
-											}
+														currentBeacon
+																.getMinor());
+											
 
 										} else {
 											handler.sendEmptyMessage(EMPTYVALUE);
@@ -175,13 +185,14 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 			}
 		});
 		minorTextView.setOnClickListener(new OnClickListener() {
-			LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
-					R.layout.attr_modify_dialog, null);
-			final EditText attrValue = (EditText) ll
-					.findViewById(R.id.attr_value);
+			
 
 			@Override
 			public void onClick(View v) {
+				LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
+						R.layout.attr_modify_dialog, null);
+				final EditText attrValue = (EditText) ll
+						.findViewById(R.id.attr_value);
 				// TODO Auto-generated method stub
 				new AlertDialog.Builder(BeaconModify.this)
 						.setIcon(R.drawable.title_bar_menu)
@@ -196,17 +207,14 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 										// TODO Auto-generated method stub
 										if (!attrValue.getText().toString()
 												.equals("")) {
-											try {
+											
 												beaconConnection.setMajorMinor(
-														Integer.valueOf(attrValue
-																.getText()
-																.toString()),
+														currentBeacon
+																.getMajor(),
 														Integer.valueOf(attrValue
 																.getText()
 																.toString()));
-											} catch (Exception e) {
-												handler.sendEmptyMessage(EMPTYVALUE);
-											}
+											
 										} else {
 											handler.sendEmptyMessage(EMPTYVALUE);
 										}
@@ -217,14 +225,15 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 			}
 		});
 		rssiTextView.setOnClickListener(new OnClickListener() {
-			LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
-					R.layout.attr_modify_dialog, null);
-			final EditText attrValue = (EditText) ll
-					.findViewById(R.id.attr_value);
+			
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
+						R.layout.attr_modify_dialog, null);
+				final EditText attrValue = (EditText) ll
+						.findViewById(R.id.attr_value);
 				new AlertDialog.Builder(BeaconModify.this)
 						.setIcon(R.drawable.title_bar_menu)
 						.setTitle("设置计算RSSI")
@@ -255,6 +264,89 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 						.show();
 			}
 		});
+		advertiseView.setOnClickListener(new OnClickListener() {
+			
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				//view 的获取需要写在onclick中，否则第二次调用的时候报错
+				LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
+						R.layout.attr_modify_dialog, null);
+				final EditText attrValue = (EditText) ll
+						.findViewById(R.id.attr_value);
+				new AlertDialog.Builder(BeaconModify.this)
+						.setIcon(R.drawable.title_bar_menu)
+						.setTitle("设置广播频率")
+						.setView(ll)
+						.setPositiveButton("保存",
+								new DialogInterface.OnClickListener() {
+
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										// TODO Auto-generated method stub
+										if (!attrValue.getText().toString()
+												.equals("")) {
+											try {
+												beaconConnection
+														.setAdvertisingInterval(BaseSettings
+																.getAdvertisingIntervalByInt(Integer
+																		.valueOf(attrValue.getText()
+																				.toString())));
+											} catch (Exception e) {
+												handler.sendEmptyMessage(EMPTYVALUE);
+											}
+										} else {
+											handler.sendEmptyMessage(EMPTYVALUE);
+										}
+
+									}
+								}).setNegativeButton("取消", null).create()
+						.show();
+			}
+		});
+		transmitView.setOnClickListener(new OnClickListener() {
+			
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
+						R.layout.attr_modify_dialog, null);
+				final EditText attrValue = (EditText) ll
+						.findViewById(R.id.attr_value);
+				new AlertDialog.Builder(BeaconModify.this)
+						.setIcon(R.drawable.title_bar_menu)
+						.setTitle("设置发射功率")
+						.setView(ll)
+						.setPositiveButton("保存",
+								new DialogInterface.OnClickListener() {
+
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										// TODO Auto-generated method stub
+										if (!attrValue.getText().toString()
+												.equals("")) {
+											try {
+												beaconConnection
+														.setTransmitPower(BaseSettings
+																.getTransmitPowerByInt(Integer
+																		.valueOf(attrValue.getText()
+																				.toString())));
+											} catch (Exception e) {
+												handler.sendEmptyMessage(EMPTYVALUE);
+											}
+										} else {
+											handler.sendEmptyMessage(EMPTYVALUE);
+										}
+
+									}
+								}).setNegativeButton("取消", null).create()
+						.show();
+			}
+		});
 	}
 
 	@Override
@@ -264,23 +356,25 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 		beaconConnection.connect();
 	}
 
-//	@Override
-//	protected void onPause() {
-//		// TODO Auto-generated method stub
-//		super.onPause();
-//		if (beaconConnection != null && beaconConnection.isConnection()) {
-//			beaconConnection.disConnect();
-//		}
-//	}
+	// @Override
+	// protected void onPause() {
+	// // TODO Auto-generated method stub
+	// super.onPause();
+	// if (beaconConnection != null && beaconConnection.isConnection()) {
+	// beaconConnection.disConnect();
+	// }
+	// }
 
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		if (beaconConnection != null && beaconConnection.isConnection()) {
+		//无需在这里判断是否连接成功，disconnect中会判断，所以只要connection不为空，就应该dis，
+		//否则在未连接成功时则不dis，会出现错误
+		if (beaconConnection != null ) {
 			beaconConnection.disConnect();
 		}
-		
+		this.finish();
 	}
 
 	@Override
@@ -295,6 +389,7 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 		// TODO Auto-generated method stub
 		switch (status) {
 		case BeaconConnection.CONNECTED:
+			currentBeacon = beacon;
 			handler.sendEmptyMessage(CONNECTION_S);
 			break;
 		case BeaconConnection.DISCONNECTED:
@@ -312,8 +407,8 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 		if (status == BeaconConnection.SUCCESS) {
 			// TODO Auto-generated method stub
 			handler.sendEmptyMessage(SETSUCCEED);
-			majorTextView.setText(beacon.getMajor());
-			minorTextView.setText(beacon.getMinor());
+			majorTextView.setText(beacon.getMajor()+"");
+			minorTextView.setText(beacon.getMinor()+"");
 		} else if (status == BeaconConnection.FAILURE) {
 			handler.sendEmptyMessage(SETFAILURE);
 		} else {
@@ -324,7 +419,15 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 	@Override
 	public void onSetBaseSetting(IBeacon beacon, int status) {
 		// TODO Auto-generated method stub
-
+		if(status == BeaconConnection.SUCCESS){
+			advertiseView.setText(beacon.getBaseSettings().getAdvertisingInterval().toString());
+			transmitView.setText(beacon.getBaseSettings().getAdvertisingInterval().toString());
+			handler.sendEmptyMessage(SETSUCCEED);
+		}else if (status == BeaconConnection.FAILURE) {
+			handler.sendEmptyMessage(SETFAILURE);
+		} else {
+			handler.sendEmptyMessage(INVALIDVALUE);
+		}
 	}
 
 	@Override
@@ -354,29 +457,4 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 			handler.sendEmptyMessage(INVALIDVALUE);
 		}
 	}
-
-	@Override
-	public void onGetUUID(String proximityUuid) {
-		// TODO Auto-generated method stub
-		uuidTextView.setText(proximityUuid);
-	}
-
-	@Override
-	public void onGetMajor(int major) {
-		// TODO Auto-generated method stub
-		majorTextView.setText(major + "");
-	}
-
-	@Override
-	public void onGetMinor(int minor) {
-		// TODO Auto-generated method stub
-		minorTextView.setText(minor + "");
-	}
-
-	@Override
-	public void onGetRssi(int rssi) {
-		// TODO Auto-generated method stub
-		rssiTextView.setText(rssi + "");
-	}
-
 }

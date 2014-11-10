@@ -1,0 +1,15 @@
+# view AndroidManifest.xml #generated:54
+-keep class com.lef.beaconsdk.BeaconModify { <init>(...); }
+
+# view AndroidManifest.xml #generated:23
+-keep class com.lef.beaconsdk.MainActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:41
+-keep class com.lef.ibeacon.IBeaconIntentProcessor { <init>(...); }
+
+# view AndroidManifest.xml #generated:34
+-keep class com.lef.ibeacon.service.IBeaconService { <init>(...); }
+
+# view AndroidManifest.xml #generated:33
+-keep class com.lef.ibeacon.service.UpdateService { <init>(...); }
+

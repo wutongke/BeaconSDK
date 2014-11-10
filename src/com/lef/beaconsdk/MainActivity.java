@@ -3,12 +3,12 @@ package com.lef.beaconsdk;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.radiusnetworks.ibeacon.IBeacon;
-import com.radiusnetworks.ibeacon.IBeaconManager;
-import com.radiusnetworks.ibeacon.MonitorNotifier;
-import com.radiusnetworks.ibeacon.RangeNotifier;
-import com.radiusnetworks.ibeacon.Region;
-import com.radiusnetworks.ibeacon.service.IBeaconData;
+import com.lef.scanner.IBeacon;
+import com.lef.scanner.IBeaconData;
+import com.lef.scanner.IBeaconManager;
+import com.lef.scanner.MonitorNotifier;
+import com.lef.scanner.RangeNotifier;
+import com.lef.scanner.Region;
 import com.special.ResideMenu.ResideMenu;
 import com.special.ResideMenu.ResideMenuItem;
 
@@ -33,7 +33,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class MainActivity extends Activity implements
-		com.radiusnetworks.ibeacon.IBeaconConsumer {
+		com.lef.scanner.IBeaconConsumer {
 	// 启动蓝牙请求码
 	protected static final int BLUTETOOTH = 1;
 	private IBeaconManager iBeaconManager;
@@ -136,7 +136,10 @@ public class MainActivity extends Activity implements
 					mintent.putExtra("beacon",
 							new IBeaconData(beaconDataListB.get(position)));
 					startActivity(mintent);
-					beaconDataListA.remove(position);
+//					beaconDataListA.remove(position);
+					if (iBeaconManager != null && iBeaconManager.isBound(MainActivity.this)) {
+						iBeaconManager.unBind(MainActivity.this);
+					}
 				} else {
 					handler.sendEmptyMessage(CLICKTOAST);
 				}
@@ -149,6 +152,9 @@ public class MainActivity extends Activity implements
 		// TODO Auto-generated method stub
 		super.onResume();
 		if (iBeaconManager!=null&&!iBeaconManager.isBound(this)) {
+			if(beaconDataListA.size()>0){
+				beaconDataListA.clear();
+			}
 			// 蓝牙dialog
 			initBluetooth();
 		}
@@ -159,9 +165,9 @@ public class MainActivity extends Activity implements
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		if (iBeaconManager.isBound(this)) {
-			iBeaconManager.unBind(this);
-		}
+//		if (iBeaconManager.isBound(this)) {
+//			iBeaconManager.unBind(this);
+//		}
 	}
 
 	@Override
@@ -232,20 +238,66 @@ public class MainActivity extends Activity implements
 				if (ProgressBarVisibile) {
 					handler.sendEmptyMessage(PROGRESSBARGONE);
 				}
+//				java.util.Iterator<IBeacon> iterator = iBeacons.iterator();
+//				while (iterator.hasNext()) {
+//					IBeacon temp = iterator.next();
+//					if (beaconDataListA.contains(temp)) {
+//						beaconDataListA.set(beaconDataListA.indexOf(temp), temp);
+//						handler.sendEmptyMessage(UPDATEUI);
+//					} else {
+//						beaconDataListA.add(temp);
+//						handler.sendEmptyMessage(UPDATEUI);
+//					}
+//
+//				}
+
+			}
+
+			@Override
+			public void onNewBeacons(Collection<IBeacon> iBeacons, Region region) {
+				// TODO Auto-generated method stub
+//				beaconDataListA.addAll(iBeacons);
+//				handler.sendEmptyMessage(UPDATEUI);
+				java.util.Iterator<IBeacon> iterator = iBeacons.iterator();
+				while (iterator.hasNext()) {
+					IBeacon temp = iterator.next();
+					if (!beaconDataListA.contains(temp)) {
+						beaconDataListA.add(temp);
+					}
+					handler.sendEmptyMessage(UPDATEUI);
+				}
+			}
+
+			@Override
+			public void onGoneBeacons(Collection<IBeacon> iBeacons,
+					Region region) {
+				// TODO Auto-generated method stub
 				java.util.Iterator<IBeacon> iterator = iBeacons.iterator();
 				while (iterator.hasNext()) {
 					IBeacon temp = iterator.next();
 					if (beaconDataListA.contains(temp)) {
-						beaconDataListA.set(beaconDataListA.indexOf(temp), temp);
-						handler.sendEmptyMessage(UPDATEUI);
-					} else {
-						beaconDataListA.add(temp);
-						handler.sendEmptyMessage(UPDATEUI);
+						beaconDataListA.remove(temp);
 					}
-
+					handler.sendEmptyMessage(UPDATEUI);
 				}
-
 			}
+
+			@Override
+			public void onUpdateBeacon(Collection<IBeacon> iBeacons,
+					Region region) {
+				// TODO Auto-generated method stub
+				java.util.Iterator<IBeacon> iterator = iBeacons.iterator();
+				while (iterator.hasNext()) {
+					IBeacon temp = iterator.next();
+					if (beaconDataListA.contains(temp)) {
+						beaconDataListA
+								.set(beaconDataListA.indexOf(temp), temp);
+					}
+					handler.sendEmptyMessage(UPDATEUI);
+				}
+			}
+
+			
 		});
 		iBeaconManager.setMonitorNotifier(new MonitorNotifier() {
 
@@ -268,7 +320,6 @@ public class MainActivity extends Activity implements
 		});
 		try {
 			Region myRegion = new Region("myRangingUniqueId", null, null, null);
-			iBeaconManager.startMonitoringBeaconsInRegion(myRegion);
 			iBeaconManager.startRangingBeaconsInRegion(myRegion);
 		} catch (RemoteException e) {
 			e.printStackTrace();

@@ -30,24 +30,24 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.lef.beaconconnection.UpdateService" />
+        <service android:name="com.lef.ibeacon.service.UpdateService" />
         <service
-            android:name="com.radiusnetworks.ibeacon.service.IBeaconService"
+            android:name="com.lef.ibeacon.service.IBeaconService"
             android:enabled="true"
             android:exported="true"
             android:isolatedProcess="false"
             android:label="iBeacon" >
         </service>
         <service
-            android:name="com.radiusnetworks.ibeacon.IBeaconIntentProcessor"
+            android:name="com.lef.ibeacon.IBeaconIntentProcessor"
             android:enabled="true" >
             <meta-data
                 android:name="background"
                 android:value="true" />
 
             <intent-filter android:priority="1" >
-                <action android:name="com.radiusnetworks.ibeacon.DID_RANGING" />
-                <action android:name="com.radiusnetworks.ibeacon.DID_MONITORING" />
+                <action android:name="com.lef.ibeacon.DID_RANGING" />
+                <action android:name="com.lef.ibeacon.DID_MONITORING" />
             </intent-filter>
         </service>
 
