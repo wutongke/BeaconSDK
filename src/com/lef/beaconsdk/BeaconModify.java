@@ -7,6 +7,7 @@ import com.lef.scanner.BaseSettings;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -60,11 +61,13 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 				Toast.makeText(BeaconModify.this, "连接成功", Toast.LENGTH_SHORT)
 						.show();
 				uuidTextView.setText(currentBeacon.getProximityUuid());
-				majorTextView.setText(currentBeacon.getMajor()+"");
-				minorTextView.setText(currentBeacon.getMinor()+"");
-				rssiTextView.setText(currentBeacon.getTxPower()+"");
-				advertiseView.setText(currentBeacon.getBaseSettings().getAdvertisingInterval().toString());
-				transmitView.setText(currentBeacon.getBaseSettings().getTransmitPower().toString());
+				majorTextView.setText(currentBeacon.getMajor() + "");
+				minorTextView.setText(currentBeacon.getMinor() + "");
+				rssiTextView.setText(currentBeacon.getTxPower() + "");
+				advertiseView.setText(currentBeacon.getBaseSettings()
+						.getAdvertisingInterval().toString());
+				transmitView.setText(currentBeacon.getBaseSettings()
+						.getTransmitPower().toString());
 				break;
 			case CONNECTION_F:
 				Toast.makeText(BeaconModify.this, "连接失败", Toast.LENGTH_SHORT)
@@ -85,7 +88,10 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_beacon_modify);
-
+		// 设置名称
+		ActionBar mainBar = getActionBar();
+		mainBar.setLogo(R.drawable.ic_setting);
+		mainBar.setTitle(R.string.ibeacon_attribute);
 		Intent intent = getIntent();
 		currentBeacon = intent.getParcelableExtra("beacon");
 
@@ -109,7 +115,6 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 			}
 		});
 		uuidTextView.setOnClickListener(new OnClickListener() {
-			
 
 			@Override
 			public void onClick(View v) {
@@ -143,7 +148,6 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 			}
 		});
 		majorTextView.setOnClickListener(new OnClickListener() {
-			
 
 			@Override
 			public void onClick(View v) {
@@ -166,14 +170,11 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 										if (!attrValue.getText().toString()
 												.equals("")) {
 
-											
-												beaconConnection.setMajorMinor(
-														Integer.valueOf(attrValue
-																.getText()
-																.toString()),
-														currentBeacon
-																.getMinor());
-											
+											beaconConnection.setMajorMinor(
+													Integer.valueOf(attrValue
+															.getText()
+															.toString()),
+													currentBeacon.getMinor());
 
 										} else {
 											handler.sendEmptyMessage(EMPTYVALUE);
@@ -185,7 +186,6 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 			}
 		});
 		minorTextView.setOnClickListener(new OnClickListener() {
-			
 
 			@Override
 			public void onClick(View v) {
@@ -207,14 +207,13 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 										// TODO Auto-generated method stub
 										if (!attrValue.getText().toString()
 												.equals("")) {
-											
-												beaconConnection.setMajorMinor(
-														currentBeacon
-																.getMajor(),
-														Integer.valueOf(attrValue
-																.getText()
-																.toString()));
-											
+
+											beaconConnection.setMajorMinor(
+													currentBeacon.getMajor(),
+													Integer.valueOf(attrValue
+															.getText()
+															.toString()));
+
 										} else {
 											handler.sendEmptyMessage(EMPTYVALUE);
 										}
@@ -225,7 +224,6 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 			}
 		});
 		rssiTextView.setOnClickListener(new OnClickListener() {
-			
 
 			@Override
 			public void onClick(View v) {
@@ -265,12 +263,11 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 			}
 		});
 		advertiseView.setOnClickListener(new OnClickListener() {
-			
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				//view 的获取需要写在onclick中，否则第二次调用的时候报错
+				// view 的获取需要写在onclick中，否则第二次调用的时候报错
 				LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(
 						R.layout.attr_modify_dialog, null);
 				final EditText attrValue = (EditText) ll
@@ -292,7 +289,8 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 												beaconConnection
 														.setAdvertisingInterval(BaseSettings
 																.getAdvertisingIntervalByInt(Integer
-																		.valueOf(attrValue.getText()
+																		.valueOf(attrValue
+																				.getText()
 																				.toString())));
 											} catch (Exception e) {
 												handler.sendEmptyMessage(EMPTYVALUE);
@@ -307,7 +305,6 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 			}
 		});
 		transmitView.setOnClickListener(new OnClickListener() {
-			
 
 			@Override
 			public void onClick(View v) {
@@ -333,7 +330,8 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 												beaconConnection
 														.setTransmitPower(BaseSettings
 																.getTransmitPowerByInt(Integer
-																		.valueOf(attrValue.getText()
+																		.valueOf(attrValue
+																				.getText()
 																				.toString())));
 											} catch (Exception e) {
 												handler.sendEmptyMessage(EMPTYVALUE);
@@ -369,9 +367,9 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		//无需在这里判断是否连接成功，disconnect中会判断，所以只要connection不为空，就应该dis，
-		//否则在未连接成功时则不dis，会出现错误
-		if (beaconConnection != null ) {
+		// 无需在这里判断是否连接成功，disconnect中会判断，所以只要connection不为空，就应该dis，
+		// 否则在未连接成功时则不dis，会出现错误
+		if (beaconConnection != null) {
 			beaconConnection.disConnect();
 		}
 		this.finish();
@@ -407,8 +405,8 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 		if (status == BeaconConnection.SUCCESS) {
 			// TODO Auto-generated method stub
 			handler.sendEmptyMessage(SETSUCCEED);
-			majorTextView.setText(beacon.getMajor()+"");
-			minorTextView.setText(beacon.getMinor()+"");
+			majorTextView.setText(beacon.getMajor() + "");
+			minorTextView.setText(beacon.getMinor() + "");
 		} else if (status == BeaconConnection.FAILURE) {
 			handler.sendEmptyMessage(SETFAILURE);
 		} else {
@@ -419,11 +417,13 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 	@Override
 	public void onSetBaseSetting(IBeacon beacon, int status) {
 		// TODO Auto-generated method stub
-		if(status == BeaconConnection.SUCCESS){
-			advertiseView.setText(beacon.getBaseSettings().getAdvertisingInterval().toString());
-			transmitView.setText(beacon.getBaseSettings().getAdvertisingInterval().toString());
+		if (status == BeaconConnection.SUCCESS) {
+			advertiseView.setText(beacon.getBaseSettings()
+					.getAdvertisingInterval().toString());
+			transmitView.setText(beacon.getBaseSettings()
+					.getAdvertisingInterval().toString());
 			handler.sendEmptyMessage(SETSUCCEED);
-		}else if (status == BeaconConnection.FAILURE) {
+		} else if (status == BeaconConnection.FAILURE) {
 			handler.sendEmptyMessage(SETFAILURE);
 		} else {
 			handler.sendEmptyMessage(INVALIDVALUE);
