@@ -31,7 +31,13 @@ import android.os.Messenger;
 import android.os.Parcelable;
 import android.os.RemoteException;
 import android.util.Log;
-
+/**
+ * Service回调，回调IBeaconIntentProcessor，实现beacon探测信息的通知<br>
+ * IBeaconIntentProcessor实现了过滤，如果要通知，需要添加过滤信息，{@code intentForNew.setComponent(new ComponentName(intentPackageName, "com.lef.ibeacon.IBeaconIntentProcessor"));}
+ * 否则无法收到通知，在这里出现过错误
+ * @author lief
+ *
+ */
 public class Callback {
 	private String TAG = "Callback";
 //	private Messenger messenger;

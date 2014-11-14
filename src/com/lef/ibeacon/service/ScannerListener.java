@@ -13,8 +13,8 @@ import android.bluetooth.BluetoothDevice;
 public interface ScannerListener {
 
 	/**
-	 * Called when user has selected the device.
-	 * 
+	 * Called when user has selected the device.<br>
+	 * 当探测到设备时回调
 	 * @param device
 	 *            the selected device. May not be null.
 	 * @param the

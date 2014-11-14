@@ -103,17 +103,17 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 		rssiTextView = (TextView) findViewById(R.id.rssi_modify);
 		advertiseView = (TextView) findViewById(R.id.advertise_modify);
 		transmitView = (TextView) findViewById(R.id.transmit_modify);
-		Button disconnectBtn = (Button) findViewById(R.id.disconnect);
-		disconnectBtn.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if (beaconConnection != null && beaconConnection.isConnection()) {
-					beaconConnection.disConnect();
-				}
-			}
-		});
+//		Button disconnectBtn = (Button) findViewById(R.id.disconnect);
+//		disconnectBtn.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				if (beaconConnection != null && beaconConnection.isConnection()) {
+//					beaconConnection.disConnect();
+//				}
+//			}
+//		});
 		uuidTextView.setOnClickListener(new OnClickListener() {
 
 			@Override

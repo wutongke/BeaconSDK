@@ -795,6 +795,12 @@ public class IBeaconService extends Service {
 		}
 	}
 
+	/**
+	 * 异步处理获取到的广播信息
+	 * 
+	 * @author lief
+	 * 
+	 */
 	private class ScanProcessor extends AsyncTask<ScanData, Void, Void> {
 
 		@Override
