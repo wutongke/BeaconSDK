@@ -9,10 +9,14 @@
 package com.lef.ibeacon.service;
 
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
 import java.util.UUID;
 
 import com.lef.beaconsdk.BuildConfig;
 
+import android.R.bool;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -36,8 +40,14 @@ public class UpdateService extends Service {
 	/**
 	 * 定义action的名字
 	 */
+	/**
+	 * 连接状态改变，连接成功
+	 */
 	public final static String ACTION_STATE_CHANGED = "no.nordicsemi.android.nrfbeacon.ACTION_STATE_CHANGED";
 	public final static String ACTION_GATT_ERROR = "no.nordicsemi.android.nrfbeacon.ACTION_GATT_ERROR";
+	/**
+	 * 发现蓝牙service
+	 */
 	public final static String ACTION_DONE = "no.nordicsemi.android.nrfbeacon.ACTION_DONE";
 	public final static String ACTION_UUID_READY = "no.nordicsemi.android.nrfbeacon.ACTION_UUID_READY";
 	public final static String ACTION_MAJOR_MINOR_READY = "no.nordicsemi.android.nrfbeacon.ACTION_MAJOR_MINOR_READY";
@@ -76,6 +86,9 @@ public class UpdateService extends Service {
 			0x955A15280FE2F5AAl, 0x0A09484B8D4F3E8ADl);
 	private static final UUID CONFIG_ADVERTISINGINTERVAL_CHARACTERISTIC_UUID = new UUID(
 			0x955A15270FE2F5AAl, 0x0A09484B8D4F3E8ADl);
+	// 1. 增加service的地址
+	private static final UUID CONFIG_PASSWORD_CHARACTERISTIC_UUID = new UUID(
+			0x955A152A0FE2F5AAl, 0x0A09484B8D4F3E8ADl);
 
 	private BluetoothAdapter mAdapter;
 	private BluetoothDevice mBluetoothDevice;
@@ -85,6 +98,8 @@ public class UpdateService extends Service {
 	private BluetoothGattCharacteristic mRssiCharacteristic;
 	private BluetoothGattCharacteristic mAdvertisingintervalCharacteristic;
 	private BluetoothGattCharacteristic mTransmitpowerCharacteristic;
+	// 2. 增加密码的字段声明
+	private BluetoothGattCharacteristic mPASSWORDCharacteristic;
 
 	private Handler mHandler;
 
@@ -111,6 +126,7 @@ public class UpdateService extends Service {
 			}
 		}
 
+		// 服务发现回调，目前有五个服务，增加了密码，在这里对字段进行赋值
 		@Override
 		public void onServicesDiscovered(final BluetoothGatt gatt,
 				final int status) {
@@ -144,6 +160,9 @@ public class UpdateService extends Service {
 					.getCharacteristic(CONFIG_TRANSMITPOWER_CHARACTERISTIC_UUID);
 			mAdvertisingintervalCharacteristic = configService
 					.getCharacteristic(CONFIG_ADVERTISINGINTERVAL_CHARACTERISTIC_UUID);
+			// 3. 字段赋值
+			mPASSWORDCharacteristic = configService
+					.getCharacteristic(CONFIG_PASSWORD_CHARACTERISTIC_UUID);
 
 			if (mUuidCharacteristic != null
 					|| mMajorMinorCharacteristic != null
@@ -413,6 +432,15 @@ public class UpdateService extends Service {
 			mMajorMinorCharacteristic.setValue(minorInverted,
 					BluetoothGattCharacteristic.FORMAT_UINT16, 2);
 			mBluetoothGatt.writeCharacteristic(mMajorMinorCharacteristic);
+			return true;
+		}
+
+		public boolean sendPassword(String passWord) {
+			if(mPASSWORDCharacteristic == null){
+				return false;
+			}
+			mPASSWORDCharacteristic.setValue(passWord);
+			mBluetoothGatt.writeCharacteristic(mPASSWORDCharacteristic);
 			return true;
 		}
 

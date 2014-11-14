@@ -25,6 +25,8 @@ import android.widget.Toast;
  * iBeacons.
  */
 public class BeaconConnection implements ScannerListener {
+	
+	public static String PASSWORD  = "666666";
 	/**
 	 * 设置成功
 	 */
@@ -306,9 +308,14 @@ public class BeaconConnection implements ScannerListener {
 				int transmitpower = intent.getIntExtra(
 						UpdateService.EXTRA_DATA, 0);
 				mcurrentBeacon.setTransmitPower(transmitpower);
+				/**
+				 * 发送密码，暂时放置在这里，放置在其他地方目前测试不太好用
+				 */
+				mBinder.sendPassword(PASSWORD);
 				// mConnectionCallback.onGetRssi(advertisinginterval);
 			} else if (UpdateService.ACTION_DONE.equals(action)) {
 				mBinder.read();
+				
 				// 注释掉的内容错误是空指针
 				// mcurrentBeacon.setProximityUuid(mBinder.getBeaconUuid().toString());
 				// mcurrentBeacon.setTxPower(mBinder.getCalibratedRssi());
@@ -353,5 +360,13 @@ public class BeaconConnection implements ScannerListener {
 		activity.startService(service);
 		mBinded = true;
 		activity.bindService(service, mServiceConnection, 0);
+	}
+
+	public static String getPASSWORD() {
+		return PASSWORD;
+	}
+
+	public static void setPASSWORD(String pASSWORD) {
+		PASSWORD = pASSWORD;
 	}
 }
