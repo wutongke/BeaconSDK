@@ -6,6 +6,7 @@ import com.lef.ibeacon.service.BeaconScanner;
 import com.lef.ibeacon.service.ScannerListener;
 import com.lef.ibeacon.service.UpdateService;
 
+import android.R;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -25,7 +26,10 @@ import android.widget.Toast;
  * iBeacons.
  */
 public class BeaconConnection implements ScannerListener {
-	
+	/**
+	 * 默认密码为666666<br>
+	 * 如果修改过密码，则需要在连接之前，先{@link BeaconConnection@#setPASSWORD(String)};返回再连接
+	 */
 	public static String PASSWORD  = "666666";
 	/**
 	 * 设置成功
@@ -365,7 +369,7 @@ public class BeaconConnection implements ScannerListener {
 	public static String getPASSWORD() {
 		return PASSWORD;
 	}
-
+	
 	public static void setPASSWORD(String pASSWORD) {
 		PASSWORD = pASSWORD;
 	}

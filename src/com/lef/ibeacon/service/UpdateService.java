@@ -434,8 +434,26 @@ public class UpdateService extends Service {
 			mBluetoothGatt.writeCharacteristic(mMajorMinorCharacteristic);
 			return true;
 		}
-
+		/**
+		 * 发送密码
+		 * @param passWord
+		 * @return
+		 */
 		public boolean sendPassword(String passWord) {
+			if(mPASSWORDCharacteristic == null){
+				return false;
+			}
+			mPASSWORDCharacteristic.setValue(passWord);
+			mBluetoothGatt.writeCharacteristic(mPASSWORDCharacteristic);
+			return true;
+		}
+		/**
+		 * 修改密码
+		 * @param passWord
+		 * @return
+		 */
+		public boolean setPassword(String passWord) {
+			// TODO Auto-generated method stub
 			if(mPASSWORDCharacteristic == null){
 				return false;
 			}
