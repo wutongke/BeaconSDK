@@ -34,7 +34,11 @@ import com.lef.scanner.Region;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
-
+/**
+ * 包含region和region中的beacon信息，用于intent传输
+ * @author lief
+ *
+ */
 public class RangingData implements Parcelable {
 	private static final String TAG = "RangingData";
 	private Collection<IBeaconData> iBeaconDatas;

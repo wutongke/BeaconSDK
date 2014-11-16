@@ -30,11 +30,22 @@ import java.util.Set;
 import android.util.Log;
 
 import com.lef.scanner.IBeacon;
-
+/**
+ * 一个region对于一个rangeState，包括该region中所有的iBeacon，和当前探测到的属于region中beacon<br>
+ * 作为beaconService中hashmap的内容：key：region；value：rangeState；
+ * @author lief
+ *
+ */
 public class RangeState {
 	private static final String TAG = "RangeState";
 	private Callback callback;
+	/**
+	 * 当前探测到beacon
+	 */
 	private Set<IBeacon> iBeacons = new HashSet<IBeacon>();
+	/**
+	 * region中对于的所有beacon，在一定时间内如果没有探测到则在set中删除
+	 */
 	private Set<IBeacon> allIBeacons = new HashSet<IBeacon>();
 	private long inside_expiration_millis;
 

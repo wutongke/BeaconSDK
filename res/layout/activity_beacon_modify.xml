@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    style="@android:style/Holo.ButtonBar"
+    >
 
     <LinearLayout
         android:id="@+id/uuid_container"
@@ -162,10 +164,13 @@
             android:textSize="12sp" />
     </LinearLayout>
 	
-    <Button
+    <!-- <Button
         android:id="@+id/disconnect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="断开连接" />
+        android:text="断开连接" 
+        android:layout_gravity="bottom|right"
+        style="@android:style/MediaButton.Pause"
+        /> -->
 
 </LinearLayout>

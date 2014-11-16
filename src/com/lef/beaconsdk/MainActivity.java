@@ -3,6 +3,7 @@ package com.lef.beaconsdk;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.lef.scanner.BeaconConnection;
 import com.lef.scanner.IBeacon;
 import com.lef.scanner.IBeaconData;
 import com.lef.scanner.IBeaconManager;
@@ -19,6 +20,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.RemoteException;
@@ -129,14 +131,14 @@ public class MainActivity extends Activity implements
 					int position, long id) {
 				// TODO Auto-generated method stub
 				if (beaconDataListB.get(position).isCanBeConnected()) {
+					//连接之前先设置密码
+					BeaconConnection.setPASSWORD(MainActivity.this.getResources().getString(R.string.beaconPassword));
 					Intent mintent = new Intent(MainActivity.this,
 							BeaconModify.class);
-					// mintent.putExtra("address",
-					// beaconDataListB.get(position).getBluetoothAddress());
+					//需要把IBeacon类型封装成IBeacon，以方便在intent传输
 					mintent.putExtra("beacon",
 							new IBeaconData(beaconDataListB.get(position)));
 					startActivity(mintent);
-//					beaconDataListA.remove(position);
 					if (iBeaconManager != null && iBeaconManager.isBound(MainActivity.this)) {
 						iBeaconManager.unBind(MainActivity.this);
 					}

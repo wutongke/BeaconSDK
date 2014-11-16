@@ -15,6 +15,7 @@ import android.bluetooth.BluetoothDevice;
 import android.util.Log;
 
 /**
+ * 判断是蓝牙设备中是否有服务
  * ScannerServiceParser is responsible to parse scanning data and it check if
  * scanned device has required service in it.
  */

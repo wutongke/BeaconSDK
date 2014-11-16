@@ -9,7 +9,11 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.util.Log;
-
+/**
+ * 开始蓝牙扫描，停止蓝牙扫描的一个封装类
+ * @author lief
+ *
+ */
 public class BeaconScanner {
 
 	private final static String TAG = "BeaconScanner";

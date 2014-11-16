@@ -27,7 +27,11 @@ import com.lef.scanner.Region;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
+/**
+ * 包装region数据，用于intent传输
+ * @author lief
+ *
+ */
 public class RegionData extends Region implements Parcelable {
     public RegionData(String uniqueId, String proximityUuid, Integer major,
 			Integer minor) {

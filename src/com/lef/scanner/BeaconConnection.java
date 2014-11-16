@@ -6,6 +6,7 @@ import com.lef.ibeacon.service.BeaconScanner;
 import com.lef.ibeacon.service.ScannerListener;
 import com.lef.ibeacon.service.UpdateService;
 
+import android.R;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -25,6 +26,11 @@ import android.widget.Toast;
  * iBeacons.
  */
 public class BeaconConnection implements ScannerListener {
+	/**
+	 * 默认密码为666666<br>
+	 * 如果修改过密码，则需要在连接之前，先{@link BeaconConnection@#setPASSWORD(String)};返回再连接
+	 */
+	public static String PASSWORD  = "666666";
 	/**
 	 * 设置成功
 	 */
@@ -306,9 +312,14 @@ public class BeaconConnection implements ScannerListener {
 				int transmitpower = intent.getIntExtra(
 						UpdateService.EXTRA_DATA, 0);
 				mcurrentBeacon.setTransmitPower(transmitpower);
+				/**
+				 * 发送密码，暂时放置在这里，放置在其他地方目前测试不太好用
+				 */
+				mBinder.sendPassword(PASSWORD);
 				// mConnectionCallback.onGetRssi(advertisinginterval);
 			} else if (UpdateService.ACTION_DONE.equals(action)) {
 				mBinder.read();
+				
 				// 注释掉的内容错误是空指针
 				// mcurrentBeacon.setProximityUuid(mBinder.getBeaconUuid().toString());
 				// mcurrentBeacon.setTxPower(mBinder.getCalibratedRssi());
@@ -353,5 +364,13 @@ public class BeaconConnection implements ScannerListener {
 		activity.startService(service);
 		mBinded = true;
 		activity.bindService(service, mServiceConnection, 0);
+	}
+
+	public static String getPASSWORD() {
+		return PASSWORD;
+	}
+	
+	public static void setPASSWORD(String pASSWORD) {
+		PASSWORD = pASSWORD;
 	}
 }
