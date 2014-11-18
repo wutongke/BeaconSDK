@@ -40,7 +40,6 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 	private static final int SETFAILURE = 3;
 	private static final int CONNECTION_S = 4;
 	private static final int CONNECTION_F = 5;
-	private boolean isConnected = false;
 	// private static final int EmptyValue = 1;
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
@@ -376,22 +375,12 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.beacon_modify, menu);
-		return true;
-	}
-
-	@Override
 	public void onConnectedState(IBeacon beacon, int status) {
 		// TODO Auto-generated method stub
 		switch (status) {
 		case BeaconConnection.CONNECTED:
-			if (!isConnected) {
 				currentBeacon = beacon;
 				handler.sendEmptyMessage(CONNECTION_S);
-				isConnected = true;
-			}
 			break;
 		case BeaconConnection.DISCONNECTED:
 			handler.sendEmptyMessage(CONNECTION_F);
