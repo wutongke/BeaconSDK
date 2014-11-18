@@ -40,7 +40,7 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 	private static final int SETFAILURE = 3;
 	private static final int CONNECTION_S = 4;
 	private static final int CONNECTION_F = 5;
-
+	private boolean isConnected = false;
 	// private static final int EmptyValue = 1;
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
@@ -70,7 +70,7 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 						.getTransmitPower().toString());
 				break;
 			case CONNECTION_F:
-				Toast.makeText(BeaconModify.this, "连接失败", Toast.LENGTH_SHORT)
+				Toast.makeText(BeaconModify.this, "失去连接", Toast.LENGTH_SHORT)
 						.show();
 				break;
 			case INVALIDVALUE:
@@ -103,17 +103,17 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 		rssiTextView = (TextView) findViewById(R.id.rssi_modify);
 		advertiseView = (TextView) findViewById(R.id.advertise_modify);
 		transmitView = (TextView) findViewById(R.id.transmit_modify);
-//		Button disconnectBtn = (Button) findViewById(R.id.disconnect);
-//		disconnectBtn.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				if (beaconConnection != null && beaconConnection.isConnection()) {
-//					beaconConnection.disConnect();
-//				}
-//			}
-//		});
+		// Button disconnectBtn = (Button) findViewById(R.id.disconnect);
+		// disconnectBtn.setOnClickListener(new OnClickListener() {
+		//
+		// @Override
+		// public void onClick(View v) {
+		// // TODO Auto-generated method stub
+		// if (beaconConnection != null && beaconConnection.isConnection()) {
+		// beaconConnection.disConnect();
+		// }
+		// }
+		// });
 		uuidTextView.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -387,8 +387,11 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 		// TODO Auto-generated method stub
 		switch (status) {
 		case BeaconConnection.CONNECTED:
-			currentBeacon = beacon;
-			handler.sendEmptyMessage(CONNECTION_S);
+			if (!isConnected) {
+				currentBeacon = beacon;
+				handler.sendEmptyMessage(CONNECTION_S);
+				isConnected = true;
+			}
 			break;
 		case BeaconConnection.DISCONNECTED:
 			handler.sendEmptyMessage(CONNECTION_F);
@@ -420,8 +423,8 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 		if (status == BeaconConnection.SUCCESS) {
 			advertiseView.setText(beacon.getBaseSettings()
 					.getAdvertisingInterval().toString());
-			transmitView.setText(beacon.getBaseSettings()
-					.getAdvertisingInterval().toString());
+			transmitView.setText(beacon.getBaseSettings().getTransmitPower()
+					.toString());
 			handler.sendEmptyMessage(SETSUCCEED);
 		} else if (status == BeaconConnection.FAILURE) {
 			handler.sendEmptyMessage(SETFAILURE);
@@ -436,7 +439,7 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 		if (status == BeaconConnection.SUCCESS) {
 			// TODO Auto-generated method stub
 			handler.sendEmptyMessage(SETSUCCEED);
-			rssiTextView.setText(beacon.getTxPower());
+			rssiTextView.setText(beacon.getTxPower()+"");
 		} else if (status == BeaconConnection.FAILURE) {
 			handler.sendEmptyMessage(SETFAILURE);
 		} else {
@@ -450,7 +453,7 @@ public class BeaconModify extends Activity implements BeaconConnectionCallback {
 		if (status == BeaconConnection.SUCCESS) {
 			// TODO Auto-generated method stub
 			handler.sendEmptyMessage(SETSUCCEED);
-			uuidTextView.setText(beacon.getProximity());
+			uuidTextView.setText(beacon.getProximityUuid());
 		} else if (status == BeaconConnection.FAILURE) {
 			handler.sendEmptyMessage(SETFAILURE);
 		} else {
