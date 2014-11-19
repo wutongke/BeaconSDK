@@ -187,6 +187,10 @@ public class BeaconConnection implements ScannerListener {
 	 */
 	public void setAdvertisingInterval(
 			BaseSettings.AdvertisingInterval advertisingInterval) {
+		if(advertisingInterval.aValue<0||advertisingInterval.aValue>6){
+			mConnectionCallback.onSetBaseSetting(mcurrentBeacon, INVALIDVALUE);
+			return;
+		}
 		if (mBinder.setAdvertisingInterval(advertisingInterval.aValue)) {
 			mcurrentBeacon.setAdvertisingInterval(advertisingInterval.aValue);
 			mConnectionCallback.onSetBaseSetting(mcurrentBeacon, SUCCESS);
@@ -200,6 +204,10 @@ public class BeaconConnection implements ScannerListener {
 	 */
 	public void setTransmitPower(
 			BaseSettings.TransmitPower ransmitPower) {
+		if(ransmitPower.aValue<0||ransmitPower.aValue>6){
+			mConnectionCallback.onSetBaseSetting(mcurrentBeacon, INVALIDVALUE);
+			return;
+		}
 		if (mBinder.setTransmitPower(ransmitPower.aValue)) {
 			mcurrentBeacon.setTransmitPower(ransmitPower.aValue);
 			mConnectionCallback.onSetBaseSetting(mcurrentBeacon, SUCCESS);
