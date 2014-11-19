@@ -57,22 +57,22 @@ import android.util.Log;
 * @see     Region#matchesIBeacon(IBeacon iBeacon)
 */
 public class IBeacon { 
-	/**
-	 * Less than half a meter away
-	 */
-	public static final int PROXIMITY_IMMEDIATE = 1;
-	/**
-	 * More than half a meter away, but less than four meters away
-	 */
-	public static final int PROXIMITY_NEAR = 2;
-	/**
-	 * More than four meters away
-	 */
-	public static final int PROXIMITY_FAR = 3;
-	/**
-	 * No distance estimate was possible due to a bad RSSI value or measured TX power
-	 */
-	public static final int PROXIMITY_UNKNOWN = 0;
+//	/**
+//	 * Less than half a meter away
+//	 */
+//	public static final int PROXIMITY_IMMEDIATE = 1;
+//	/**
+//	 * More than half a meter away, but less than four meters away
+//	 */
+//	public static final int PROXIMITY_NEAR = 2;
+//	/**
+//	 * More than four meters away
+//	 */
+//	public static final int PROXIMITY_FAR = 3;
+//	/**
+//	 * No distance estimate was possible due to a bad RSSI value or measured TX power
+//	 */
+//	public static final int PROXIMITY_UNKNOWN = 0;
 
     final private static char[] hexArray = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
 	private static final String TAG = "IBeacon";	
@@ -178,16 +178,16 @@ public class IBeacon {
 	public int getMinor() {
 		return minor;
 	}
-	/**
-	 * @see #proximity
-	 * @return proximity
-	 */
-	public int getProximity() {
-		if (proximity == null) {
-			proximity = calculateProximity(getAccuracy());		
-		}
-		return proximity;		
-	}
+//	/**
+//	 * @see #proximity
+//	 * @return proximity
+//	 */
+//	public int getProximity() {
+//		if (proximity == null) {
+//			proximity = calculateProximity(getAccuracy());		
+//		}
+//		return proximity;		
+//	}
 	protected void setProximityUuid(String proximityUuid) {
 		this.proximityUuid = proximityUuid;
 	}
@@ -458,23 +458,23 @@ public class IBeacon {
 		}
 	}	
 	
-	protected static int calculateProximity(double accuracy) {
-		if (accuracy < 0) {
-			return PROXIMITY_UNKNOWN;	 
-			// is this correct?  does proximity only show unknown when accuracy is negative?  I have seen cases where it returns unknown when
-			// accuracy is -1;
-		}
-		if (accuracy < 0.5 ) {
-			return IBeacon.PROXIMITY_IMMEDIATE;
-		}
-		// forums say 3.0 is the near/far threshold, but it looks to be based on experience that this is 4.0
-		if (accuracy <= 4.0) { 
-			return IBeacon.PROXIMITY_NEAR;
-		}
-		// if it is > 4.0 meters, call it far
-		return IBeacon.PROXIMITY_FAR;
-
-	}
+//	protected static int calculateProximity(double accuracy) {
+//		if (accuracy < 0) {
+//			return PROXIMITY_UNKNOWN;	 
+//			// is this correct?  does proximity only show unknown when accuracy is negative?  I have seen cases where it returns unknown when
+//			// accuracy is -1;
+//		}
+//		if (accuracy < 0.5 ) {
+//			return IBeacon.PROXIMITY_IMMEDIATE;
+//		}
+//		// forums say 3.0 is the near/far threshold, but it looks to be based on experience that this is 4.0
+//		if (accuracy <= 4.0) { 
+//			return IBeacon.PROXIMITY_NEAR;
+//		}
+//		// if it is > 4.0 meters, call it far
+//		return IBeacon.PROXIMITY_FAR;
+//
+//	}
 
 	private static String bytesToHex(byte[] bytes) {
         char[] hexChars = new char[bytes.length * 2];

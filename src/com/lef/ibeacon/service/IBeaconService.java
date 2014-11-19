@@ -753,14 +753,14 @@ public class IBeaconService extends Service {
 								+ iBeacon.getProximityUuid() + " "
 								+ iBeacon.getMajor() + " " + iBeacon.getMinor()
 								+ " accuracy: " + iBeacon.getAccuracy()
-								+ " proximity: " + iBeacon.getProximity());
+								);
 		}
 		trackedBeacons.add(iBeacon);
 		if (IBeaconManager.debug)
 			Log.d(TAG, "iBeacon detected :" + iBeacon.getProximityUuid() + " "
 					+ iBeacon.getMajor() + " " + iBeacon.getMinor()
 					+ " accuracy: " + iBeacon.getAccuracy() + " proximity: "
-					+ iBeacon.getProximity());
+					);
 
 		List<Region> matchedRegions = null;
 		synchronized (monitoredRegionState) {

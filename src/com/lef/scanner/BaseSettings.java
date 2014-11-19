@@ -1,15 +1,19 @@
 package com.lef.scanner;
 
-
+/**
+ *	基本配置类，包括beacon的发射功率和发射频率
+ * @author lief
+ *
+ */
 public class BaseSettings {
 	public AdvertisingInterval advertisingInterval;
 	public TransmitPower transmitPower;
-	public BaseSettings() {
+	protected BaseSettings() {
 		// TODO Auto-generated constructor stub
 		this.advertisingInterval = AdvertisingInterval.UNKNOWN;
 		this.transmitPower = TransmitPower.UNKNOWN;
 	}
-	public BaseSettings(int advertisingInterval,int transmitPower) {
+	protected BaseSettings(int advertisingInterval,int transmitPower) {
 		// TODO Auto-generated constructor stub
 		this.advertisingInterval = getAdvertisingIntervalByInt(advertisingInterval);
 		this.transmitPower = getTransmitPowerByInt(transmitPower);
@@ -115,14 +119,14 @@ public class BaseSettings {
 		return TransmitPower.UNKNOWN;
 	}
 	/**
-	 * 获取广播频率
+	 * 获取beacon广播频率
 	 * @return
 	 */
 	public  AdvertisingInterval getAdvertisingInterval() {
 		return advertisingInterval;
 	}
 	/**
-	 * 获取发射功率
+	 * 获取beacon发射功率
 	 * @return
 	 */
 	public TransmitPower getTransmitPower() {

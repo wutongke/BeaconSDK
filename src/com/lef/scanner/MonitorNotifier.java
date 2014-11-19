@@ -25,6 +25,7 @@ package com.lef.scanner;
 
 
 /**
+ * 回调接口，需要实现回调接口中的方法，触发进入，离开某个自定义的region{@link Region}
  * This interface is implemented by classes that receive iBeacon monitoring notifications
  * 
  * @see IBeaconManager#setMonitorNotifier(MonitorNotifier notifier)

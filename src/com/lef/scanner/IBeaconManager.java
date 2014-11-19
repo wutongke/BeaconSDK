@@ -193,10 +193,7 @@ public class IBeaconManager {
 	}
 
 	/**
-	 * Sets the duration in milliseconds spent not scanning between each
-	 * Bluetooth LE scan cycle when no ranging/monitoring clients are in the
-	 * foreground
-	 * 
+	 * 设置后台两次扫描周期之间的间隔
 	 * @param p
 	 */
 	public void setBackgroundBetweenScanPeriod(long p) {
@@ -212,10 +209,7 @@ public class IBeaconManager {
 	}
 
 	/**
-	 * An accessor for the singleton instance of this class. A context must be
-	 * provided, but if you need to use it from a non-Activity or non-Service
-	 * class, you can attach it to another singleton or a subclass of the
-	 * Android Application class.
+	 * 获取IBeaconManger实例
 	 */
 	public static IBeaconManager getInstanceForApplication(Context context) {
 		if (client == null) {
@@ -408,7 +402,7 @@ public class IBeaconManager {
 	}
 
 	/**
-	 * 设置扫描通知<br>
+	 * 设置扫描通知，即回调通知读取到的beacon{@link RangeNotifier}<br>
 	 * Specifies a class that should be called each time the
 	 * <code>IBeaconService</code> gets ranging data, which is nominally once
 	 * per second when iBeacons are detected.
@@ -425,6 +419,7 @@ public class IBeaconManager {
 	}
 
 	/**
+	 * 
 	 * Specifies a class that should be called each time the
 	 * <code>IBeaconService</code> gets sees or stops seeing a Region of
 	 * iBeacons.
