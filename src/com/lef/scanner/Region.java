@@ -27,6 +27,8 @@ package com.lef.scanner;
 import android.util.Log;
 
 /**
+ * 
+ * 自定义一个区域，这个区域可以通过uuid、major、minor属性过滤掉不符合的条件 的beacon。
  * This class represents a criteria of fields used to match iBeacons.  The strange name
  * comes from the iOS implementation, where the idea of a "Region" is also used for a geofence.
  * The idea is that a grouping of one or more iBeacons are analogous to a geofence region.

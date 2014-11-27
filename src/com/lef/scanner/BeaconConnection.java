@@ -2,11 +2,6 @@ package com.lef.scanner;
 
 import java.util.UUID;
 
-import com.lef.ibeacon.service.BeaconScanner;
-import com.lef.ibeacon.service.ScannerListener;
-import com.lef.ibeacon.service.UpdateService;
-
-import android.R;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -21,9 +16,14 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.lef.ibeacon.service.BeaconScanner;
+import com.lef.ibeacon.service.ScannerListener;
+import com.lef.ibeacon.service.UpdateService;
+
 /**
  * * An class for an Android <code>Activity</code> that wants to interact with
- * iBeacons.
+ * iBeacons.<br>
+ * 连接beacon是用到，连接成功后可以设置beacon的uuid{@link BeaconConnection#setUUID(String)}、major、minor、发射功率和频率
  */
 public class BeaconConnection implements ScannerListener {
 	/**
@@ -32,11 +32,11 @@ public class BeaconConnection implements ScannerListener {
 	 */
 	public static String PASSWORD  = "666666";
 	/**
-	 * 设置成功
+	 * 属性设置成功
 	 */
 	public static final int SUCCESS = 1;
 	/**
-	 * 设置失败
+	 * 属性设置失败
 	 */
 	public static final int FAILURE = 2;
 	/**
@@ -120,7 +120,7 @@ public class BeaconConnection implements ScannerListener {
 	};
 
 	/**
-	 * 设置beacon的Major和Minor
+	 * 设置beacon的Major和Minor，回调onSetMajoMinor
 	 * 
 	 * @param major
 	 *            (范围:0~65535)
@@ -143,7 +143,7 @@ public class BeaconConnection implements ScannerListener {
 	}
 
 	/**
-	 * 设置beacon的UUID
+	 * 设置beacon的UUID，回调onSetProximityUUID
 	 * 
 	 * @param UUID
 	 *            (格式:"00000000-0000-0000-0000-000000000000")
@@ -187,6 +187,10 @@ public class BeaconConnection implements ScannerListener {
 	 */
 	public void setAdvertisingInterval(
 			BaseSettings.AdvertisingInterval advertisingInterval) {
+		if(advertisingInterval.aValue<0||advertisingInterval.aValue>6){
+			mConnectionCallback.onSetBaseSetting(mcurrentBeacon, INVALIDVALUE);
+			return;
+		}
 		if (mBinder.setAdvertisingInterval(advertisingInterval.aValue)) {
 			mcurrentBeacon.setAdvertisingInterval(advertisingInterval.aValue);
 			mConnectionCallback.onSetBaseSetting(mcurrentBeacon, SUCCESS);
@@ -200,6 +204,10 @@ public class BeaconConnection implements ScannerListener {
 	 */
 	public void setTransmitPower(
 			BaseSettings.TransmitPower ransmitPower) {
+		if(ransmitPower.aValue<0||ransmitPower.aValue>6){
+			mConnectionCallback.onSetBaseSetting(mcurrentBeacon, INVALIDVALUE);
+			return;
+		}
 		if (mBinder.setTransmitPower(ransmitPower.aValue)) {
 			mcurrentBeacon.setTransmitPower(ransmitPower.aValue);
 			mConnectionCallback.onSetBaseSetting(mcurrentBeacon, SUCCESS);
@@ -349,7 +357,6 @@ public class BeaconConnection implements ScannerListener {
 
 	/**
 	 * SDK自动回调，开发者不需要调用
-	 * 
 	 * @param BluetoothDevice
 	 * @param BluetoothDeviceName
 	 */

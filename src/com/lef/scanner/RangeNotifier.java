@@ -26,6 +26,7 @@ package com.lef.scanner;
 import java.util.Collection;
 
 /**
+ * 回调接口，需要实现回调接口中的方法，以接收扫描到的自定义的region{@link Region}中的beacon
  * This interface is implemented by classes that receive iBeacon ranging notifications
  * 
  * @see IBeaconManager#setRangeNotifier(RangeNotifier notifier)

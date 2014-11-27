@@ -218,8 +218,8 @@ public class UpdateService extends Service {
 				final int advertisinginterval = characteristic.getIntValue(
 						BluetoothGattCharacteristic.FORMAT_SINT8, 0);
 				broadcastTransmitpower(advertisinginterval);
-				// 所有数据读取完成后设置成功，这样返回的mcurrnentBeacon所有配置就被设置了
-				setState(STATE_CONNECTED);
+//				// 所有数据读取完成后设置成功，这样返回的mcurrnentBeacon所有配置就被设置了
+//				setState(STATE_CONNECTED);
 			}
 		}
 
