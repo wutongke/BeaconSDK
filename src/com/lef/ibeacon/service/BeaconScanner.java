@@ -10,7 +10,7 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.util.Log;
 /**
- * ¿ªÊ¼À¶ÑÀÉ¨Ãè£¬Í£Ö¹À¶ÑÀÉ¨ÃèµÄÒ»¸ö·â×°Àà
+ * æ‰«æå‘¨å›´è“ç‰™ï¼Œå¯»æ‰¾éœ€è¦è¿æ¥çš„beacon
  * @author lief
  *
  */
@@ -39,7 +39,7 @@ public class BeaconScanner {
 	}
 
 	/**
-	 * ¿ªÊ¼É¨ÃèÉè±¸
+	 * å¼€å§‹æ‰«æ
 	 */
 	public void startScan() {
 		if (!mIsScanning) {
@@ -49,7 +49,7 @@ public class BeaconScanner {
 	}
 
 	/**
-	 * Í£Ö¹À¶ÑÀÉ¨Ãè
+	 * Í£Ö¹åœæ­¢æ‰«æ
 	 */
 	public void stopScan() {
 		if (mIsScanning) {
