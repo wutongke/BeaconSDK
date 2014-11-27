@@ -2,11 +2,6 @@ package com.lef.scanner;
 
 import java.util.UUID;
 
-import com.lef.ibeacon.service.BeaconScanner;
-import com.lef.ibeacon.service.ScannerListener;
-import com.lef.ibeacon.service.UpdateService;
-
-import android.R;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -20,6 +15,10 @@ import android.os.ParcelUuid;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import com.lef.ibeacon.service.BeaconScanner;
+import com.lef.ibeacon.service.ScannerListener;
+import com.lef.ibeacon.service.UpdateService;
 
 /**
  * * An class for an Android <code>Activity</code> that wants to interact with

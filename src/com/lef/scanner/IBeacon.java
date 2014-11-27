@@ -25,14 +25,14 @@ package com.lef.scanner;
 
 import java.util.Date;
 
-import com.lef.client.IBeaconDataFactory;
-import com.lef.client.NullIBeaconDataFactory;
-import com.lef.ibeacon.IBeaconDataNotifier;
-import com.lef.scanner.BaseSettings.AdvertisingInterval;
-
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothDevice;
 import android.util.Log;
+
+import com.lef.client.IBeaconDataFactory;
+import com.lef.client.NullIBeaconDataFactory;
+import com.lef.ibeacon.IBeaconDataNotifier;
 
 /**
 * The <code>IBeacon</code> class represents a single hardware iBeacon detected by 
@@ -423,6 +423,7 @@ public class IBeacon {
 		
 	}
 
+	@SuppressLint("DefaultLocale")
 	protected IBeacon(String proximityUuid, int major, int minor, int txPower, int rssi) {
 		this.proximityUuid = proximityUuid.toLowerCase();
 		this.major = major;
