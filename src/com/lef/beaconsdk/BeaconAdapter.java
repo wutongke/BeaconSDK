@@ -1,9 +1,6 @@
 package com.lef.beaconsdk;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import com.lef.scanner.IBeacon;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.lef.scanner.IBeacon;
 
 public class BeaconAdapter extends BaseAdapter{
 	private List<IBeacon> beaconList;
@@ -89,7 +88,7 @@ public class BeaconAdapter extends BaseAdapter{
 		if (beacon.isCanBeConnected()){
 			return R.drawable.conn;
 		}else{
-			return R.drawable.disconn;
+			return R.drawable.conn;
 		}
 	}
 	private String getDistance(IBeacon beacon){

@@ -130,20 +130,34 @@ public class MainActivity extends Activity implements
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				if (beaconDataListB.get(position).isCanBeConnected()) {
-					//连接之前先设置密码
-					BeaconConnection.setPASSWORD(MainActivity.this.getResources().getString(R.string.beaconPassword));
-					Intent mintent = new Intent(MainActivity.this,
-							BeaconModify.class);
-					//需要把IBeacon类型封装成IBeacon，以方便在intent传输
-					mintent.putExtra("beacon",
-							new IBeaconData(beaconDataListB.get(position)));
-					startActivity(mintent);
-					if (iBeaconManager != null && iBeaconManager.isBound(MainActivity.this)) {
-						iBeaconManager.unBind(MainActivity.this);
-					}
-				} else {
-					handler.sendEmptyMessage(CLICKTOAST);
+//				处理有按键情况
+//				if (beaconDataListB.get(position).isCanBeConnected()) {
+//					//连接之前先设置密码
+//					BeaconConnection.setPASSWORD(MainActivity.this.getResources().getString(R.string.beaconPassword));
+//					Intent mintent = new Intent(MainActivity.this,
+//							BeaconModify.class);
+//					//需要把IBeacon类型封装成IBeacon，以方便在intent传输
+//					mintent.putExtra("beacon",
+//							new IBeaconData(beaconDataListB.get(position)));
+//					startActivity(mintent);
+//					if (iBeaconManager != null && iBeaconManager.isBound(MainActivity.this)) {
+//						iBeaconManager.unBind(MainActivity.this);
+//					}
+//				} else {
+//					handler.sendEmptyMessage(CLICKTOAST);
+//				}
+				/**
+				 * 无按键处理
+				 */
+				BeaconConnection.setPASSWORD(MainActivity.this.getResources().getString(R.string.beaconPassword));
+				Intent mintent = new Intent(MainActivity.this,
+						BeaconModify.class);
+				//需要把IBeacon类型封装成IBeacon，以方便在intent传输
+				mintent.putExtra("beacon",
+						new IBeaconData(beaconDataListB.get(position)));
+				startActivity(mintent);
+				if (iBeaconManager != null && iBeaconManager.isBound(MainActivity.this)) {
+					iBeaconManager.unBind(MainActivity.this);
 				}
 			}
 		});

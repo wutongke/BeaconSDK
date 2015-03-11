@@ -129,7 +129,7 @@ public class BeaconConnection implements ScannerListener {
 	 */
 	public void setMajorMinor(int major, int minor) {
 		// TODO Auto-generated method stub
-		if (major < 0 || major > 0xFFF || minor < 0 || minor > 0xFFFF) {
+		if (major < 0 || major > 0xFFFF || minor < 0 || minor > 0xFFFF) {
 			mConnectionCallback.onSetMajoMinor(mcurrentBeacon, INVALIDVALUE);
 		} else {
 			if (mBinder.setMajorAndMinor(major, minor)) {
@@ -236,12 +236,13 @@ public class BeaconConnection implements ScannerListener {
 			isConnection = false;
 			mBinded = false;
 			mBinder.disconnectAndClose();
-			LocalBroadcastManager.getInstance(mContext).unregisterReceiver(
-					mServiceBroadcastReceiver);
-			mContext.unbindService(mServiceConnection);
-			final Intent service = new Intent(mContext, UpdateService.class);
-			mContext.stopService(service);
 		}
+		
+		mContext.unbindService(mServiceConnection);
+		final Intent service = new Intent(mContext, UpdateService.class);
+		mContext.stopService(service);
+		LocalBroadcastManager.getInstance(mContext).unregisterReceiver(
+				mServiceBroadcastReceiver);
 	}
 
 	/**
@@ -343,7 +344,7 @@ public class BeaconConnection implements ScannerListener {
 							.show();
 					break;
 				default:
-					Toast.makeText(mContext, "服务出现错误", Toast.LENGTH_SHORT)
+					Toast.makeText(mContext, "蓝牙服务出现错误，请重新连接", Toast.LENGTH_SHORT)
 							.show();
 					break;
 				}

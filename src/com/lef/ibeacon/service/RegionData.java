@@ -75,5 +75,4 @@ public class RegionData extends Region implements Parcelable {
 	   	 proximityUuid = in.readString();
 	   	 uniqueId = in.readString();
     }
-
 }

@@ -68,8 +68,11 @@ public class BeaconScanner {
 		public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
 			if (device != null) {
 				try {
-					if (ScannerServiceParser.decodeDeviceAdvData(scanRecord,
-							mUuid)&&device.getAddress().equals(bluetoothAdress)) {
+					//原版
+//					if (ScannerServiceParser.decodeDeviceAdvData(scanRecord,
+//							mUuid)&&device.getAddress().equals(bluetoothAdress)) {
+					//新版本
+					if (device.getAddress().equals(bluetoothAdress)) {
 						// On some devices device.getName() is always null. We
 						// have to parse the name manually :(
 						// This bug has been found on Sony Xperia Z1 (C6903)

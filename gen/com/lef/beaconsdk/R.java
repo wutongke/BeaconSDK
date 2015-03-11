@@ -18,30 +18,30 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
-        public static final int config_name_bg_color=0x7f060003;
-        public static final int config_vlaue_color=0x7f060002;
-        public static final int contents_text=0x7f060004;
-        public static final int encode_view=0x7f060006;
-        public static final int ibeacon_attribute_name=0x7f060000;
-        public static final int ibeacon_attribute_value=0x7f060001;
-        public static final int lightgreen=0x7f060005;
-        public static final int possible_result_points=0x7f060007;
+        public static final int config_name_bg_color=0x7f06000f;
+        public static final int config_vlaue_color=0x7f06000e;
+        public static final int contents_text=0x7f060000;
+        public static final int encode_view=0x7f060002;
+        public static final int ibeacon_attribute_name=0x7f06000c;
+        public static final int ibeacon_attribute_value=0x7f06000d;
+        public static final int lightgreen=0x7f060001;
+        public static final int possible_result_points=0x7f060003;
         /**  Android standard ICS color 
          */
-        public static final int result_minor_text=0x7f060008;
-        public static final int result_points=0x7f060009;
+        public static final int result_minor_text=0x7f060004;
+        public static final int result_points=0x7f060005;
         /**  Android standard ICS color 
          */
-        public static final int result_text=0x7f06000a;
-        public static final int result_view=0x7f06000b;
-        public static final int status_text=0x7f06000c;
+        public static final int result_text=0x7f060006;
+        public static final int result_view=0x7f060007;
+        public static final int status_text=0x7f060008;
         public static final int tablelayout=0x7f060010;
         public static final int tablelayoutrow=0x7f060011;
-        public static final int transparent=0x7f06000d;
-        public static final int viewfinder_laser=0x7f06000e;
+        public static final int transparent=0x7f060009;
+        public static final int viewfinder_laser=0x7f06000a;
         /**  Android standard ICS color 
          */
-        public static final int viewfinder_mask=0x7f06000f;
+        public static final int viewfinder_mask=0x7f06000b;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
